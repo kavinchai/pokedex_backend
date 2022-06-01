@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+           http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+
+    <changeSet id="insertData" author="Kavin Chaisawangwong">
+        <loadData
+            tableName="pokemon_table"
+            file = "db/changelog/data/pokedex.csv"
+            seperator = "," >
+        <column header="id" name="pokemonId" type="int"/>
+        <column header="name" name="name" type="varchar(250)"/>
+        <column header="types" type="skip"/>
+        <column header="height" name="height" type="int"/>
+        <column header="weight" name="weight" type="int"/>
+        <column header="abilities" type="skip"/>
+        <column header="egg_groups" type="skip"/>
+        <column header="stats" type="skip"/>
+        <column header="genus" name="genus" type="varchar(250)"/>
+        <column header="description" name="description" type="varchar(500)"/>
+
+        </loadData>
+
+        <loadData
+                tableName="egg_groups_table"
+                file = "db/changelog/data/pokedex.csv"
+                seperator = "\,\" >
+            <column header="id" name="eggGroupId" type="int"/>
+            <column header="name" type="skip"/>
+            <column header="types" type="skip"/>
+            <column header="height" type="skip"/>
+            <column header="weight" type="skip"/>
+            <column header="abilities" type="skip"/>
+            <column header="egg_groups" name="eggGroup1" type="varchar(250)"/>
+            <column header="stats" type="skip"/>
+            <column header="genus" type="skip"/>
+            <column header="description" type="skip"/>
+        </loadData>
+    </changeSet>
+
+
+</databaseChangeLog>

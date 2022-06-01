@@ -1,0 +1,184 @@
+trigger: [main, dev]
+
+pr:
+  branches:
+    include:
+      - '*'
+
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: pipeline-libraries/pipeline-libraries
+
+variables:
+  - template: /variable-groups/variables.import.yaml@templates
+    parameters:
+      targetRefs:
+        - target: prod
+          ref: refs/heads/main
+        - target: dev
+          ref: refs/heads/dev
+  - name: Deployable
+    value: $[ne(variables['GKE.Namespace'], '')]
+  - name: IsMain
+    value: ${{ eq(variables['Build.SourceBranch'], 'refs/heads/master') }}
+
+pool: { vmImage: "ubuntu-latest" }
+
+stages:
+  - stage: Build
+    displayName: 'Build 🛠'
+    jobs:
+      - job: app
+        displayName: "Build App"
+        variables:
+          GRADLE_USER_HOME: $(Pipeline.Workspace)/.gradle
+        steps:
+          # Use Java 17
+          - task: JavaToolInstaller@0
+            displayName: Use Java 17
+            inputs:
+              versionSpec: '17'
+              jdkArchitectureOption: 'x64'
+              jdkSourceOption: 'PreInstalled'
+
+          # Configure caching for GRADLE_USER_HOME
+          - task: Cache@2
+            displayName: Configure Gradle Caching
+            inputs:
+              key: 'gradle | "$(Agent.OS)" | **/build.gradle.kts'
+              restoreKeys: |
+                gradle | "$(Agent.OS)"
+                gradle
+              path: $(GRADLE_USER_HOME)
+
+          # Provide the SYSTEM_ACCESSTOKEN to Gradle via gradle.properties
+          - task: Bash@3
+            displayName: Provide SYSTEM_ACCESSTOKEN to Gradle
+            inputs:
+              targetType: 'inline'
+              script: 'printf "\nvstsMavenAccessToken=%s\n" "$SYSTEM_ACCESSTOKEN" >> "gradle.properties"'
+            env:
+              SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+
+          # Prepare SonarCloud scanning configuration
+          - task: SonarCloudPrepare@1
+            displayName: SonarCloud Prepare
+            inputs:
+              SonarCloud: 'sonarcloud'
+              organization: 'bushelpowered'
+              scannerMode: 'Other'
+
+          # Build the app
+          - task: Gradle@2
+            displayName: 'Build App 🛠'
+            inputs:
+              tasks: 'api:assemble'
+              publishJUnitResults: false
+
+          # Scan the app with Snyk
+          - task: SnykSecurityScan@1
+            displayName: "Snyk Scan 🔒"
+            inputs:
+              serviceConnectionEndpoint: "snyk"
+              testType: "app"
+              targetFile: "build.gradle.kts"
+              severityThreshold: "high"
+              ${{ if variables.IsMain }}:
+                monitorWhen: never
+              failOnIssues: true
+              projectName: '$(System.TeamProject)-$(Build.Repository.Name)'
+              organization: 'bushelpowered'
+              testDirectory: '$(System.DefaultWorkingDirectory)/api'
+            continueOnError: true
+
+          # Run and publish app tests
+          - task: Gradle@2
+            displayName: "Test App 🔍"
+            inputs:
+              tasks: 'api:test'
+              publishJUnitResults: true
+              testResultsFiles: '$(System.DefaultWorkingDirectory)/api/build/test-results/**/TEST-*.xml'
+              sonarQubeRunAnalysis: true
+              sqGradlePluginVersionChoice: 'build'
+
+          # Publish JaCoCo code coverage results
+          - task: PublishCodeCoverageResults@1
+            displayName: 'Publish Code Coverage Results'
+            inputs:
+              codeCoverageTool: 'JaCoCo'
+              summaryFileLocation: '$(System.DefaultWorkingDirectory)/api/build/reports/jacoco/**/*.xml'
+              additionalCodeCoverageFiles: '$(System.DefaultWorkingDirectory)/api/build/jacoco/*.exec'
+              pathToSources: '$(System.DefaultWorkingDirectory)/api/src/main/kotlin/'
+              failIfCoverageEmpty: true
+            condition: always()
+
+          # Publish the Sonar results and wait for quality gate
+          - task: SonarCloudPublish@1
+            displayName: SonarCloud Publish
+            inputs:
+              pollingTimeoutSec: '300'
+            condition: always()
+
+          # Log in to Docker registry for pushing image
+          - task: Docker@2
+            displayName: 'Docker Login'
+            inputs:
+              containerRegistry: $(GCR.ConnectionName)
+              command: login
+              addPipelineData: false
+            condition: eq(variables.Deployable, 'true')
+
+          # Build and push the image using Jib
+          - task: Gradle@2
+            displayName: 'Build And Push Image 🐳'
+            inputs:
+              tasks: 'api:jib'
+              publishJUnitResults: false
+              options: '-PdockerImageName=$(GCR.ImageName)/$(BushelTarget)/service'
+            condition: eq(variables.Deployable, 'true')
+
+          # Stop the Gradle daemon to ensure no files are left open for clean caching
+          - script: ./gradlew --stop
+            displayName: Stop Gradle
+            condition: always()
+
+  - ${{ if or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['Build.SourceBranch'], 'refs/heads/dev')) }}:
+    - stage: Deploy
+      displayName: 'Deploy 🚢'
+      condition: and(succeeded(), eq(variables.Deployable, 'true'))
+      dependsOn: Build
+      jobs:
+        - deployment: ${{ replace(variables.BushelTarget, '-', '_') }}
+          environment: '$(BushelTarget).$(GKE.ConnectionName)'
+          displayName: "Deploy App"
+          strategy:
+            runOnce:
+              deploy:
+                steps:
+                  - template: /helm/steps.deploy-helm-chart.yaml@templates
+                    parameters:
+                      releaseName: '$(BushelTarget)'
+                      chartType: Name
+                      kubernetesServiceEndpoint: ''
+                      namespace: '$(GKE.Namespace)'
+                      overrides:
+                        ingress:
+                          hosts:
+                            - '$(GKE.Hostname)'
+                        fullnameOverride: '$(GKE.Namespace)'
+                        port: 8080
+                        replicaCount: 1
+                        livenessProbe:
+                          httpGet:
+                            path: /actuator/health
+                            port: 8080
+                        readinessProbe:
+                          httpGet:
+                            path: /actuator/health
+                            port: 8080
+                        image:
+                          repository: $(GCR.ImageName)/$(BushelTarget)/service
+                          pullPolicy: IfNotPresent
+                          tag: '$(Build.BuildNumber)'

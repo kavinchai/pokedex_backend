@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+           http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+
+<changeSet id="insertPokemon" author="Kavin Chaisawangwong">
+    <insert tableName="pokemon_table">
+        <column name="pokemonId" value="1"></column>
+        <column name="name" value="Bulbasaur"></column>
+        <column name="height" value="7"></column>
+        <column name="weight" value="69"></column>
+        <column name="genus" value="Seed Pokemon"></column>
+        <column name="description" value="Bulbasaur can be seen napping in bright sunlight."></column>
+    </insert>
+
+    <insert tableName="pokemon_table">
+        <column name="pokemonId" value="2"></column>
+        <column name="name" value="Ivysaur"></column>
+        <column name="height" value="10"></column>
+        <column name="weight" value="130"></column>
+        <column name="genus" value="Seed Pokemon"></column>
+        <column name="description" value="There is a bud on this Pokémon’s back."></column>
+    </insert>
+
+</changeSet>
+
+
+</databaseChangeLog>

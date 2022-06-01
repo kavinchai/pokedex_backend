@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+           http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+
+    <changeSet id="insertEggGroups" author="Kavin Chaisawangwong">
+        <insert tableName="pokemon_abilities_table">
+            <column name="pokemonAbilityId" value="1"></column>
+            <column name="ability1" value="chlorophyll"></column>
+            <column name="ability2" value="overgrow"></column>
+        </insert>
+
+        <insert tableName="pokemon_abilities_table">
+            <column name="pokemonAbilityId" value="2"></column>
+            <column name="ability1" value="chlorophyll"></column>
+            <column name="ability2" value="overgrow"></column>
+        </insert>
+
+    </changeSet>
+
+
+</databaseChangeLog>

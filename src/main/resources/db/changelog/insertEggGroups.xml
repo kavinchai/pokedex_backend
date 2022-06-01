@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+           http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+
+    <changeSet id="insertEggGroups" author="Kavin Chaisawangwong">
+        <insert tableName="egg_groups_table">
+            <column name="eggGroupId" value="1"></column>
+            <column name="eggGroup1" value="plant"></column>
+            <column name="eggGroup2" value="monster"></column>
+        </insert>
+
+        <insert tableName="egg_groups_table">
+            <column name="eggGroupId" value="2"></column>
+            <column name="eggGroup1" value="plant"></column>
+            <column name="eggGroup2" value="monster"></column>
+        </insert>
+
+    </changeSet>
+
+
+</databaseChangeLog>

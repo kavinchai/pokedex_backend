@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+           http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+
+    <changeSet id="createPokemonTable" author="Kavin Chaisawangwong">
+        <createTable tableName="pokemon_table">
+            <column name="pokemonId" type="int">
+                <constraints primaryKey="true" primaryKeyName="pokemonPk" />
+            </column>
+            <column name="name" type="varchar(250)"/>
+            <column name="types" type="varchar(50)"/>
+            <column name="height" type="int"/>
+            <column name="weight" type="int"/>
+            <column name="abilities" type="varchar(50)"/>
+            <column name="eggGroups" type="varchar(50)"/>
+            <column name="genus" type="varchar(250)"/>
+            <column name="description" type="varchar(500)"/>
+        </createTable>
+
+        <createTable tableName="pokemon_types_table">
+            <column name="pokemonTypeId" type="int">
+                <constraints primaryKey="true" primaryKeyName="pokemonTypePk" />
+            </column>
+            <column name="type1" type="varchar(50)"/>
+            <column name="type2" type="varchar(50)"/>
+        </createTable>
+
+        <createTable tableName="pokemon_abilities_table">
+            <column name="pokemonAbilityId" type="int">
+                <constraints primaryKey="true" primaryKeyName="pokemonAbilityPk" />
+            </column>
+            <column name="ability1" type="varchar(50)"/>
+            <column name="ability2" type="varchar(50)"/>
+            <column name="ability3" type="varchar(50)"/>
+        </createTable>
+
+        <createTable tableName="egg_groups_table">
+            <column name="eggGroupId" type="int">
+                <constraints primaryKey="true" primaryKeyName="eggGroupPk" />
+            </column>
+            <column name="eggGroup1" type="varchar(50)"/>
+            <column name="eggGroup2" type="varchar(50)"/>
+        </createTable>
+
+        <createTable tableName="pokemon_stats_table">
+            <column name="statId" type="int">
+                <constraints primaryKey="true" primaryKeyName="statPk" />
+            </column>
+            <column name="hp" type="int"/>
+            <column name="speed" type="int"/>
+            <column name="attack" type="int"/>
+            <column name="defense" type="int"/>
+            <column name="specialAttack" type="int"/>
+            <column name="specialDefense" type="int"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="pokemon_types_table"
+                baseColumnNames="pokemonTypeId"
+                constraintName="pokemonTypeFk"
+                referencedTableName="pokemon_table"
+                referencedColumnNames="pokemonId"
+        />
+        <addForeignKeyConstraint
+                baseTableName="pokemon_abilities_table"
+                baseColumnNames="pokemonAbilityId"
+                constraintName="pokemonAbilityFk"
+                referencedTableName="pokemon_table"
+                referencedColumnNames="pokemonId"
+        />
+        <addForeignKeyConstraint
+                baseTableName="egg_groups_table"
+                baseColumnNames="eggGroupId"
+                constraintName="eggGroupFk"
+                referencedTableName="pokemon_table"
+                referencedColumnNames="pokemonId"
+        />
+        <addForeignKeyConstraint
+                baseTableName="pokemon_stats_table"
+                baseColumnNames="statId"
+                constraintName="statFk"
+                referencedTableName="pokemon_table"
+                referencedColumnNames="pokemonId"
+        />
+
+
+    </changeSet>
+
+
+</databaseChangeLog>
