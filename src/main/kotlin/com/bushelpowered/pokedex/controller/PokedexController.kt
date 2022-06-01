@@ -13,7 +13,6 @@ class PokedexController (val service: PokemonService){
     @GetMapping
     fun index() = service.allPokemon()
 
-
     @GetMapping("/{id}")
     fun get(@PathVariable id: Int) = service.findPokemon(id)
 

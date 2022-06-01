@@ -24,21 +24,6 @@
 
         </loadData>
 
-        <loadData
-                tableName="egg_groups_table"
-                file = "db/changelog/data/pokedex.csv"
-                seperator = "\,\" >
-            <column header="id" name="eggGroupId" type="int"/>
-            <column header="name" type="skip"/>
-            <column header="types" type="skip"/>
-            <column header="height" type="skip"/>
-            <column header="weight" type="skip"/>
-            <column header="abilities" type="skip"/>
-            <column header="egg_groups" name="eggGroup1" type="varchar(250)"/>
-            <column header="stats" type="skip"/>
-            <column header="genus" type="skip"/>
-            <column header="description" type="skip"/>
-        </loadData>
     </changeSet>
 
 
