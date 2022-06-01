@@ -1,31 +1,34 @@
 package com.bushelpowered.pokedex.controller
 
+import com.bushelpowered.pokedex.controller.repository.PokemonRepository
 import com.bushelpowered.pokedex.dataClasses.Pokemon
-import com.bushelpowered.pokedex.repository.PokemonRepository
-import org.apache.commons.csv.CSVFormat
-import org.apache.commons.csv.CSVParser
-import java.nio.file.Files
-import java.nio.file.Paths
+import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
+import java.io.File
 
+class parseFile (){
 
-class fileParser {
-    fun insertData(){
+    private fun getCSV(): File{
         val filePath = "src/main/resources/db/changelog/data/"
         val file = filePath + "pokedex.csv"
-        val bufferedReader = Files.newBufferedReader(Paths.get(file))
-        val csvParser = CSVParser(bufferedReader, CSVFormat.EXCEL
-            .withSkipHeaderRecord()
-            .withHeader("id", "name", "types", "height", "weight", "abilities", "egg_groups", "stats", "genus", "description")
-            )
-
-        for (csvRecord in csvParser){
-            val id : String = csvRecord.get("id")
-            val name = csvRecord.get("name")
-            val type = csvRecord.get("types")
-            println("-----")
-            println("id: $id")
-            println("Name: $name")
-            println("Type: $type")
-        }
+        return File(file)
     }
+    fun pokemonArray(): ArrayList<Pokemon> {
+        val file = getCSV()
+        val pokemonChar: List<List<String>> = csvReader().readAll(file)
+
+        var pokemonList = ArrayList<Pokemon>()
+        for (entity in 1 until pokemonChar.size){
+            //println("id: ${pokemonChar[entity][0]}")
+            pokemonList.add(Pokemon(
+                pokemonChar[entity][0].toInt(),
+                pokemonChar[entity][1],
+                pokemonChar[entity][3].toInt(),
+                pokemonChar[entity][4].toInt(),
+                pokemonChar[entity][8],
+                pokemonChar[entity][9],
+                ))
+        }
+        return pokemonList
+    }
+    // create repository
 }

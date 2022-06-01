@@ -8,38 +8,38 @@ import javax.persistence.*
 data class Pokemon (
     @Id
     @Column(name = "pokemonid") // All names in @Column need to be lowercase
-    val PokemonID: Int,
+    val pokemonID: Int,
 
     @Column(name = "name")
-    val Name: String,
+    val name: String,
 
     @Column(name = "height")
-    val Height: String,
+    val height: Int,
 
     @Column(name = "weight")
-    val Weight: String,
+    val weight: Int,
 
     @Column(name = "genus")
-    val Genus: String,
+    val genus: String,
 
     @Column(name = "description")
-    val Description: String,
+    val description: String,
 
-    @OneToOne(cascade = [CascadeType.ALL])
-    @JoinColumn(name = "pokemonid", referencedColumnName = "statid")
-    val pokemonStats: PokemonStats,
-
-    @OneToOne(cascade = [CascadeType.ALL])
-    @JoinColumn(name = "pokemonid", referencedColumnName = "egggroupid")
-    val eggGroups: EggGroups,
-
-    @OneToOne(cascade = [CascadeType.ALL])
-    @JoinColumn(name = "pokemonid", referencedColumnName = "pokemonabilityid")
-    val pokemonAbilities: PokemonAbilities,
-
-    @OneToOne(cascade = [CascadeType.ALL])
-    @JoinColumn(name = "pokemonid", referencedColumnName = "pokemontypeid")
-    val pokemonTypes: PokemonTypes,
+//    @OneToOne(cascade = [CascadeType.ALL])
+//    @JoinColumn(name = "pokemonid", referencedColumnName = "statid")
+//    val pokemonStats: PokemonStats,
+//
+//    @OneToOne(cascade = [CascadeType.ALL])
+//    @JoinColumn(name = "pokemonid", referencedColumnName = "egggroupid")
+//    val eggGroups: EggGroups,
+//
+//    @OneToOne(cascade = [CascadeType.ALL])
+//    @JoinColumn(name = "pokemonid", referencedColumnName = "pokemonabilityid")
+//    val pokemonAbilities: PokemonAbilities,
+//
+//    @OneToOne(cascade = [CascadeType.ALL])
+//    @JoinColumn(name = "pokemonid", referencedColumnName = "pokemontypeid")
+//    val pokemonTypes: PokemonTypes,
 )
 
 

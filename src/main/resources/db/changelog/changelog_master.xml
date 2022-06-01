@@ -9,5 +9,4 @@
 
     <include file="createPokemonTable.xml" relativeToChangelogFile="true"/>
 
-
 </databaseChangeLog>
