@@ -13,8 +13,8 @@ data class PokemonAbilities (
     val PokemonAbilityID: Int,
 
     @Column(name = "ability1")
-    val Ability1: String,
+    val Ability1: String?,
 
     @Column(name = "ability2")
-    val Ability2: String
+    val Ability2: String?
 )

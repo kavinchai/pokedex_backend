@@ -13,9 +13,9 @@ data class EggGroups (
     val EggGroupID: Int,
 
     @Column(name = "egggroup1")
-    val EggGroup1: String,
+    val EggGroup1: String?,
 
     @Column(name = "egggroup2")
-    val EggGroup2: String
+    val EggGroup2: String?
 
 )

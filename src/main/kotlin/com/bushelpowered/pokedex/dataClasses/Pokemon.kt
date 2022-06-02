@@ -1,11 +1,6 @@
 package com.bushelpowered.pokedex.dataClasses
 
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
-import javax.persistence.OneToOne
-import javax.persistence.JoinColumn
+import javax.persistence.*
 
 
 @Entity
@@ -30,21 +25,21 @@ data class Pokemon(
     @Column(name = "description")
     val description: String,
 
-//    @OneToOne(cascade = [CascadeType.ALL])
-//    @JoinColumn(name = "pokemonid", referencedColumnName = "statid")
-//    val pokemonStats: PokemonStats,
-//
-//    @OneToOne(cascade = [CascadeType.ALL])
-//    @JoinColumn(name = "pokemonid", referencedColumnName = "egggroupid")
-//    val eggGroups: EggGroups,
-//
-//    @OneToOne(cascade = [CascadeType.ALL])
-//    @JoinColumn(name = "pokemonid", referencedColumnName = "pokemonabilityid")
-//    val pokemonAbilities: PokemonAbilities,
-//
-//    @OneToOne(cascade = [CascadeType.ALL])
-//    @JoinColumn(name = "pokemonid", referencedColumnName = "pokemontypeid")
-//    val pokemonTypes: PokemonTypes,
+    @OneToOne(cascade = [CascadeType.ALL])
+    @JoinColumn(name = "pokemonid", referencedColumnName = "statid")
+    val pokemonStats: PokemonStats,
+
+    @OneToOne(cascade = [CascadeType.ALL])
+    @JoinColumn(name = "pokemonid", referencedColumnName = "egggroupid")
+    val eggGroups: EggGroups,
+
+    @OneToOne(cascade = [CascadeType.ALL])
+    @JoinColumn(name = "pokemonid", referencedColumnName = "pokemonabilityid")
+    val pokemonAbilities: PokemonAbilities,
+
+    @OneToOne(cascade = [CascadeType.ALL])
+    @JoinColumn(name = "pokemonid", referencedColumnName = "pokemontypeid")
+    val pokemonTypes: PokemonTypes,
 
 )
 
