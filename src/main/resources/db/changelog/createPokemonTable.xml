@@ -58,34 +58,7 @@
             <column name="specialDefense" type="int"/>
         </createTable>
 
-        <addForeignKeyConstraint
-                baseTableName="pokemon_types_table"
-                baseColumnNames="pokemonTypeId"
-                constraintName="pokemonTypeFk"
-                referencedTableName="pokemon_table"
-                referencedColumnNames="pokemonId"
-        />
-        <addForeignKeyConstraint
-                baseTableName="pokemon_abilities_table"
-                baseColumnNames="pokemonAbilityId"
-                constraintName="pokemonAbilityFk"
-                referencedTableName="pokemon_table"
-                referencedColumnNames="pokemonId"
-        />
-        <addForeignKeyConstraint
-                baseTableName="egg_groups_table"
-                baseColumnNames="eggGroupId"
-                constraintName="eggGroupFk"
-                referencedTableName="pokemon_table"
-                referencedColumnNames="pokemonId"
-        />
-        <addForeignKeyConstraint
-                baseTableName="pokemon_stats_table"
-                baseColumnNames="statId"
-                constraintName="statFk"
-                referencedTableName="pokemon_table"
-                referencedColumnNames="pokemonId"
-        />
+
 
 
     </changeSet>
