@@ -48,8 +48,12 @@ class parseFile {
 
         for (entity in 1 until pokemonChar.size) {
             var ability = formatString(pokemonChar[entity][5])
-
             if (ability.size == 1) {
+                ability.add(null)
+                ability.add(null)
+            }
+
+            if (ability.size == 2){
                 ability.add(null)
             }
 
@@ -58,6 +62,7 @@ class parseFile {
                     pokemonChar[entity][0].toInt(),
                     ability[0],
                     ability[1],
+                    ability[2]
                 )
             )
         }
@@ -105,7 +110,7 @@ class parseFile {
         return pokeStatList
     }
 
-    fun pokemonEntity(): List<Pokemon>{
+    fun listOfPokemon(): List<Pokemon>{
         val pokemonChar:List<List<String>> = parseCSV()
         val pokemonList = mutableListOf<Pokemon>()
         for (entity in 1 until pokemonChar.size) {
