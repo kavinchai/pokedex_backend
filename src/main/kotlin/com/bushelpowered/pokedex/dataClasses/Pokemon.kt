@@ -1,23 +1,28 @@
 package com.bushelpowered.pokedex.dataClasses
 
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.Id
+import javax.persistence.Table
+import javax.persistence.OneToOne
+import javax.persistence.JoinColumn
 
 
 @Entity
 @Table(name = "pokemon_table") // All tables need to be named with _ notation
-data class Pokemon (
+data class Pokemon(
     @Id
     @Column(name = "pokemonid") // All names in @Column need to be lowercase
-    val pokemonID: Int,
+    val pokemonId: Int,
 
     @Column(name = "name")
     val name: String,
 
     @Column(name = "height")
-    val height: Int,
+    val height: Double,
 
     @Column(name = "weight")
-    val weight: Int,
+    val weight: Double,
 
     @Column(name = "genus")
     val genus: String,
@@ -40,6 +45,7 @@ data class Pokemon (
 //    @OneToOne(cascade = [CascadeType.ALL])
 //    @JoinColumn(name = "pokemonid", referencedColumnName = "pokemontypeid")
 //    val pokemonTypes: PokemonTypes,
+
 )
 
 
