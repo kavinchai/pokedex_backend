@@ -13,34 +13,33 @@ data class Pokemon(
     @Column(name = "name")
     val name: String,
 
+    @OneToOne(cascade = [CascadeType.ALL])
+    @JoinColumn(name = "pokemonid", referencedColumnName = "pokemontypeid")
+    val pokemonTypes: PokemonTypes,
+
     @Column(name = "height")
     val height: Double,
 
     @Column(name = "weight")
     val weight: Double,
 
-    @Column(name = "genus")
-    val genus: String,
-
-    @Column(name = "description")
-    val description: String,
-
     @OneToOne(cascade = [CascadeType.ALL])
-    @JoinColumn(name = "pokemonid", referencedColumnName = "statid")
-    val pokemonStats: PokemonStats,
+    @JoinColumn(name = "pokemonid", referencedColumnName = "pokemonabilityid")
+    val pokemonAbilities: PokemonAbilities,
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "pokemonid", referencedColumnName = "egggroupid")
     val eggGroups: EggGroups,
 
     @OneToOne(cascade = [CascadeType.ALL])
-    @JoinColumn(name = "pokemonid", referencedColumnName = "pokemonabilityid")
-    val pokemonAbilities: PokemonAbilities,
+    @JoinColumn(name = "pokemonid", referencedColumnName = "statid")
+    val pokemonStats: PokemonStats,
 
-    @OneToOne(cascade = [CascadeType.ALL])
-    @JoinColumn(name = "pokemonid", referencedColumnName = "pokemontypeid")
-    val pokemonTypes: PokemonTypes,
+    @Column(name = "genus")
+    val genus: String,
 
+    @Column(name = "description")
+    val description: String,
 )
 
 
