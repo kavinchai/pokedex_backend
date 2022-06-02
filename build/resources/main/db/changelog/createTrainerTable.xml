@@ -8,6 +8,13 @@
 
     <changeSet id="createPokemonTable" author="Kavin Chaisawangwong">
         <createTable tableName="trainer_table">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="trainerPk" />
+            </column>
+            <column name="userName" type="varchar(50)"/>
+            <column name="firstName" type="varchar(50)"/>
+            <column name="lastName" type="varchar(50)"/>
+            <column name="emailAddress" type="varchar(50)"/>
         </createTable>
 
     </changeSet>

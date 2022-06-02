@@ -19,7 +19,7 @@ class PokemonService (val db: PokemonRepository) {
         return db.findAll()
     }
 
-    fun findPokemon(id: Int): Optional<Pokemon> {
+    fun getPokemon(id: Int): Optional<Pokemon> {
         return db.findById(id)
     }
 

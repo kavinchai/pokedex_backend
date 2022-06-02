@@ -10,11 +10,11 @@ import javax.persistence.Table
 data class PokemonTypes (
     @Id
     @Column(name = "pokemontypeid")
-    val PokemonTypeID: Int,
+    val pokemonTypeId: Int,
 
     @Column(name = "type1")
-    val Type1: String?,
+    val type1: String?,
 
     @Column(name = "type2")
-    val Type2: String?
+    val type2: String?
 )

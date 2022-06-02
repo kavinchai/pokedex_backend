@@ -10,14 +10,14 @@ import javax.persistence.Table
 data class PokemonAbilities (
     @Id
     @Column(name = "pokemonabilityid")
-    val PokemonAbilityID: Int,
+    val pokemonAbilityId: Int,
 
     @Column(name = "ability1")
-    val Ability1: String?,
+    val ability1: String?,
 
     @Column(name = "ability2")
-    val Ability2: String?,
+    val ability2: String?,
 
     @Column(name = "ability3")
-    val Ability3: String?,
+    val ability3: String?,
 )

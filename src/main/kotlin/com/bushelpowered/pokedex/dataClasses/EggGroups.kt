@@ -10,12 +10,12 @@ import javax.persistence.Table
 data class EggGroups (
     @Id
     @Column(name = "egggroupid")
-    val EggGroupID: Int,
+    val eggGroupId: Int,
 
     @Column(name = "egggroup1")
-    val EggGroup1: String?,
+    val eggGroup1: String?,
 
     @Column(name = "egggroup2")
-    val EggGroup2: String?
+    val eggGroup2: String?
 
 )

@@ -4,11 +4,23 @@ import javax.persistence.*
 
 
 @Entity
-@Table(name = "trainer_table") // All tables need to be named with _ notation
+@Table(name = "trainer_table")
 data class Trainer(
     @Id
-    @Column(name = "trainerid") // All names in @Column need to be lowercase
-    val trainerid: Int,
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Int,
+
+    @Column(name = "username", unique = true, nullable = false)
+    val userName: String,
+
+    @Column(name = "firstname", nullable = false)
+    val firstName: String,
+
+    @Column(name = "lastname", nullable = false)
+    val lastName: String,
+
+    @Column(name = "emailaddress", nullable = false)
+    val emailId: String,
 
 )
 

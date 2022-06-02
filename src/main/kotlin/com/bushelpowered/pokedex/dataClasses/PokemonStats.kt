@@ -7,24 +7,24 @@ import javax.persistence.*
 data class PokemonStats (
     @Id
     @Column(name = "statid")
-    val StatID: Int,
+    val statID: Int,
 
     @Column(name = "hp")
-    val Hp: Int,
+    val hp: Int,
 
     @Column(name = "speed")
-    val Speed: Int,
+    val speed: Int,
 
     @Column(name = "attack")
-    val Attack: Int,
+    val attack: Int,
 
     @Column(name = "defense")
-    val Defense: Int,
+    val defense: Int,
 
     @Column(name = "specialattack")
-    val SpecialAttack: Int,
+    val specialAttack: Int,
 
     @Column(name = "specialdefense")
-    val SpecialDefense: Int,
+    val specialDefense: Int,
 
 )
