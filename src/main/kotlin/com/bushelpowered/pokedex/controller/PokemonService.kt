@@ -7,20 +7,12 @@ import java.util.Optional
 
 @Service
 class PokemonService (val db: PokemonRepository) {
-    fun createPokemonDb(){
-        val pokemonList = parseFile().listOfPokemon()
-        pokemonList.forEach{pokemon->
-            db.save(pokemon)
-        }
+    fun createPokemonDb() {
+        db.saveAll(parseFile().listOfPokemon())
     }
 
-    fun allPokemon(): MutableIterable<Pokemon> {
+    fun allPokemon(): MutableIterable<Pokemon> = db.findAll()
 
-        return db.findAll()
-    }
-
-    fun getPokemon(id: Int): Optional<Pokemon> {
-        return db.findById(id)
-    }
+    fun getPokemon(id: Int): Optional<Pokemon> = db.findById(id)
 
 }

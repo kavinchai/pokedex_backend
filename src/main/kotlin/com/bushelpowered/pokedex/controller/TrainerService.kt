@@ -11,9 +11,7 @@ import java.util.Optional
 class TrainerService (val tdb: TrainerRepository, val pdb: PokemonRepository){
     fun getAllTrainers(): MutableIterable<Trainer> = tdb.findAll()
 
-    fun getTrainer(id: Int): Optional<Trainer> {
-        return tdb.findById(id)
-    }
+    fun getTrainer(id: Int): Optional<Trainer> = tdb.findById(id)
 
     fun getTrainerPokemon(id: Int): MutableIterable<Pokemon> {
         val pokemonIdList = tdb.findById(id).get().capturedPokemon
@@ -28,11 +26,12 @@ class TrainerService (val tdb: TrainerRepository, val pdb: PokemonRepository){
         return pdb.findAllById(intList)
     }
 
-    fun createTrainer(trainerInfo: Trainer) = tdb.save(trainerInfo)
+    fun createTrainer(trainerInfo: Trainer) {
+        tdb.save(trainerInfo)
+    }
 
     private fun isValidIntList(strList : List<String>) : Boolean{
         strList.forEach{
-            println(it.toInt())
             if (it.toIntOrNull() == null){  // Not int type
                 return false
             }

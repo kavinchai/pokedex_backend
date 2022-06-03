@@ -48,7 +48,7 @@ class PokedexController (val pokemonService: PokemonService,
     }
 
     @DeleteMapping("/trainer/{id}")
-    fun deleteTrainerbyId(@PathVariable("id") trainerId: Int) {
+    fun deleteTrainerById(@PathVariable("id") trainerId: Int) {
         trainerService.deleteTrainer(trainerId)
     }
 }
