@@ -23,11 +23,12 @@ data class Trainer(
     @Column(name = "emailaddress", nullable = false)
     val emailId: String,
 
-    @OneToMany(fetch = FetchType.LAZY,
-        cascade = [(CascadeType.ALL)],
-        targetEntity = Pokemon::class)
-    @JoinColumn(name = "pokemonid", referencedColumnName = "trainerid")
-    val pokemon: MutableList<Pokemon>? = mutableListOf<Pokemon>(),
+//    @OneToMany(fetch = FetchType.LAZY,
+//        cascade = [(CascadeType.ALL)],
+//        targetEntity = Pokemon::class)
+//    @JoinColumn(name = "pokemonid", referencedColumnName = "trainerid")
+    @Column(name = "capturedpokemon")
+    val capturedPokemon: String?,
 )
 
 

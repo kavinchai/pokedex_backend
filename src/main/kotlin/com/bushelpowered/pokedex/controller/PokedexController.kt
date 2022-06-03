@@ -3,6 +3,8 @@ package com.bushelpowered.pokedex.controller
 import com.bushelpowered.pokedex.dataClasses.Trainer
 import com.bushelpowered.pokedex.repository.PokemonRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.context.event.ApplicationReadyEvent
+import org.springframework.context.event.EventListener
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -16,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController
 class PokedexController (val pokemonService: PokemonService,
                          val trainerService: TrainerService){
 
+    @EventListener(ApplicationReadyEvent::class) // Import data on startup
+    fun importData() = pokemonService.createPokemonDb()
+
     @GetMapping("/pokemon")
     fun getAllPokemon() = pokemonService.allPokemon()
 
@@ -27,6 +32,11 @@ class PokedexController (val pokemonService: PokemonService,
 
     @GetMapping("/trainer/{id}")
     fun getTrainerById(@PathVariable id: Int) = trainerService.getTrainer(id)
+
+    @GetMapping("/trainer/{id}/capturedPokemon")
+    fun getTrainerPokemonById(@PathVariable id: Int) {
+        trainerService.getTrainerPokemon(id)
+    }
 
     @PostMapping("/trainer")
     fun createEmployee(@RequestBody trainerInfo: Trainer) {

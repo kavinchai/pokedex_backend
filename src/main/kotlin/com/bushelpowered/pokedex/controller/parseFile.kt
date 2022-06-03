@@ -130,4 +130,6 @@ class parseFile {
         }
         return pokemonList
     }
+
+
 }

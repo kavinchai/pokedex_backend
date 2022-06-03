@@ -15,7 +15,7 @@ class PokemonService (val db: PokemonRepository) {
     }
 
     fun allPokemon(): MutableIterable<Pokemon> {
-        createPokemonDb()
+
         return db.findAll()
     }
 
