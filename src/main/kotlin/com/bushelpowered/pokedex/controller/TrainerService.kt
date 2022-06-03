@@ -25,27 +25,56 @@ class TrainerService (val tdb: TrainerRepository, val pdb: PokemonRepository){
                 intList.add(it.toInt())
             }
         }
-
         return pdb.findAllById(intList)
     }
 
     fun createTrainer(trainerInfo: Trainer) = tdb.save(trainerInfo)
 
-    fun updateTrainerById(id: Int, trainerInfo: Trainer): Any {
-         return if (tdb.existsById(id)){
-            tdb.save(
-                Trainer(
-                    trainerId = trainerInfo.trainerId,
-                    userName = trainerInfo.userName,
-                    firstName = trainerInfo.firstName,
-                    lastName = trainerInfo.lastName,
-                    emailId = trainerInfo.emailId,
-                    capturedPokemon = trainerInfo.capturedPokemon
-                )
-            )
+    private fun isValidIntList(strList : List<String>) : Boolean{
+        strList.forEach{
+            println(it.toInt())
+            if (it.toIntOrNull() == null){  // Not int type
+                return false
+            }
+            if (it.toInt() > pdb.count()){  // PokemonId exceeds pokedex
+                return false
+            }
         }
-        else {
-            println("Error: Trainer does not exist")
+        return true
+    }
+
+    private fun hasDuplicates(strList : List<String>) : Boolean{
+        return strList.size != strList.distinct().count()
+    }
+    fun updateTrainerById(id: Int, trainerInfo: Trainer) {
+        if (!trainerInfo.capturedPokemon.isNullOrEmpty()){  // If capturedPokemon changes are not null
+            val capturedPokemonStr = trainerInfo.capturedPokemon
+                ?.split(" ")
+            if (isValidIntList(capturedPokemonStr) == true) {
+                if (hasDuplicates(capturedPokemonStr) == false){
+                    if (tdb.existsById(id)) {
+                        tdb.save(
+                            Trainer(
+                                trainerId = trainerInfo.trainerId,
+                                userName = trainerInfo.userName,
+                                firstName = trainerInfo.firstName,
+                                lastName = trainerInfo.lastName,
+                                emailId = trainerInfo.emailId,
+                                capturedPokemon = trainerInfo.capturedPokemon
+                            )
+                        )
+                    }
+                    else {
+                        println("Error: Trainer does not exist")
+                    }
+                }
+                else{
+                    println("Error: Pokemon ID has duplicates")
+                }
+            }
+            else{
+                println("Error: Invalid pokemon id")
+            }
         }
     }
 }

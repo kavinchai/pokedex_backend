@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController
 
 
 @RestController
-//@RequestMapping
 class PokedexController (val pokemonService: PokemonService,
                          val trainerService: TrainerService){
 
@@ -34,9 +33,7 @@ class PokedexController (val pokemonService: PokemonService,
     fun getTrainerById(@PathVariable id: Int) = trainerService.getTrainer(id)
 
     @GetMapping("/trainer/{id}/capturedPokemon")
-    fun getTrainerPokemonById(@PathVariable id: Int) {
-        trainerService.getTrainerPokemon(id)
-    }
+    fun getTrainerPokemonById(@PathVariable id: Int) = trainerService.getTrainerPokemon(id)
 
     @PostMapping("/trainer")
     fun createEmployee(@RequestBody trainerInfo: Trainer) {
