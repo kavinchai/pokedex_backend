@@ -6,15 +6,16 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
 
-    <changeSet id="createPokemonTable" author="Kavin Chaisawangwong">
+    <changeSet id="createTrainerTable" author="Kavin Chaisawangwong">
         <createTable tableName="trainer_table">
-            <column name="id" type="bigint" autoIncrement="true">
+            <column name="trainerId" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" primaryKeyName="trainerPk" />
             </column>
             <column name="userName" type="varchar(50)"/>
             <column name="firstName" type="varchar(50)"/>
             <column name="lastName" type="varchar(50)"/>
             <column name="emailAddress" type="varchar(50)"/>
+            <column name="capturedPokemon" type = "varchar(255)"/>
         </createTable>
 
     </changeSet>

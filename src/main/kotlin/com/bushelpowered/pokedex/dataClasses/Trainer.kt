@@ -8,7 +8,8 @@ import javax.persistence.*
 data class Trainer(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int,
+    @Column(name = "trainerid")
+    val trainerId: Int,
 
     @Column(name = "username", unique = true, nullable = false)
     val userName: String,
@@ -22,6 +23,11 @@ data class Trainer(
     @Column(name = "emailaddress", nullable = false)
     val emailId: String,
 
+    @OneToMany(fetch = FetchType.LAZY,
+        cascade = [(CascadeType.ALL)],
+        targetEntity = Pokemon::class)
+    @JoinColumn(name = "pokemonid", referencedColumnName = "trainerid")
+    val pokemon: MutableList<Pokemon>? = mutableListOf<Pokemon>(),
 )
 
 

@@ -19,11 +19,12 @@ class TrainerService (val db: TrainerRepository){
         if (db.existsById(id)){
             db.save(
                 Trainer(
-                    id = trainerInfo.id,
+                    trainerId = trainerInfo.trainerId,
                     userName = trainerInfo.userName,
                     firstName = trainerInfo.firstName,
                     lastName = trainerInfo.lastName,
-                    emailId = trainerInfo.emailId
+                    emailId = trainerInfo.emailId,
+                    pokemon = trainerInfo.pokemon
                 )
             )
         }
