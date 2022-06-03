@@ -77,4 +77,13 @@ class TrainerService (val tdb: TrainerRepository, val pdb: PokemonRepository){
             }
         }
     }
+
+    fun deleteTrainer(trainerId: Int){
+        if (tdb.existsById(trainerId)){
+            tdb.deleteById(trainerId)
+        }
+        else{
+            println("Error: Trainer doesn't exist")
+        }
+    }
 }
