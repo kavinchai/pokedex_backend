@@ -19,7 +19,7 @@ class parseFile {
             .split(", ")
             .toMutableList<String?>()
     }
-
+    
     private fun initPokemonEntity() : Array<MutableList<out Any>> {
         val pokemonInfo:List<List<String>> = parseCSV()
         val pokeTypeList = mutableListOf<PokemonTypes>()
@@ -33,25 +33,16 @@ class parseFile {
             val eggGroup = formatString(pokemonInfo[columns][6])
             val pokeStat = JSONObject(pokemonInfo[columns][7])
 
-            if (types.size == 1) {
-                types.add(null)
-            }
-            if (ability.size == 1) {
-                ability.add(null)
-                ability.add(null)
-            }
-            if (ability.size == 2){
-                ability.add(null)
-            }
-            if (eggGroup.size == 1) {
-                eggGroup.add(null)
-            }
+            if (types.size == 1) types.add(null)
+            if (ability.size == 1) for (i in 1..2) ability.add(null)
+            if (ability.size == 2) ability.add(null)
+            if (eggGroup.size == 1) eggGroup.add(null)
 
             pokeTypeList.add(
                 PokemonTypes(
                     pokemonInfo[columns][0].toInt(),
                     types[0],
-                    types[1],
+                    types[1]
                 )
             )
             pokeAbilityList.add(
@@ -66,7 +57,7 @@ class parseFile {
                 EggGroups(
                     pokemonInfo[columns][0].toInt(),
                     eggGroup[0],
-                    eggGroup[1],
+                    eggGroup[1]
                 )
             )
             pokeStatList.add(
@@ -77,7 +68,7 @@ class parseFile {
                     pokeStat.get("attack") as Int,
                     pokeStat.get("defense") as Int,
                     pokeStat.get("special-attack") as Int,
-                    pokeStat.get("special-defense") as Int,
+                    pokeStat.get("special-defense") as Int
                 )
             )
         }
