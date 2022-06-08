@@ -22,7 +22,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.3.0")
 	implementation("org.json:json:20220320")
-	implementation("org.springframework.boot:spring-boot-starter-security")
+	//implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.security:spring-security-test")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
