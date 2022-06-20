@@ -5,15 +5,14 @@ import com.bushelpowered.pokedex.dataClasses.Trainer
 import com.bushelpowered.pokedex.repository.PokemonRepository
 import com.bushelpowered.pokedex.repository.TrainerRepository
 import org.springframework.stereotype.Service
-import java.util.Optional
 
 @Service
 class TrainerService (val tdb: TrainerRepository, val pdb: PokemonRepository){
-    fun getAllTrainers(): MutableIterable<Trainer> = tdb.findAll()
+    fun getAllTrainers(): Iterable<Trainer> = tdb.findAll()
 
-    fun getTrainer(id: Int): Optional<Trainer> = tdb.findById(id)
+    fun getTrainer(id: Int): Trainer? = tdb.findById(id).orElse(null)
 
-    fun getTrainerPokemon(id: Int): MutableIterable<Pokemon> {
+    fun getTrainerPokemon(id: Int): Iterable<Pokemon> {
         val pokemonIdList = tdb.findById(id).get().capturedPokemon
             ?.split(" ")
         val intList : MutableList<Int> = mutableListOf()

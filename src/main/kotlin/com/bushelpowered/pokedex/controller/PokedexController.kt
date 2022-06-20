@@ -1,8 +1,6 @@
 package com.bushelpowered.pokedex.controller
 
 import com.bushelpowered.pokedex.dataClasses.Trainer
-import com.bushelpowered.pokedex.repository.PokemonRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.web.bind.annotation.*
@@ -22,7 +20,7 @@ class PokedexController (val pokemonService: PokemonService,
     fun getPokemonById(@PathVariable id: Int) = pokemonService.getPokemon(id)
 
     @GetMapping("pokemon/page")
-    fun getPokemonByPage(@RequestParam pageNum: Int, @RequestParam pageSize: Int) = pokemonService.getPokemonByPage(pageNum, pageSize)
+    fun getPokemonByPage(@RequestParam(defaultValue = "0") pageNum: Int, @RequestParam(defaultValue = "15") pageSize: Int) = pokemonService.getPokemonByPage(pageNum, pageSize)
 
     @GetMapping("/trainer")
     fun getAllTrainers() = trainerService.getAllTrainers()
