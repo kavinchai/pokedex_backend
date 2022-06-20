@@ -5,13 +5,7 @@ import com.bushelpowered.pokedex.repository.PokemonRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 
 @RestController
@@ -26,6 +20,9 @@ class PokedexController (val pokemonService: PokemonService,
 
     @GetMapping("/pokemon/{id}")
     fun getPokemonById(@PathVariable id: Int) = pokemonService.getPokemon(id)
+
+    @GetMapping("pokemon/page")
+    fun getPokemonByPage(@RequestParam pageNum: Int, @RequestParam pageSize: Int) = pokemonService.getPokemonByPage(pageNum, pageSize)
 
     @GetMapping("/trainer")
     fun getAllTrainers() = trainerService.getAllTrainers()
