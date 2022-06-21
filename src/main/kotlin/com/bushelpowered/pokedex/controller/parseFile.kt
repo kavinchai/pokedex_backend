@@ -19,7 +19,7 @@ class parseFile {
             .split(", ")
             .toMutableList<String?>()
     }
-    
+
     private fun initPokemonEntity() : Array<MutableList<out Any>> {
         val pokemonInfo:List<List<String>> = parseCSV()
         val pokeTypeList = mutableListOf<PokemonTypes>()

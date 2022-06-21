@@ -14,7 +14,9 @@ class PokemonService (val pdb: PokemonRepository) {
         pdb.saveAll(parseFile().listOfPokemon())
     }
 
-    fun allPokemon(): Iterable<Pokemon> = pdb.findAll()
+    fun allPokemon(): Iterable<Pokemon> {
+        return pdb.findAll()
+    }
 
     fun getPokemon(id: Int): Optional<Pokemon> = pdb.findById(id)
 

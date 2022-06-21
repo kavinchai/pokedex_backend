@@ -8,4 +8,5 @@
 
     <include file="createPokemonTable.xml" relativeToChangelogFile="true"/>
     <include file="createTrainerTable.xml" relativeToChangelogFile="true"/>
+    <include file="createCapturedPokemonTable.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

@@ -19,19 +19,19 @@ class PokedexController (val pokemonService: PokemonService,
     @GetMapping("/pokemon/{id}")
     fun getPokemonById(@PathVariable id: Int) = pokemonService.getPokemon(id)
 
-    @GetMapping("pokemon/page")
+    @GetMapping("/pokemon/page")
     fun getPokemonByPage(@RequestParam(defaultValue = "0") pageNum: Int, @RequestParam(defaultValue = "15") pageSize: Int) = pokemonService.getPokemonByPage(pageNum, pageSize)
 
-    @GetMapping("/trainer")
+    @GetMapping("/trainer/")
     fun getAllTrainers() = trainerService.getAllTrainers()
 
     @GetMapping("/trainer/{id}")
     fun getTrainerById(@PathVariable id: Int) = trainerService.getTrainer(id)
 
-    @GetMapping("/trainer/{id}/capturedPokemon")
-    fun getTrainerPokemonById(@PathVariable id: Int) = trainerService.getTrainerPokemon(id)
+    @GetMapping("/capturedPokemon/")
+    fun getAllCapturedPokemon() = trainerService.getCaptured()
 
-    @PostMapping("/trainer")
+    @PostMapping("/trainer/")
     fun createEmployee(@RequestBody trainerInfo: Trainer) {
         trainerService.createTrainer(trainerInfo)
     }
@@ -40,6 +40,11 @@ class PokedexController (val pokemonService: PokemonService,
     fun updateTrainerById(@PathVariable("id") trainerId: Int,
                           @RequestBody trainerInfo: Trainer) {
         trainerService.updateTrainerById(trainerId, trainerInfo)
+    }
+
+    @PutMapping("/trainer/{trainerId}/capturePokemon/{pokemonId}")
+    fun capturePokemon(@PathVariable trainerId: Int, @PathVariable pokemonId: Int){
+        trainerService.capturePokemonToTrainer(trainerId, pokemonId)
     }
 
     @DeleteMapping("/trainer/{id}")

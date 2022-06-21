@@ -15,9 +15,8 @@
             <column name="firstName" type="varchar(50)"/>
             <column name="lastName" type="varchar(50)"/>
             <column name="emailAddress" type="varchar(50)"/>
-            <column name="capturedPokemon" type="varchar(255)"/>
+            <column name="capturedPokemon" type="varchar(50)"/>
         </createTable>
-
     </changeSet>
 
 

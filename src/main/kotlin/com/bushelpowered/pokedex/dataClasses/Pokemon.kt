@@ -1,13 +1,17 @@
 package com.bushelpowered.pokedex.dataClasses
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
 import javax.persistence.*
 
 
 @Entity
 @Table(name = "pokemon_table") // All tables need to be named with _ notation
+@JsonIgnoreProperties("pokemonid")
 data class Pokemon(
     @Id
     @Column(name = "pokemonid") // All names in @Column need to be lowercase
+    @JsonProperty("pokemonid")
     val pokemonId: Int,
 
     @Column(name = "name")
@@ -40,7 +44,6 @@ data class Pokemon(
 
     @Column(name = "description")
     val description: String,
-
 )
 
 

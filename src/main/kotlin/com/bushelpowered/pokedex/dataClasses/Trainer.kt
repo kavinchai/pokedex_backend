@@ -1,5 +1,6 @@
 package com.bushelpowered.pokedex.dataClasses
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import javax.persistence.*
 
 
@@ -23,8 +24,11 @@ data class Trainer(
     @Column(name = "emailaddress", nullable = false)
     val emailId: String,
 
-    @Column(name = "capturedpokemon")
-    val capturedPokemon: String?,
+    @OneToMany
+    @JoinTable(name = "captured_pokemon_table",
+        joinColumns = [JoinColumn(name = "trainer", referencedColumnName = "trainerid")],
+        inverseJoinColumns = [JoinColumn(name = "pokemon", referencedColumnName = "pokemonid")])
+    var capturedPokemon: List<Pokemon>?
 )
 
 

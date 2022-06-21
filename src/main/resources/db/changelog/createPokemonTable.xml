@@ -57,9 +57,7 @@
             <column name="specialAttack" type="int"/>
             <column name="specialDefense" type="int"/>
         </createTable>
-
-
-
+        
 
     </changeSet>
 

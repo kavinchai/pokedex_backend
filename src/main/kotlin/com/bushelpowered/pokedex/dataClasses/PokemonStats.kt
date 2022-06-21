@@ -1,12 +1,16 @@
 package com.bushelpowered.pokedex.dataClasses
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
 import javax.persistence.*
 
 @Entity
 @Table(name = "pokemon_stats_table")
+@JsonIgnoreProperties("statid" )
 data class PokemonStats (
     @Id
     @Column(name = "statid")
+    @JsonProperty("statid")
     val statID: Int,
 
     @Column(name = "hp")

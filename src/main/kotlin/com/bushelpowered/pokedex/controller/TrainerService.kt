@@ -1,29 +1,20 @@
 package com.bushelpowered.pokedex.controller
 
+import com.bushelpowered.pokedex.dataClasses.CapturedPokemon
 import com.bushelpowered.pokedex.dataClasses.Pokemon
 import com.bushelpowered.pokedex.dataClasses.Trainer
+import com.bushelpowered.pokedex.repository.CapturedPokemonRepository
 import com.bushelpowered.pokedex.repository.PokemonRepository
 import com.bushelpowered.pokedex.repository.TrainerRepository
 import org.springframework.stereotype.Service
 
 @Service
-class TrainerService (val tdb: TrainerRepository, val pdb: PokemonRepository){
+class TrainerService (val tdb: TrainerRepository, val pdb: PokemonRepository, val cpdb: CapturedPokemonRepository){
     fun getAllTrainers(): Iterable<Trainer> = tdb.findAll()
 
     fun getTrainer(id: Int): Trainer? = tdb.findById(id).orElse(null)
 
-    fun getTrainerPokemon(id: Int): Iterable<Pokemon> {
-        val pokemonIdList = tdb.findById(id).get().capturedPokemon
-            ?.split(" ")
-        val intList : MutableList<Int> = mutableListOf()
-
-        if (pokemonIdList != null) {
-            pokemonIdList.forEach{
-                intList.add(it.toInt())
-            }
-        }
-        return pdb.findAllById(intList)
-    }
+    fun getCaptured(): Iterable<CapturedPokemon> = cpdb.findAll()
 
     fun createTrainer(trainerInfo: Trainer) {
         tdb.save(trainerInfo)
@@ -45,34 +36,39 @@ class TrainerService (val tdb: TrainerRepository, val pdb: PokemonRepository){
         return strList.size != strList.distinct().count()
     }
     fun updateTrainerById(id: Int, trainerInfo: Trainer) {
-        if (!trainerInfo.capturedPokemon.isNullOrEmpty()){  // If capturedPokemon changes are not null
-            val capturedPokemonStr = trainerInfo.capturedPokemon
-                ?.split(" ")
-            if (isValidIntList(capturedPokemonStr) == true) {
-                if (hasDuplicates(capturedPokemonStr) == false){
-                    if (tdb.existsById(id)) {
-                        tdb.save(
-                            Trainer(
-                                trainerId = trainerInfo.trainerId,
-                                userName = trainerInfo.userName,
-                                firstName = trainerInfo.firstName,
-                                lastName = trainerInfo.lastName,
-                                emailId = trainerInfo.emailId,
-                                capturedPokemon = trainerInfo.capturedPokemon
-                            )
-                        )
-                    }
-                    else {
-                        println("Error: Trainer does not exist")
-                    }
-                }
-                else{
-                    println("Error: Pokemon ID has duplicates")
-                }
+        if (tdb.existsById(id)) {
+            println(trainerInfo)
+            tdb.save(
+                Trainer(
+                    trainerId = trainerInfo.trainerId,
+                    userName = trainerInfo.userName,
+                    firstName = trainerInfo.firstName,
+                    lastName = trainerInfo.lastName,
+                    emailId = trainerInfo.emailId,
+                    capturedPokemon = trainerInfo.capturedPokemon
+                )
+            )
+        }
+        else {
+            println("Error: Trainer does not exist")
+        }
+
+    }
+
+    fun capturePokemonToTrainer(trainerId: Int, pokemonId: Int){
+        if (tdb.existsById(trainerId)){
+            if (pdb.existsById(pokemonId)){
+                val tmpTrainer : Trainer = tdb.findById(trainerId).orElse(null)
+                val tmpPokemon : Pokemon = pdb.findById(pokemonId).orElse(null)
+                val uniqueTrainerPokemon = (tmpTrainer.trainerId * 1000) + tmpPokemon.pokemonId
+                cpdb.save(CapturedPokemon(uniqueTrainerPokemon, trainerId, pokemonId))
             }
             else{
-                println("Error: Invalid pokemon id")
+                println("Error: Pokemon doesn't exist")
             }
+        }
+        else{
+            println("Error: Trainer doesn't exist")
         }
     }
 
