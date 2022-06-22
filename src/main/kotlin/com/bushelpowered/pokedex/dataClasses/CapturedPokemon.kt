@@ -8,7 +8,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "captured_pokemon_table") // All tables need to be named with _ notation
-@JsonIgnoreProperties("capturedpokemonid" )
+@JsonIgnoreProperties("capturedpokemonid")
 data class CapturedPokemon(
     @Id
     @Column(name = "capturedpokemonid") // All names in @Column need to be lowercase

@@ -9,7 +9,7 @@
     <changeSet id="createPokemonTable" author="Kavin Chaisawangwong">
         <createTable tableName="pokemon_table">
             <column name="pokemonId" type="int">
-                <constraints primaryKey="true" primaryKeyName="pokemonPk" />
+                <constraints primaryKey="true" primaryKeyName="pokemonPk"/>
             </column>
             <column name="name" type="varchar(250)"/>
             <column name="types" type="varchar(50)"/>
@@ -23,7 +23,7 @@
 
         <createTable tableName="pokemon_types_table">
             <column name="pokemonTypeId" type="int">
-                <constraints primaryKey="true" primaryKeyName="pokemonTypePk" />
+                <constraints primaryKey="true" primaryKeyName="pokemonTypePk"/>
             </column>
             <column name="type1" type="varchar(50)"/>
             <column name="type2" type="varchar(50)"/>
@@ -31,7 +31,7 @@
 
         <createTable tableName="pokemon_abilities_table">
             <column name="pokemonAbilityId" type="int">
-                <constraints primaryKey="true" primaryKeyName="pokemonAbilityPk" />
+                <constraints primaryKey="true" primaryKeyName="pokemonAbilityPk"/>
             </column>
             <column name="ability1" type="varchar(50)"/>
             <column name="ability2" type="varchar(50)"/>
@@ -40,7 +40,7 @@
 
         <createTable tableName="egg_groups_table">
             <column name="eggGroupId" type="int">
-                <constraints primaryKey="true" primaryKeyName="eggGroupPk" />
+                <constraints primaryKey="true" primaryKeyName="eggGroupPk"/>
             </column>
             <column name="eggGroup1" type="varchar(50)"/>
             <column name="eggGroup2" type="varchar(50)"/>
@@ -48,7 +48,7 @@
 
         <createTable tableName="pokemon_stats_table">
             <column name="statId" type="int">
-                <constraints primaryKey="true" primaryKeyName="statPk" />
+                <constraints primaryKey="true" primaryKeyName="statPk"/>
             </column>
             <column name="hp" type="int"/>
             <column name="speed" type="int"/>
@@ -57,9 +57,5 @@
             <column name="specialAttack" type="int"/>
             <column name="specialDefense" type="int"/>
         </createTable>
-        
-
     </changeSet>
-
-
 </databaseChangeLog>

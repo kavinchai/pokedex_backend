@@ -9,8 +9,8 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "egg_groups_table")
-@JsonIgnoreProperties("egggroupid" )
-data class EggGroups (
+@JsonIgnoreProperties("egggroupid")
+data class EggGroups(
     @Id
     @Column(name = "egggroupid")
     @JsonProperty("egggroupid")

@@ -25,10 +25,12 @@ data class Trainer(
     val emailId: String,
 
     @OneToMany
-    @JoinTable(name = "captured_pokemon_table",
+    @JoinTable(
+        name = "captured_pokemon_table",
         joinColumns = [JoinColumn(name = "trainer", referencedColumnName = "trainerid")],
-        inverseJoinColumns = [JoinColumn(name = "pokemon", referencedColumnName = "pokemonid")])
-    var capturedPokemon: List<Pokemon>?
+        inverseJoinColumns = [JoinColumn(name = "pokemon", referencedColumnName = "pokemonid")]
+    )
+    val capturedPokemon: List<Pokemon>?
 )
 
 

@@ -9,8 +9,8 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "pokemon_abilities_table")
-@JsonIgnoreProperties("pokemonabilityid" )
-data class PokemonAbilities (
+@JsonIgnoreProperties("pokemonabilityid")
+data class PokemonAbilities(
     @Id
     @Column(name = "pokemonabilityid")
     @JsonProperty("pokemonabilityid")

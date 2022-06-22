@@ -1,5 +1,6 @@
 package com.bushelpowered.pokedex.controller
 
+import com.bushelpowered.pokedex.dataClasses.Pokemon
 import com.bushelpowered.pokedex.dataClasses.Trainer
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
@@ -7,29 +8,44 @@ import org.springframework.web.bind.annotation.*
 
 
 @RestController
-class PokedexController (val pokemonService: PokemonService,
-                         val trainerService: TrainerService){
+class PokedexController(
+    val pokemonService: PokemonService,
+    val trainerService: TrainerService
+) {
 
     @EventListener(ApplicationReadyEvent::class) // Import data on startup
-    fun importData() = pokemonService.createPokemonDb()
+    fun importData() {
+        return pokemonService.createPokemonDb()
+    }
 
     @GetMapping("/pokemon")
-    fun getAllPokemon() = pokemonService.allPokemon()
+    fun getAllPokemon(): Iterable<Pokemon> {
+        return pokemonService.allPokemon()
+    }
 
     @GetMapping("/pokemon/{id}")
-    fun getPokemonById(@PathVariable id: Int) = pokemonService.getPokemon(id)
+    fun getPokemonById(@PathVariable id: Int): Pokemon? {
+        return pokemonService.getPokemon(id)
+    }
 
+    //page?pageNum=Int&pageSize=Int
     @GetMapping("/pokemon/page")
-    fun getPokemonByPage(@RequestParam(defaultValue = "0") pageNum: Int, @RequestParam(defaultValue = "15") pageSize: Int) = pokemonService.getPokemonByPage(pageNum, pageSize)
+    fun getPokemonByPage(
+        @RequestParam(defaultValue = "0") pageNum: Int,
+        @RequestParam(defaultValue = "15") pageSize: Int
+    ): Iterable<Pokemon> {
+        return pokemonService.getPokemonByPage(pageNum, pageSize)
+    }
 
     @GetMapping("/trainer/")
-    fun getAllTrainers() = trainerService.getAllTrainers()
+    fun getAllTrainers(): Iterable<Trainer> {
+        return trainerService.getAllTrainers()
+    }
 
     @GetMapping("/trainer/{id}")
-    fun getTrainerById(@PathVariable id: Int) = trainerService.getTrainer(id)
-
-    @GetMapping("/capturedPokemon/")
-    fun getAllCapturedPokemon() = trainerService.getCaptured()
+    fun getTrainerById(@PathVariable id: Int): Trainer? {
+        return trainerService.getTrainer(id)
+    }
 
     @PostMapping("/trainer/")
     fun createEmployee(@RequestBody trainerInfo: Trainer) {
@@ -37,13 +53,15 @@ class PokedexController (val pokemonService: PokemonService,
     }
 
     @PutMapping("/trainer/{id}")
-    fun updateTrainerById(@PathVariable("id") trainerId: Int,
-                          @RequestBody trainerInfo: Trainer) {
+    fun updateTrainerById(
+        @PathVariable("id") trainerId: Int,
+        @RequestBody trainerInfo: Trainer
+    ) {
         trainerService.updateTrainerById(trainerId, trainerInfo)
     }
 
     @PutMapping("/trainer/{trainerId}/capturePokemon/{pokemonId}")
-    fun capturePokemon(@PathVariable trainerId: Int, @PathVariable pokemonId: Int){
+    fun capturePokemon(@PathVariable trainerId: Int, @PathVariable pokemonId: Int) {
         trainerService.capturePokemonToTrainer(trainerId, pokemonId)
     }
 

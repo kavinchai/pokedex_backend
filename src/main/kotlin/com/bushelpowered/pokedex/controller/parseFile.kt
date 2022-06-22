@@ -12,7 +12,7 @@ class parseFile {
         return csvReader().readAll(File(file))
     }
 
-    private fun formatString(str: String) : MutableList<String?> {
+    private fun formatString(str: String): MutableList<String?> {
         return str.replace("[\"", "")
             .replace("\"]", "")
             .replace("\", \"", ", ")
@@ -20,8 +20,13 @@ class parseFile {
             .toMutableList<String?>()
     }
 
-    private fun initPokemonEntity() : Array<MutableList<out Any>> {
-        val pokemonInfo:List<List<String>> = parseCSV()
+    private fun getPokemonTypes(){
+        val pokemonInfo: List<List<String>> = parseCSV()
+
+    }
+
+    private fun initPokemonEntity(): Array<MutableList<out Any>> {
+        val pokemonInfo: List<List<String>> = parseCSV()
         val pokeTypeList = mutableListOf<PokemonTypes>()
         val pokeAbilityList = mutableListOf<PokemonAbilities>()
         val eggGroupList = mutableListOf<EggGroups>()
@@ -75,8 +80,8 @@ class parseFile {
         return arrayOf(pokeTypeList, pokeAbilityList, eggGroupList, pokeStatList)
     }
 
-    fun listOfPokemon(): List<Pokemon>{
-        val pokemonInfo:List<List<String>> = parseCSV()
+    fun listOfPokemon(): List<Pokemon> {
+        val pokemonInfo: List<List<String>> = parseCSV()
         val pokemonList = mutableListOf<Pokemon>()
         val (pokeTypeList,
             pokeAbilityList,
@@ -91,7 +96,7 @@ class parseFile {
                 pokemonInfo[columns][4].toDouble(),
                 pokeAbilityList[columns - 1] as PokemonAbilities,
                 eggGroupList[columns - 1] as EggGroups,
-                pokeStatList[columns-1] as PokemonStats,
+                pokeStatList[columns - 1] as PokemonStats,
                 pokemonInfo[columns][8],
                 pokemonInfo[columns][9]
             )

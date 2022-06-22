@@ -9,7 +9,7 @@
     <changeSet id="createTrainerTable" author="Kavin Chaisawangwong">
         <createTable tableName="trainer_table">
             <column name="trainerId" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" primaryKeyName="trainerPk" />
+                <constraints primaryKey="true" primaryKeyName="trainerPk"/>
             </column>
             <column name="userName" type="varchar(50)"/>
             <column name="firstName" type="varchar(50)"/>
