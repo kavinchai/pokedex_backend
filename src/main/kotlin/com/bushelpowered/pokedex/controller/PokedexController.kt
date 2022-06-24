@@ -4,6 +4,8 @@ import com.bushelpowered.pokedex.dto.PokemonResponse
 import com.bushelpowered.pokedex.dto.TrainerResponse
 import com.bushelpowered.pokedex.entity.Pokemon
 import com.bushelpowered.pokedex.entity.Trainer
+import com.bushelpowered.pokedex.service.PokemonService
+import com.bushelpowered.pokedex.service.TrainerService
 import org.modelmapper.ModelMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.event.ApplicationReadyEvent

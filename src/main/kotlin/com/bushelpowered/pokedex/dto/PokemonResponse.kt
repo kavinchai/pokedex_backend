@@ -15,5 +15,5 @@ data class PokemonResponse(
     val eggGroups: EggGroups,
     val pokemonStats: PokemonStats,
     val genus: String,
-    val description: String,
+    val description: String
 )

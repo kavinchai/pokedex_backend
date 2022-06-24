@@ -1,4 +1,4 @@
-package com.bushelpowered.pokedex.controller
+package com.bushelpowered.pokedex.service
 
 import com.bushelpowered.pokedex.dto.PokemonResponse
 import com.bushelpowered.pokedex.repository.PokemonRepository
