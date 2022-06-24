@@ -16,7 +16,7 @@ import org.springframework.web.server.ResponseStatusException
 class TrainerService(
     private val trainerDb: TrainerRepository,
     private val pokemonDb: PokemonRepository,
-    private val capturedPokemonDb: CapturedPokemonRepository,
+    private val capturedPokemonDb: CapturedPokemonRepository
 ) {
     fun getAllTrainers(): List<Trainer> {
         return trainerDb.findAll() as List<Trainer>
