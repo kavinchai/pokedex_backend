@@ -1,11 +1,12 @@
-package com.bushelpowered.pokedex.dataClasses
+package com.bushelpowered.pokedex.entity
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import lombok.Data
 import javax.persistence.*
 
 
 @Entity
 @Table(name = "trainer_table")
+@Data
 data class Trainer(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +32,7 @@ data class Trainer(
         inverseJoinColumns = [JoinColumn(name = "pokemon", referencedColumnName = "pokemonid")]
     )
     val capturedPokemon: List<Pokemon>?
+
 )
 
 

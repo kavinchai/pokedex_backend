@@ -1,8 +1,9 @@
 package com.bushelpowered.pokedex.controller
 
-import com.bushelpowered.pokedex.dataClasses.CapturedPokemon
-import com.bushelpowered.pokedex.dataClasses.Pokemon
-import com.bushelpowered.pokedex.dataClasses.Trainer
+import com.bushelpowered.pokedex.dto.TrainerResponse
+import com.bushelpowered.pokedex.entity.CapturedPokemon
+import com.bushelpowered.pokedex.entity.Pokemon
+import com.bushelpowered.pokedex.entity.Trainer
 import com.bushelpowered.pokedex.repository.CapturedPokemonRepository
 import com.bushelpowered.pokedex.repository.PokemonRepository
 import com.bushelpowered.pokedex.repository.TrainerRepository
@@ -10,26 +11,33 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
 
+
 @Service
 class TrainerService(
-    val trainerDb: TrainerRepository,
-    val pokemonDb: PokemonRepository,
-    val capturedPokemonDb: CapturedPokemonRepository
+    private val trainerDb: TrainerRepository,
+    private val pokemonDb: PokemonRepository,
+    private val capturedPokemonDb: CapturedPokemonRepository,
 ) {
-    fun getAllTrainers(): Iterable<Trainer> {
-        return trainerDb.findAll()
+    fun getAllTrainers(): List<Trainer> {
+        return trainerDb.findAll() as List<Trainer>
     }
 
-    fun getTrainer(id: Int): Trainer? {
-        return trainerDb.findById(id).orElse(null)
+    fun getTrainer(id: Int): TrainerResponse? {
+        val trainer: Trainer? = trainerDb.findById(id).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
+        return trainer?.let {
+            TrainerResponse(
+                trainerId = it.trainerId,
+                userName = trainer.userName,
+                firstName = trainer.firstName,
+                lastName = trainer.lastName,
+                emailId = trainer.emailId,
+                capturedPokemon = trainer.capturedPokemon
+            )
+        }
     }
 
     fun createTrainer(trainerInfo: Trainer) {
         trainerDb.save(trainerInfo)
-    }
-
-    private fun hasDuplicates(strList: List<String>): Boolean {
-        return strList.size != strList.distinct().count()
     }
 
     fun updateTrainerById(id: Int, trainerInfo: Trainer) {
@@ -60,3 +68,4 @@ class TrainerService(
         trainerDb.deleteById(trainerId)
     }
 }
+

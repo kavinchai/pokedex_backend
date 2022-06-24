@@ -1,4 +1,4 @@
-package com.bushelpowered.pokedex.dataClasses
+package com.bushelpowered.pokedex.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty

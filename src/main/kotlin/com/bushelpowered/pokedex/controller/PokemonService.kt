@@ -1,40 +1,64 @@
 package com.bushelpowered.pokedex.controller
 
+import com.bushelpowered.pokedex.dto.PokemonResponse
 import com.bushelpowered.pokedex.repository.PokemonRepository
-import com.bushelpowered.pokedex.dataClasses.*
-import org.apache.coyote.Response
+import com.bushelpowered.pokedex.entity.*
 import org.springframework.data.domain.PageRequest
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
-import java.util.Optional
 
 @Service
-class PokemonService(val pokemonDb: PokemonRepository) {
+class PokemonService(
+    private val pokemonDb: PokemonRepository){
     fun createPokemonDb() {
         pokemonDb.saveAll(parseFile().listOfPokemon())
     }
 
-    fun allPokemon(): Iterable<Pokemon> {
-        return pokemonDb.findAll()
+    fun allPokemon(): List<Pokemon> {
+        return pokemonDb.findAll() as List<Pokemon>
     }
 
-    fun getPokemon(id: Int): Pokemon? {
-        return pokemonDb.findById(id).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
+    fun getPokemonById(id: Int): PokemonResponse? {
+        val pokemon =  pokemonDb.findById(id).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
+        return pokemon?.let{
+            PokemonResponse(
+                pokemonId = pokemon.pokemonId,
+                name = pokemon.name,
+                pokemonTypes = pokemon.pokemonTypes,
+                height = pokemon.height,
+                weight = pokemon.weight,
+                pokemonAbilities = pokemon.pokemonAbilities,
+                eggGroups = pokemon.eggGroups,
+                pokemonStats = pokemon.pokemonStats,
+                genus = pokemon.genus,
+                description = pokemon.description
+            )
+        }
+    }
+
+    fun getPokemonByName(name: String): Any {
+        val pokemonList =  pokemonDb.findAll()
+        for (pokemon in pokemonList){
+            if (pokemon.name.lowercase() == name.lowercase()){
+                return PokemonResponse(
+                    pokemonId = pokemon.pokemonId,
+                    name = pokemon.name,
+                    pokemonTypes = pokemon.pokemonTypes,
+                    height = pokemon.height,
+                    weight = pokemon.weight,
+                    pokemonAbilities = pokemon.pokemonAbilities,
+                    eggGroups = pokemon.eggGroups,
+                    pokemonStats = pokemon.pokemonStats,
+                    genus = pokemon.genus,
+                    description = pokemon.description
+                )
+            }
+        }
+        return ResponseStatusException(HttpStatus.NOT_FOUND)
     }
 
     fun getPokemonByPage(pageNum: Int, pageSize: Int): Iterable<Pokemon> {
         return pokemonDb.findAll(PageRequest.of(pageNum, pageSize))
-    }
-    private fun isValidIntList(strList: List<String>): Boolean {
-        strList.forEach {
-            if (it.toIntOrNull() == null) {  // Not int type
-                return false
-            }
-            if (it.toInt() > pokemonDb.count()) {  // PokemonId exceeds pokedex
-                return false
-            }
-        }
-        return true
     }
 }

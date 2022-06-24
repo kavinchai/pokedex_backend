@@ -1,6 +1,6 @@
 package com.bushelpowered.pokedex.controller
 
-import com.bushelpowered.pokedex.dataClasses.*
+import com.bushelpowered.pokedex.entity.*
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import org.json.JSONObject
 import java.io.File

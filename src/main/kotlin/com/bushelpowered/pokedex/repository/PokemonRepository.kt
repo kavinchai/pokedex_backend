@@ -1,6 +1,6 @@
 package com.bushelpowered.pokedex.repository
 
-import com.bushelpowered.pokedex.dataClasses.Pokemon
+import com.bushelpowered.pokedex.entity.Pokemon
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.CrudRepository
 
