@@ -19,11 +19,18 @@ class TrainerService(
     private val capturedPokemonDb: CapturedPokemonRepository
 ) {
     fun getAllTrainers(): List<Trainer> {
+        // we don't want to do 'as' this will type cast at runtime, and can cause issues
+        // we want to explicitly map
+        // return trainerDb.findAll().toList()
         return trainerDb.findAll() as List<Trainer>
     }
 
+    // the service should return a model.
     fun getTrainer(id: Int): TrainerResponse? {
         val trainer: Trainer? = trainerDb.findById(id).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
+
+        // good use of let, but "trainer" should never be null here.
+
         return trainer?.let {
             TrainerResponse(
                 trainerId = it.trainerId,
@@ -34,12 +41,18 @@ class TrainerService(
                 capturedPokemon = trainer.capturedPokemon
             )
         }
+        // in "one" line (should be broken up across lines for readability)
+        // return trainerDb.findById(id)?.let { TrainerResponse(....) } ?: throw Exception()
     }
 
+    // What if we fail to save the user? How can we handle that and return a message to the user.
+    // e.g. what if I create an account with the same username / email.
     fun createTrainer(trainerInfo: Trainer) {
         trainerDb.save(trainerInfo)
     }
 
+
+    // Same comments as above
     fun updateTrainerById(id: Int, trainerInfo: Trainer) {
         trainerDb.findById((id)).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
         trainerDb.save(
@@ -55,10 +68,13 @@ class TrainerService(
     }
 
     fun capturePokemonToTrainer(trainerId: Int, pokemonId: Int) {
-        trainerDb.findById(trainerId).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
-        pokemonDb.findById(pokemonId).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
-        val tmpTrainer: Trainer = trainerDb.findById(trainerId).orElse(null)
-        val tmpPokemon: Pokemon = pokemonDb.findById(pokemonId).orElse(null)
+        val tmpTrainer: Trainer = trainerDb.findById(trainerId).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
+        val tmpPokemon: Pokemon =  pokemonDb.findById(pokemonId).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
+
+        // we are doubling up on queries, where we should just assign in the block above.
+
+        // JPA should be able to manage the "pokemonId to capturedPokemon" if setup correctly
+        // what happens if I capture 2 of the same pokemon?
         val uniqueTrainerPokemon = (tmpTrainer.trainerId * 1000) + tmpPokemon.pokemonId
         capturedPokemonDb.save(CapturedPokemon(uniqueTrainerPokemon, trainerId, pokemonId))
     }

@@ -10,34 +10,33 @@ import org.springframework.web.server.ResponseStatusException
 
 @Service
 class PokemonService(
+        // pokemonRepository
     private val pokemonDb: PokemonRepository){
     fun createPokemonDb() {
         pokemonDb.saveAll(parseFile().listOfPokemon())
     }
 
     fun allPokemon(): List<Pokemon> {
-        return pokemonDb.findAll() as List<Pokemon>
+        return pokemonDb.findAll().toList()
     }
 
     fun getPokemonById(id: Int): PokemonResponse? {
         val pokemon =  pokemonDb.findById(id).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
-        return pokemon?.let{
-            PokemonResponse(
-                pokemonId = pokemon.pokemonId,
-                name = pokemon.name,
-                pokemonTypes = pokemon.pokemonTypes,
-                height = pokemon.height,
-                weight = pokemon.weight,
-                pokemonAbilities = pokemon.pokemonAbilities,
-                eggGroups = pokemon.eggGroups,
-                pokemonStats = pokemon.pokemonStats,
-                genus = pokemon.genus,
-                description = pokemon.description
-            )
-        }
+        return PokemonResponse(
+            pokemonId = pokemon.pokemonId,
+            name = pokemon.name,
+            pokemonTypes = pokemon.pokemonTypes,
+            height = pokemon.height,
+            weight = pokemon.weight,
+            pokemonAbilities = pokemon.pokemonAbilities,
+            eggGroups = pokemon.eggGroups,
+            pokemonStats = pokemon.pokemonStats,
+            genus = pokemon.genus,
+            description = pokemon.description
+        )
     }
 
-    fun getPokemonByName(name: String): Any {
+    fun getPokemonByName(name: String): PokemonResponse {
         val pokemonList =  pokemonDb.findAll()
         for (pokemon in pokemonList){
             if (pokemon.name.lowercase() == name.lowercase()){
@@ -55,7 +54,7 @@ class PokemonService(
                 )
             }
         }
-        return ResponseStatusException(HttpStatus.NOT_FOUND)
+        throw RuntimeException("Not Found") // ideally a custom exception
     }
 
     fun getPokemonByPage(pageNum: Int, pageSize: Int): Iterable<Pokemon> {

@@ -9,6 +9,7 @@ import javax.persistence.*
 @Table(name = "pokemon_table") // All tables need to be named with _ notation
 @JsonIgnoreProperties("pokemonid")
 data class Pokemon(
+    // should be "id"
     @Id
     @Column(name = "pokemonid") // All names in @Column need to be lowercase
     @JsonProperty("pokemonid")
@@ -17,7 +18,8 @@ data class Pokemon(
     @Column(name = "name")
     val name: String,
 
-    @OneToOne(cascade = [CascadeType.ALL])
+    // should this be one to one? Or should the types just be entered in once?
+    @ManyToMany(cascade = [CascadeType.ALL])
     @JoinColumn(name = "pokemonid", referencedColumnName = "pokemontypeid")
     val pokemonTypes: PokemonTypes,
 
@@ -27,14 +29,17 @@ data class Pokemon(
     @Column(name = "weight")
     val weight: Double,
 
+    // should this be one to one? Or should the abilities just be entered in once?
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "pokemonid", referencedColumnName = "pokemonabilityid")
     val pokemonAbilities: PokemonAbilities,
 
+    // should this be one to one? Or should the abilities just be entered in once?
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "pokemonid", referencedColumnName = "egggroupid")
     val eggGroups: EggGroups,
 
+    // be mindful of "Cascade"
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "pokemonid", referencedColumnName = "statid")
     val pokemonStats: PokemonStats,

@@ -16,6 +16,7 @@ data class PokemonAbilities(
     @JsonProperty("pokemonabilityid")
     val pokemonAbilityId: Int,
 
+    // shouldn't it be one ability, per entry?
     @Column(name = "ability1")
     val ability1: String?,
 

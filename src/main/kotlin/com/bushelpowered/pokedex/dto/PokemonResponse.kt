@@ -11,9 +11,9 @@ data class PokemonResponse(
     val pokemonTypes: PokemonTypes,
     val height: Double,
     val weight: Double,
-    val pokemonAbilities: PokemonAbilities,
-    val eggGroups: EggGroups,
-    val pokemonStats: PokemonStats,
+    val pokemonAbilities: PokemonAbilities, // this maps to the entity, we would ideally use a PokemonAbilitiesResponse as well
+    val eggGroups: EggGroups, // this maps to the entity, we would ideally use an EggGroupsResponse as well
+    val pokemonStats: PokemonStats,// this maps to the entity, we would ideally use a PokemonStatsResponse as well
     val genus: String,
     val description: String
 )

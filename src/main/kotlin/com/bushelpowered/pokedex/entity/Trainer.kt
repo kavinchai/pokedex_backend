@@ -10,7 +10,7 @@ import javax.persistence.*
 data class Trainer(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "trainerid")
+    @Column(name = "trainerid") // id
     val trainerId: Int,
 
     @Column(name = "username", unique = true, nullable = false)
@@ -22,7 +22,7 @@ data class Trainer(
     @Column(name = "lastname", nullable = false)
     val lastName: String,
 
-    @Column(name = "emailaddress", nullable = false)
+    @Column(name = "emailaddress", nullable = false) // email is fine
     val emailId: String,
 
     @OneToMany
@@ -32,7 +32,4 @@ data class Trainer(
         inverseJoinColumns = [JoinColumn(name = "pokemon", referencedColumnName = "pokemonid")]
     )
     val capturedPokemon: List<Pokemon>?
-
 )
-
-

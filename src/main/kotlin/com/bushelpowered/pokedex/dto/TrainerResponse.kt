@@ -7,6 +7,6 @@ data class TrainerResponse(
     val userName: String,
     val firstName: String,
     val lastName: String,
-    val emailId: String,
-    val capturedPokemon: List<Pokemon>?
+    val emailId: String, // why do we have an emailId? Is this just the user's email?
+    val capturedPokemon: List<Pokemon>? // this should not be nullable, and we want this to be List<PokemonResponse>
 )

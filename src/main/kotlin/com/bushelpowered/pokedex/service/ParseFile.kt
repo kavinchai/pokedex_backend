@@ -3,9 +3,21 @@ package com.bushelpowered.pokedex.service
 import com.bushelpowered.pokedex.entity.*
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import org.json.JSONObject
+import org.springframework.context.event.EventListener
+import org.springframework.stereotype.Component
 import java.io.File
 
+
+// PokemonCsvParser
+@Component
 class parseFile {
+
+    // another option
+    @EventListener()
+    fun loadDatabase(){
+
+    }
+
     private fun parseCSV(): List<List<String>> {
         val filePath = "src/main/resources/db/changelog/data/"
         val file = filePath + "pokedex.csv"
@@ -20,11 +32,14 @@ class parseFile {
             .toMutableList<String?>()
     }
 
+    // remove unused methods
     private fun getPokemonTypes(){
         val pokemonInfo: List<List<String>> = parseCSV()
 
     }
 
+
+    // Is this method init Pokemon Entity? Is the name accurate. Is the return type useful?
     private fun initPokemonEntity(): Array<MutableList<out Any>> {
         val pokemonInfo: List<List<String>> = parseCSV()
         val pokeTypeList = mutableListOf<PokemonTypes>()
@@ -83,10 +98,14 @@ class parseFile {
     fun listOfPokemon(): List<Pokemon> {
         val pokemonInfo: List<List<String>> = parseCSV()
         val pokemonList = mutableListOf<Pokemon>()
+
+        // good use of destructuring for cleanliness, but this is error prone.
         val (pokeTypeList,
             pokeAbilityList,
             eggGroupList,
             pokeStatList) = initPokemonEntity()
+
+        // what are these numbers?
         for (columns in 1 until pokemonInfo.size) {
             val newPokemon: Pokemon = Pokemon(
                 pokemonInfo[columns][0].toInt(),

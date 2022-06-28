@@ -9,6 +9,13 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 class TrainerController(private val trainerService: TrainerService) {
+
+    /*
+        Remove the trailing slash on the get mapping
+        Again, we are returning a NotFound
+
+        This endpoint is not required in the spec & should be removed.
+     */
     @GetMapping("/trainer/")
     fun getAllTrainers(): ResponseEntity<List<Trainer>> {
         return ResponseEntity(
@@ -17,6 +24,11 @@ class TrainerController(private val trainerService: TrainerService) {
         )
     }
 
+    /*
+        Again, we are returning a NotFound
+
+        This endpoint is not required in the spec & should be removed.
+    */
     @GetMapping("/trainer/{id}")
     fun getTrainerById(
         @PathVariable id: Int
@@ -27,7 +39,12 @@ class TrainerController(private val trainerService: TrainerService) {
             HttpStatus.NOT_FOUND
         )
     }
+    /*
+        Should remove the trailing slash
 
+        This method should be renamed to reflect its actions
+        Trainer should be TrainerRequest
+    */
     @PostMapping("/trainer/")
     fun createEmployee(
         @RequestBody trainerInfo: Trainer
@@ -49,6 +66,13 @@ class TrainerController(private val trainerService: TrainerService) {
         )
     }
 
+    /*
+        We should have all of the info in path variables in the request body
+        With TLS & Networks in general, the paths in which you interact are
+        somewhat visible, less secury than the "request body".
+
+        If someone was snooping on your network calls, they can see your trainerId
+    */
     @PutMapping("/trainer/{trainerId}/capturePokemon/{pokemonId}")
     fun capturePokemon(
         @PathVariable trainerId: Int,
@@ -60,6 +84,12 @@ class TrainerController(private val trainerService: TrainerService) {
         )
     }
 
+    /*
+        This is a good use case for ResponseEntity.noContent()
+
+        In general, again, we would have the id in a jwt for security, but here,
+        for this use case, having id in the path is fine
+    */
     @DeleteMapping("/trainer/{id}")
     fun deleteTrainerById(
         @PathVariable("id") trainerId: Int
