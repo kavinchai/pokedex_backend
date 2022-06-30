@@ -3,10 +3,10 @@ package com.bushelpowered.pokedex.entity
 import javax.persistence.*
 
 @Entity
-@Table(name = "pokemon_types_table")
-data class PokemonTypes(
+@Table(name = "pokemon_type_table")
+data class PokemonType(
     @Id
-    @Column(name = "pokemon_types_id")
+    @Column(name = "pokemon_type_id")
     val id: Int,
 
     @Column(name = "pokemon_id")

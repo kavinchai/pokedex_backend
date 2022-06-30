@@ -10,9 +10,7 @@ import org.springframework.web.server.ResponseStatusException
 
 @Service
 class PokemonService(
-    private val pokemonRepository: PokemonRepository,
-    private val typeRepository: TypeRepository,
-    private val pokemonTypesRepository: TypeRepository
+    private val pokemonRepository: PokemonRepository
 ){
     fun allPokemon(): List<Pokemon> {
         return pokemonRepository.findAll().toList()

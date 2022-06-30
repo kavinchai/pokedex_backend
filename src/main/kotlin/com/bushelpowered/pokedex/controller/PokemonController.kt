@@ -48,7 +48,7 @@ class PokemonController(
 //            pokemonTypes = this.pokemonTypes,
             height = this.height,
             weight = this.weight,
-            pokemonAbilities = this.pokemonAbilities,
+//            pokemonAbilities = this.ability,
             eggGroups = this.eggGroups,
             pokemonStats = this.pokemonStats,
             genus = this.genus,

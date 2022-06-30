@@ -1,8 +1,6 @@
 package com.bushelpowered.pokedex
 
-import com.bushelpowered.pokedex.repository.PokemonRepository
-import com.bushelpowered.pokedex.repository.PokemonTypeRepository
-import com.bushelpowered.pokedex.repository.TypeRepository
+import com.bushelpowered.pokedex.repository.*
 import com.bushelpowered.pokedex.service.ParseFile
 import com.bushelpowered.pokedex.service.PokemonService
 import com.bushelpowered.pokedex.service.PopulateData
@@ -15,14 +13,19 @@ import org.springframework.context.event.EventListener
 class PokedexApplication(
     private val pokemonRepository: PokemonRepository,
     private val typeRepository: TypeRepository,
+    private val abilityRepository: AbilityRepository,
+    private val pokemonAbilityRepository: PokemonAbilityRepository,
     private val pokemonTypesRepository: PokemonTypeRepository
-){
+) {
     @EventListener(ApplicationReadyEvent::class) // Import data on startup
     fun importData() {
-        typeRepository.saveAll(PopulateData(typeRepository, pokemonTypesRepository).populateTypesTable())
-        pokemonTypesRepository.saveAll(PopulateData(typeRepository, pokemonTypesRepository).populatePokemonTypesTable())
-        pokemonRepository.saveAll(ParseFile(typeRepository, pokemonTypesRepository).listOfPokemon())
+        typeRepository.saveAll(PopulateData(typeRepository, pokemonTypesRepository, abilityRepository, pokemonAbilityRepository).populateTypesTable())
+        pokemonTypesRepository.saveAll(PopulateData(typeRepository, pokemonTypesRepository, abilityRepository, pokemonAbilityRepository).populatePokemonTypesTable())
+        abilityRepository.saveAll(PopulateData(typeRepository, pokemonTypesRepository, abilityRepository, pokemonAbilityRepository).populateAbilityTable())
+        pokemonAbilityRepository.saveAll(PopulateData(typeRepository, pokemonTypesRepository, abilityRepository, pokemonAbilityRepository).populatePokemonAbilityTable())
 
+//        PopulateData(typeRepository, pokemonTypesRepository, abilityRepository, pokemonAbilityRepository).listOfPokemon()
+        pokemonRepository.saveAll(PopulateData(typeRepository, pokemonTypesRepository, abilityRepository, pokemonAbilityRepository).listOfPokemon())
     }
 }
 

@@ -6,12 +6,13 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
 
-    <changeSet id="createPokemonTable" author="Kavin Chaisawangwong">
-        <createTable tableName="types_table">
-            <column name="type_id" type="int">
-                <constraints primaryKey="true" primaryKeyName="typePk"/>
+    <changeSet id="createPokemonAbilityTable" author="Kavin Chaisawangwong">
+        <createTable tableName="pokemon_ability_table">
+            <column name="pokemon_ability_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pokemonAbilityPk"/>
             </column>
-            <column name="type" type="varchar(50)"/>
+            <column name="pokemon_id" type="int"/>
+            <column name="ability_id" type="int"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>

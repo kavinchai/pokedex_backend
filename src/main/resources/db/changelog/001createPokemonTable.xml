@@ -15,19 +15,10 @@
 <!--            <column name="types" type="varchar(50)"/>-->
             <column name="height" type="int"/>
             <column name="weight" type="int"/>
-            <column name="abilities" type="varchar(50)"/>
+<!--            <column name="abilities" type="varchar(50)"/>-->
             <column name="eggGroups" type="varchar(50)"/>
             <column name="genus" type="varchar(250)"/>
             <column name="description" type="varchar(500)"/>
-        </createTable>
-
-        <createTable tableName="pokemon_abilities_table">
-            <column name="pokemon_ability_id" type="int">
-                <constraints primaryKey="true" primaryKeyName="pokemonAbilityPk"/>
-            </column>
-            <column name="ability1" type="varchar(50)"/>
-            <column name="ability2" type="varchar(50)"/>
-            <column name="ability3" type="varchar(50)"/>
         </createTable>
 
         <createTable tableName="egg_groups_table">
