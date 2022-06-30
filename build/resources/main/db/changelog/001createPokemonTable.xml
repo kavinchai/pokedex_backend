@@ -21,14 +21,6 @@
             <column name="description" type="varchar(500)"/>
         </createTable>
 
-        <createTable tableName="egg_groups_table">
-            <column name="egg_group_id" type="int">
-                <constraints primaryKey="true" primaryKeyName="eggGroupPk"/>
-            </column>
-            <column name="eggGroup1" type="varchar(50)"/>
-            <column name="eggGroup2" type="varchar(50)"/>
-        </createTable>
-
         <createTable tableName="pokemon_stats_table">
             <column name="stat_id" type="int">
                 <constraints primaryKey="true" primaryKeyName="statPk"/>

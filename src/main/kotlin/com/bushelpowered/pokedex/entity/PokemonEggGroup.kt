@@ -16,5 +16,5 @@ data class PokemonEggGroup (
     val pokemonId: Int,
 
     @Column(name="egg_group_id")
-    val abilityId: Int?
+    val eggGroupId: Int?
 )
