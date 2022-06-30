@@ -32,14 +32,28 @@ class PopulateData(
         val pokemonInfo: List<List<String>> = ParseFile().parseCSV()
         val pokeAbilityList = mutableListOf<String>()
         for (columns in 1 until pokemonInfo.size) {
-            val types = ParseFile().formatString(pokemonInfo[columns][5])
-            types.forEach{
+            val abilities = ParseFile().formatString(pokemonInfo[columns][5])
+            abilities.forEach{
                 if (it != null) {
                     pokeAbilityList.add(it)
                 }
             }
         }
         return pokeAbilityList.distinct()
+    }
+
+    private fun getUniqueEggGroups(): List<String> {
+        val pokemonInfo: List<List<String>> = ParseFile().parseCSV()
+        val pokeEggGroupList = mutableListOf<String>()
+        for (columns in 1 until pokemonInfo.size) {
+            val eggGroups = ParseFile().formatString(pokemonInfo[columns][6])
+            eggGroups.forEach{
+                if (it != null) {
+                    pokeEggGroupList.add(it)
+                }
+            }
+        }
+        return pokeEggGroupList.distinct()
     }
 
     private fun <K, V> getKey(map: Map<K, V>, target: V): K? {
@@ -92,16 +106,16 @@ class PopulateData(
 
     fun populateAbilityTable(): List<Ability> {
         val uniqueList = getUniqueAbilities()
-        val typeList = mutableListOf<Ability>()
+        val abilityList = mutableListOf<Ability>()
         for (ability in uniqueList.indices) {
-            typeList.add(
+            abilityList.add(
                 Ability(
                     ability + 1,
                     uniqueList[ability]
                 )
             )
         }
-        return typeList
+        return abilityList
     }
 
     fun populatePokemonAbilityTable(): List<PokemonAbility> {
@@ -125,6 +139,19 @@ class PopulateData(
         return pokemonAbilityList
     }
 
+    fun populateEggGroupTable(): List<EggGroup> {
+        val uniqueList = getUniqueAbilities()
+        val eggGroupList = mutableListOf<EggGroup>()
+        for (eggGroup in uniqueList.indices) {
+            eggGroupList.add(
+                EggGroup(
+                    eggGroup + 1,
+                    uniqueList[eggGroup]
+                )
+            )
+        }
+        return eggGroupList
+    }
 
     fun listOfPokemon(): List<Pokemon> {
         val pokemonTypeDb = pokemonTypesRepository.findAll()
@@ -158,7 +185,7 @@ class PopulateData(
                 pokemonInfo[pokemonId][3].toDouble(),
                 pokemonInfo[pokemonId][4].toDouble(),
                 abilityList,
-                eggGroupList[pokemonId - 1] as EggGroup,
+//                eggGroupList[pokemonId - 1] as EggGroup,
                 pokeStatList[pokemonId - 1] as PokemonStats,
                 pokemonInfo[pokemonId][8],
                 pokemonInfo[pokemonId][9]
@@ -167,9 +194,5 @@ class PopulateData(
         }
         return pokemonList
     }
-
-    private fun <E> MutableList<E>.add(element: Optional<E>?) {
-
-    }
-
+    private fun <E> MutableList<E>.add(element: Optional<E>?) {}
 }

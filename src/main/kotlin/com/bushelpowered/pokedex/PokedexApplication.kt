@@ -24,6 +24,7 @@ class PokedexApplication(
         abilityRepository.saveAll(PopulateData(typeRepository, pokemonTypesRepository, abilityRepository, pokemonAbilityRepository).populateAbilityTable())
         pokemonAbilityRepository.saveAll(PopulateData(typeRepository, pokemonTypesRepository, abilityRepository, pokemonAbilityRepository).populatePokemonAbilityTable())
 
+
 //        PopulateData(typeRepository, pokemonTypesRepository, abilityRepository, pokemonAbilityRepository).listOfPokemon()
         pokemonRepository.saveAll(PopulateData(typeRepository, pokemonTypesRepository, abilityRepository, pokemonAbilityRepository).listOfPokemon())
     }

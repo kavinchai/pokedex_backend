@@ -39,9 +39,9 @@ data class Pokemon(
     )
     val pokemonAbilities: List<Ability>,
 
-    @OneToOne(cascade = [CascadeType.ALL])
-    @JoinColumn(name = "pokemon_id", referencedColumnName = "egg_group_id")
-    val eggGroup: EggGroup,
+//    @OneToOne(cascade = [CascadeType.ALL])
+//    @JoinColumn(name = "pokemon_id", referencedColumnName = "egg_group_id")
+//    val eggGroup: EggGroup,
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "pokemon_id", referencedColumnName = "stat_id")
