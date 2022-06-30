@@ -6,12 +6,12 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
 
-    <changeSet id="createAbilityTable" author="Kavin Chaisawangwong">
-        <createTable tableName="ability_table">
-            <column name="ability_id" type="int">
-                <constraints primaryKey="true" primaryKeyName="abilityPk"/>
+    <changeSet id="createEggGroupTable" author="Kavin Chaisawangwong">
+        <createTable tableName="egg_group_table">
+            <column name="egg_group_id" type="int">
+                <constraints primaryKey="true" primaryKeyName="eggGroupPk"/>
             </column>
-            <column name="ability" type="varchar(50)"/>
+            <column name="egg_group" type="varchar(50)"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>

@@ -37,13 +37,6 @@ class ParseFile (){
             if (ability.size == 2) ability.add(null)
             if (eggGroup.size == 1) eggGroup.add(null)
 
-            eggGroupList.add(
-                EggGroup(
-                    pokemonInfo[columns][0].toInt(),
-                    eggGroup[0],
-                    eggGroup[1]
-                )
-            )
             pokeStatList.add(
                 PokemonStats(
                     pokemonInfo[columns][0].toInt(),
@@ -56,7 +49,7 @@ class ParseFile (){
                 )
             )
         }
-        return arrayOf(eggGroupList, pokeStatList)
+        return arrayOf(pokeStatList)
     }
 }
 

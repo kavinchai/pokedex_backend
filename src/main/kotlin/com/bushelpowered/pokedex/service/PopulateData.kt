@@ -1,10 +1,7 @@
 package com.bushelpowered.pokedex.service
 
 import com.bushelpowered.pokedex.entity.*
-import com.bushelpowered.pokedex.repository.AbilityRepository
-import com.bushelpowered.pokedex.repository.PokemonAbilityRepository
-import com.bushelpowered.pokedex.repository.PokemonTypeRepository
-import com.bushelpowered.pokedex.repository.TypeRepository
+import com.bushelpowered.pokedex.repository.*
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -13,6 +10,7 @@ class PopulateData(
     private val pokemonTypesRepository: PokemonTypeRepository,
     private val abilityRepository: AbilityRepository,
     private val pokemonAbilityRepository: PokemonAbilityRepository,
+    private val pokemonRepository : PokemonRepository
 ) {
     private fun getUniqueTypes(): List<String> {
         val pokemonInfo: List<List<String>> = ParseFile().parseCSV()
@@ -153,12 +151,11 @@ class PopulateData(
         return eggGroupList
     }
 
-    fun listOfPokemon(): List<Pokemon> {
+    fun populatePokemonTable(): List<Pokemon> {
         val pokemonTypeDb = pokemonTypesRepository.findAll()
         val pokemonInfo: List<List<String>> = ParseFile().parseCSV()
         val pokemonList = mutableListOf<Pokemon>()
         val (
-            eggGroupList,
             pokeStatList
         ) = ParseFile().initPokemonEntity()
 
@@ -193,6 +190,14 @@ class PopulateData(
             pokemonList.add(newPokemon)
         }
         return pokemonList
+    }
+
+    fun populateTables(){
+        typeRepository.saveAll(populateTypesTable())
+        pokemonTypesRepository.saveAll(populatePokemonTypesTable())
+        abilityRepository.saveAll(populateAbilityTable())
+        pokemonAbilityRepository.saveAll(populatePokemonAbilityTable())
+        pokemonRepository.saveAll(populatePokemonTable())
     }
     private fun <E> MutableList<E>.add(element: Optional<E>?) {}
 }

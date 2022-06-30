@@ -10,7 +10,7 @@ data class PokemonResponse(
     val height: Double,
     val weight: Double,
 //    val pokemonAbilities: Ability,
-    val eggGroup: EggGroup,
+//    val eggGroup: EggGroup,
     val pokemonStats: PokemonStats,
     val genus: String,
     val description: String

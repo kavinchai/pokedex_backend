@@ -13,5 +13,7 @@
     <include file="005createPokemonTypeTable.xml" relativeToChangelogFile="true"/>
     <include file="006createAbilityTable.xml" relativeToChangelogFile="true"/>
     <include file="007createPokemonAbilityTable.xml" relativeToChangelogFile="true"/>
+    <include file="008createEggGroupTable.xml" relativeToChangelogFile="true"/>
+    <include file="009createPokemonEggGroupTable.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

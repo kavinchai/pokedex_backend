@@ -13,20 +13,21 @@ import org.springframework.context.event.EventListener
 class PokedexApplication(
     private val pokemonRepository: PokemonRepository,
     private val typeRepository: TypeRepository,
+    private val pokemonTypesRepository: PokemonTypeRepository,
     private val abilityRepository: AbilityRepository,
     private val pokemonAbilityRepository: PokemonAbilityRepository,
-    private val pokemonTypesRepository: PokemonTypeRepository
+    private val eggGroupRepository: EggGroupRepository,
+    private val pokemonEggGroupRepository: PokemonEggGroupRepository
 ) {
     @EventListener(ApplicationReadyEvent::class) // Import data on startup
     fun importData() {
-        typeRepository.saveAll(PopulateData(typeRepository, pokemonTypesRepository, abilityRepository, pokemonAbilityRepository).populateTypesTable())
-        pokemonTypesRepository.saveAll(PopulateData(typeRepository, pokemonTypesRepository, abilityRepository, pokemonAbilityRepository).populatePokemonTypesTable())
-        abilityRepository.saveAll(PopulateData(typeRepository, pokemonTypesRepository, abilityRepository, pokemonAbilityRepository).populateAbilityTable())
-        pokemonAbilityRepository.saveAll(PopulateData(typeRepository, pokemonTypesRepository, abilityRepository, pokemonAbilityRepository).populatePokemonAbilityTable())
-
-
-//        PopulateData(typeRepository, pokemonTypesRepository, abilityRepository, pokemonAbilityRepository).listOfPokemon()
-        pokemonRepository.saveAll(PopulateData(typeRepository, pokemonTypesRepository, abilityRepository, pokemonAbilityRepository).listOfPokemon())
+        PopulateData(
+        typeRepository,
+        pokemonTypesRepository,
+        abilityRepository,
+        pokemonAbilityRepository,
+        pokemonRepository
+        ).populateTables()
     }
 }
 
