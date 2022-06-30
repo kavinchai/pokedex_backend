@@ -16,5 +16,5 @@ data class PokemonGenus (
     val pokemonId: Int,
 
     @Column(name="genus_id")
-    val genusId: Int?
+    val genusId: Int
 )

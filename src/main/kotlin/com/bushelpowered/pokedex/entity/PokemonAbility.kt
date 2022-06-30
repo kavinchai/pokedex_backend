@@ -16,5 +16,5 @@ data class PokemonAbility (
     val pokemonId: Int,
 
     @Column(name="ability_id")
-    val abilityId: Int?
+    val abilityId: Int
 )

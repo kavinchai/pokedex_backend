@@ -22,20 +22,12 @@ class ParseFile (){
 
 
 
-    fun initPokemonEntity(): Array<MutableList<out Any>> {
+    fun getPokemonStat(): Array<MutableList<out Any>> {
         val pokemonInfo: List<List<String>> = parseCSV()
-        val pokeAbilityList = mutableListOf<Ability>()
-        val eggGroupList = mutableListOf<EggGroup>()
         val pokeStatList = mutableListOf<PokemonStats>()
 
         for (columns in 1 until pokemonInfo.size) {
-            val ability = formatString(pokemonInfo[columns][5])
-            val eggGroup = formatString(pokemonInfo[columns][6])
             val pokeStat = JSONObject(pokemonInfo[columns][7])
-
-            if (ability.size == 1) for (i in 1..2) ability.add(null)
-            if (ability.size == 2) ability.add(null)
-            if (eggGroup.size == 1) eggGroup.add(null)
 
             pokeStatList.add(
                 PokemonStats(

@@ -16,6 +16,17 @@ class PopulateData(
     private val pokemonGenusRepository: PokemonGenusRepository,
     private val pokemonRepository : PokemonRepository
 ) {
+
+    private fun <K, V> getKey(map: Map<K, V>, target: V): K? {
+        for ((key, value) in map)
+        {
+            if (target == value) {
+                return key
+            }
+        }
+        return null
+    }
+
     private fun getUniqueTypes(): List<String> {
         val pokemonInfo: List<List<String>> = ParseFile().parseCSV()
         val pokeTypeList = mutableListOf<String>()
@@ -72,15 +83,6 @@ class PopulateData(
         return pokeGenusList.distinct()
     }
 
-    private fun <K, V> getKey(map: Map<K, V>, target: V): K? {
-        for ((key, value) in map)
-        {
-            if (target == value) {
-                return key
-            }
-        }
-        return null
-    }
 
     private fun populateTypesTable(): List<Type> {
         val uniqueList = getUniqueTypes()
@@ -94,29 +96,6 @@ class PopulateData(
             )
         }
         return typeList
-    }
-
-
-    private fun populatePokemonTypesTable(): List<PokemonType> {
-        val pokemonInfo: List<List<String>> = ParseFile().parseCSV()
-        val pokemonTypeList = mutableListOf<PokemonType>()
-        val typeDb = typeRepository.findAll()
-        val typeListMap : MutableMap<Int, String> = HashMap()
-        var uniqueId : Int = 1;
-        typeDb.forEach {
-            typeListMap[it.id] = it.type.toString()
-        }
-        for (pokemonId in 1 until pokemonInfo.size) {
-            val individualPokemonTypes = ParseFile().formatString(pokemonInfo[pokemonId][2])
-            for (type in individualPokemonTypes) {
-                if (typeListMap.containsValue(type)){
-                    pokemonTypeList.add(PokemonType(uniqueId, pokemonId, getKey(typeListMap, type.toString())))
-                    uniqueId += 1
-
-                }
-            }
-        }
-        return pokemonTypeList
     }
 
     private fun populateAbilityTable(): List<Ability> {
@@ -133,27 +112,6 @@ class PopulateData(
         return abilityList
     }
 
-    private fun populatePokemonAbilityTable(): List<PokemonAbility> {
-        val pokemonInfo: List<List<String>> = ParseFile().parseCSV()
-        val pokemonAbilityList = mutableListOf<PokemonAbility>()
-        val abilityDb = abilityRepository.findAll()
-        val abilityMap : MutableMap<Int, String> = HashMap()
-        var uniqueId : Int = 1;
-        abilityDb.forEach {
-            abilityMap[it.id] = it.ability.toString()
-        }
-        for (pokemonId in 1 until pokemonInfo.size) {
-            val individualPokemonAbilities = ParseFile().formatString(pokemonInfo[pokemonId][5])
-            for (ability in individualPokemonAbilities) {
-                if (abilityMap.containsValue(ability)){
-                    pokemonAbilityList.add(PokemonAbility(uniqueId, pokemonId, getKey(abilityMap, ability.toString())))
-                    uniqueId += 1
-                }
-            }
-        }
-        return pokemonAbilityList
-    }
-
     private fun populateEggGroupTable(): List<EggGroup> {
         val uniqueList = getUniqueEggGroups()
         val eggGroupList = mutableListOf<EggGroup>()
@@ -166,27 +124,6 @@ class PopulateData(
             )
         }
         return eggGroupList
-    }
-
-    private fun populatePokemonEggGroupTable(): List<PokemonEggGroup> {
-        val pokemonInfo: List<List<String>> = ParseFile().parseCSV()
-        val pokemonEggGroupList = mutableListOf<PokemonEggGroup>()
-        val eggGroupDb = eggGroupRepository.findAll()
-        val eggGroupMap : MutableMap<Int, String> = HashMap()
-        var uniqueId : Int = 1;
-        eggGroupDb.forEach {
-            eggGroupMap[it.id] = it.eggGroup.toString()
-        }
-        for (pokemonId in 1 until pokemonInfo.size) {
-            val individualPokemonEggGroups = ParseFile().formatString(pokemonInfo[pokemonId][6])
-            for (eggGroup in individualPokemonEggGroups) {
-                if (eggGroupMap.containsValue(eggGroup)){
-                    pokemonEggGroupList.add(PokemonEggGroup(uniqueId, pokemonId, getKey(eggGroupMap, eggGroup.toString())))
-                    uniqueId += 1
-                }
-            }
-        }
-        return pokemonEggGroupList
     }
 
     private fun populateGenusTable(): List<Genus> {
@@ -203,20 +140,86 @@ class PopulateData(
         return genusList
     }
 
+    private fun populatePokemonTypesTable(): List<PokemonType> {
+        val pokemonInfo: List<List<String>> = ParseFile().parseCSV()
+        val pokemonTypeList = mutableListOf<PokemonType>()
+        val typeDb = typeRepository.findAll()
+        val typeListMap : MutableMap<Int, String> = HashMap()
+        var uniqueId = 1
+        typeDb.forEach {
+            typeListMap[it.id] = it.type
+        }
+        for (pokemonId in 1 until pokemonInfo.size) {
+            val individualPokemonTypes = ParseFile().formatString(pokemonInfo[pokemonId][2])
+            for (type in individualPokemonTypes) {
+                if (typeListMap.containsValue(type)){
+                    pokemonTypeList.add(PokemonType(uniqueId, pokemonId, getKey(typeListMap, type.toString())!!))
+                    uniqueId += 1
+
+                }
+            }
+        }
+        return pokemonTypeList
+    }
+
+    private fun populatePokemonAbilityTable(): List<PokemonAbility> {
+        val pokemonInfo: List<List<String>> = ParseFile().parseCSV()
+        val pokemonAbilityList = mutableListOf<PokemonAbility>()
+        val abilityDb = abilityRepository.findAll()
+        val abilityMap : MutableMap<Int, String> = HashMap()
+        var uniqueId = 1
+        abilityDb.forEach {
+            abilityMap[it.id] = it.ability
+        }
+        for (pokemonId in 1 until pokemonInfo.size) {
+            val individualPokemonAbilities = ParseFile().formatString(pokemonInfo[pokemonId][5])
+            for (ability in individualPokemonAbilities) {
+                if (abilityMap.containsValue(ability)){
+                    pokemonAbilityList.add(PokemonAbility(uniqueId, pokemonId, getKey(abilityMap, ability.toString())!!))
+                    uniqueId += 1
+                }
+            }
+        }
+        return pokemonAbilityList
+    }
+
+    private fun populatePokemonEggGroupTable(): List<PokemonEggGroup> {
+        val pokemonInfo: List<List<String>> = ParseFile().parseCSV()
+        val pokemonEggGroupList = mutableListOf<PokemonEggGroup>()
+        val eggGroupDb = eggGroupRepository.findAll()
+        val eggGroupMap : MutableMap<Int, String> = HashMap()
+        var uniqueId = 1
+        eggGroupDb.forEach {
+            eggGroupMap[it.id] = it.eggGroup
+        }
+        for (pokemonId in 1 until pokemonInfo.size) {
+            val individualPokemonEggGroups = ParseFile().formatString(pokemonInfo[pokemonId][6])
+            for (eggGroup in individualPokemonEggGroups) {
+                if (eggGroupMap.containsValue(eggGroup)){
+                    pokemonEggGroupList.add(PokemonEggGroup(uniqueId, pokemonId,
+                        getKey(eggGroupMap, eggGroup.toString())!!
+                    ))
+                    uniqueId += 1
+                }
+            }
+        }
+        return pokemonEggGroupList
+    }
+
     private fun populatePokemonGenusTable(): List<PokemonGenus> {
         val pokemonInfo: List<List<String>> = ParseFile().parseCSV()
         val pokemonGenusList = mutableListOf<PokemonGenus>()
         val genusDb = genusRepository.findAll()
         val genusMap : MutableMap<Int, String> = HashMap()
-        var uniqueId : Int = 1;
+        var uniqueId = 1
         genusDb.forEach {
-            genusMap[it.id] = it.genus.toString()
+            genusMap[it.id] = it.genus
         }
         for (pokemonId in 1 until pokemonInfo.size) {
             val individualPokemonGenus = ParseFile().formatString(pokemonInfo[pokemonId][8])
             for (genus in individualPokemonGenus) {
                 if (genusMap.containsValue(genus)){
-                    pokemonGenusList.add(PokemonGenus(uniqueId, pokemonId, getKey(genusMap, genus.toString())))
+                    pokemonGenusList.add(PokemonGenus(uniqueId, pokemonId, getKey(genusMap, genus.toString())!!))
                     uniqueId += 1
                 }
             }
@@ -234,7 +237,7 @@ class PopulateData(
         val pokemonList = mutableListOf<Pokemon>()
         val (
             pokeStatList
-        ) = ParseFile().initPokemonEntity()
+        ) = ParseFile().getPokemonStat()
 
         for (pokemonId in 1 until pokemonInfo.size) {
             val typeList = mutableListOf<Type>()
@@ -244,29 +247,29 @@ class PopulateData(
 
             for (type in pokemonTypeDb){
                 if (type.pokemonId == pokemonId){
-                    val typeEntity = type.typeId?.let { typeRepository.findById(it) }
+                    val typeEntity = type.typeId.let { typeRepository.findById(it) }
                     typeList.add(typeEntity)
                 }
             }
             for (ability in pokemonAbilityDb){
                 if (ability.pokemonId == pokemonId){
-                    val abilityEntity = ability.abilityId?.let { abilityRepository.findById(it) }
+                    val abilityEntity = ability.abilityId.let { abilityRepository.findById(it) }
                     abilityList.add(abilityEntity)
                 }
             }
             for (eggGroup in pokemonEggGroupDb){
                 if (eggGroup.pokemonId == pokemonId){
-                    val eggGroupEntity = eggGroup.eggGroupId?.let { eggGroupRepository.findById(it) }
+                    val eggGroupEntity = eggGroup.eggGroupId.let { eggGroupRepository.findById(it) }
                     eggGroupList.add(eggGroupEntity)
                 }
             }
             for (genus in pokemonGenusDb){
                 if (genus.pokemonId == pokemonId){
-                    val genusEntity = genus.genusId?.let { genusRepository.findById(it) }
+                    val genusEntity = genus.genusId.let { genusRepository.findById(it) }
                     genusList.add(genusEntity)
                 }
             }
-            val newPokemon: Pokemon = Pokemon(
+            val newPokemon = Pokemon(
                 pokemonInfo[pokemonId][0].toInt(),
                 pokemonInfo[pokemonId][1],
                 typeList,
@@ -294,5 +297,7 @@ class PopulateData(
         pokemonGenusRepository.saveAll(populatePokemonGenusTable())
         pokemonRepository.saveAll(populatePokemonTable())
     }
-    private fun <E> MutableList<E>.add(element: Optional<E>?) {}
 }
+
+private fun <E> MutableList<E>.add(element: Optional<E>) {}
+

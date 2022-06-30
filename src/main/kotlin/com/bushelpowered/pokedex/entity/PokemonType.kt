@@ -13,5 +13,5 @@ data class PokemonType(
     val pokemonId: Int,
 
     @Column(name = "type_id")
-    val typeId: Int?
+    val typeId: Int
 )
