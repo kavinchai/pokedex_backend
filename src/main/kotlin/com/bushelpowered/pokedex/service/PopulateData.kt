@@ -297,7 +297,10 @@ class PopulateData(
         pokemonGenusRepository.saveAll(populatePokemonGenusTable())
         pokemonRepository.saveAll(populatePokemonTable())
     }
+
+    private fun <E> MutableList<E>.add(element: Optional<E>) {
+    }
+
 }
 
-private fun <E> MutableList<E>.add(element: Optional<E>) {}
 
