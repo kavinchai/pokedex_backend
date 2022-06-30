@@ -12,6 +12,6 @@ data class PokemonResponse(
 //    val pokemonAbilities: Ability,
 //    val eggGroup: EggGroup,
     val pokemonStats: PokemonStats,
-    val genus: String,
+//    val genus: String,
     val description: String
 )

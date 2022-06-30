@@ -6,11 +6,11 @@ import javax.persistence.*
 
 
 @Entity
-@Table(name = "pokemon_table") // All tables need to be named with _ notation
+@Table(name = "pokemon_table")
 @JsonIgnoreProperties("pokemon_id")
 data class Pokemon(
     @Id
-    @Column(name = "pokemon_id") // All names in @Column need to be lowercase
+    @Column(name = "pokemon_id")
     @JsonProperty("pokemon_id")
     val id: Int,
 
@@ -39,9 +39,6 @@ data class Pokemon(
     )
     val pokemonAbilities: List<Ability>,
 
-//    @OneToOne(cascade = [CascadeType.ALL])
-//    @JoinColumn(name = "pokemon_id", referencedColumnName = "egg_group_id")
-//    val eggGroup: EggGroup,
     @OneToMany
     @JoinTable(
         name = "pokemon_egg_group_table",
@@ -54,8 +51,13 @@ data class Pokemon(
     @JoinColumn(name = "pokemon_id", referencedColumnName = "stat_id")
     val pokemonStats: PokemonStats,
 
-    @Column(name = "genus")
-    val genus: String,
+    @OneToMany
+    @JoinTable(
+        name = "pokemon_genus_table",
+        joinColumns = [JoinColumn(name = "pokemon_id", referencedColumnName = "pokemon_id")],
+        inverseJoinColumns = [JoinColumn(name = "genus_id", referencedColumnName = "genus_id")]
+    )
+    val pokemonGenus: List<Genus>,
 
     @Column(name = "description")
     val description: String,

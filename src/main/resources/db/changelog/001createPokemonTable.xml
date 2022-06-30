@@ -12,12 +12,8 @@
                 <constraints primaryKey="true" primaryKeyName="pokemonPk"/>
             </column>
             <column name="name" type="varchar(250)"/>
-<!--            <column name="types" type="varchar(50)"/>-->
             <column name="height" type="int"/>
             <column name="weight" type="int"/>
-<!--            <column name="abilities" type="varchar(50)"/>-->
-            <column name="eggGroups" type="varchar(50)"/>
-            <column name="genus" type="varchar(250)"/>
             <column name="description" type="varchar(500)"/>
         </createTable>
 

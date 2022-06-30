@@ -17,6 +17,8 @@ class PokedexApplication(
     private val abilityRepository: AbilityRepository,
     private val pokemonAbilityRepository: PokemonAbilityRepository,
     private val eggGroupRepository: EggGroupRepository,
+    private val genusRepository: GenusRepository,
+    private val pokemonGenusRepository: PokemonGenusRepository,
     private val pokemonEggGroupRepository: PokemonEggGroupRepository
 ) {
     @EventListener(ApplicationReadyEvent::class) // Import data on startup
@@ -28,6 +30,8 @@ class PokedexApplication(
             pokemonAbilityRepository,
             eggGroupRepository,
             pokemonEggGroupRepository,
+            genusRepository,
+            pokemonGenusRepository,
             pokemonRepository,
         ).populateTables()
     }
