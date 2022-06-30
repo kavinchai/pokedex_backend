@@ -9,9 +9,9 @@ import javax.persistence.*
 @JsonIgnoreProperties("statid")
 data class PokemonStats(
     @Id
-    @Column(name = "statid")
-    @JsonProperty("statid")
-    val statID: Int,
+    @Column(name = "stat_id")
+    @JsonProperty("stat_id")
+    val id: Int,
 
     @Column(name = "hp")
     val hp: Int,
@@ -25,10 +25,10 @@ data class PokemonStats(
     @Column(name = "defense")
     val defense: Int,
 
-    @Column(name = "specialattack")
+    @Column(name = "special_attack")
     val specialAttack: Int,
 
-    @Column(name = "specialdefense")
+    @Column(name = "special_defense")
     val specialDefense: Int,
 
     )

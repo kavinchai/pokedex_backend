@@ -22,18 +22,8 @@ class TrainerService(
         return trainerDb.findAll() as List<Trainer>
     }
 
-    fun getTrainer(id: Int): TrainerResponse? {
-        val trainer: Trainer? = trainerDb.findById(id).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
-        return trainer?.let {
-            TrainerResponse(
-                trainerId = it.trainerId,
-                userName = trainer.userName,
-                firstName = trainer.firstName,
-                lastName = trainer.lastName,
-                emailId = trainer.emailId,
-                capturedPokemon = trainer.capturedPokemon
-            )
-        }
+    fun getTrainer(id: Int): Trainer? {
+        return trainerDb.findById(id).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
     }
 
     fun createTrainer(trainerInfo: Trainer) {
@@ -44,22 +34,20 @@ class TrainerService(
         trainerDb.findById((id)).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
         trainerDb.save(
             Trainer(
-                trainerId = trainerInfo.trainerId,
-                userName = trainerInfo.userName,
-                firstName = trainerInfo.firstName,
-                lastName = trainerInfo.lastName,
-                emailId = trainerInfo.emailId,
+                id = trainerInfo.id,
+                username = trainerInfo.username,
+                firstname = trainerInfo.firstname,
+                lastname = trainerInfo.lastname,
+                email = trainerInfo.email,
                 capturedPokemon = trainerInfo.capturedPokemon
             )
         )
     }
 
     fun capturePokemonToTrainer(trainerId: Int, pokemonId: Int) {
-        trainerDb.findById(trainerId).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
-        pokemonDb.findById(pokemonId).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
-        val tmpTrainer: Trainer = trainerDb.findById(trainerId).orElse(null)
-        val tmpPokemon: Pokemon = pokemonDb.findById(pokemonId).orElse(null)
-        val uniqueTrainerPokemon = (tmpTrainer.trainerId * 1000) + tmpPokemon.pokemonId
+        val tmpTrainer: Trainer =trainerDb.findById(trainerId).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
+        val tmpPokemon: Pokemon = pokemonDb.findById(pokemonId).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
+        val uniqueTrainerPokemon = (tmpTrainer.id * 1000) + tmpPokemon.id
         capturedPokemonDb.save(CapturedPokemon(uniqueTrainerPokemon, trainerId, pokemonId))
     }
 

@@ -2,7 +2,10 @@ package com.bushelpowered.pokedex.controller
 
 import com.bushelpowered.pokedex.dto.PokemonResponse
 import com.bushelpowered.pokedex.entity.Pokemon
+import com.bushelpowered.pokedex.repository.TypeRepository
+import com.bushelpowered.pokedex.service.ParseFile
 import com.bushelpowered.pokedex.service.PokemonService
+import com.bushelpowered.pokedex.service.PopulateData
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.http.HttpStatus
@@ -10,50 +13,46 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-class PokemonController(private val pokemonService: PokemonService) {
-    @EventListener(ApplicationReadyEvent::class) // Import data on startup
-    fun importData() {
-        return pokemonService.createPokemonDb()
-    }
-
+class PokemonController(
+    private val pokemonService: PokemonService,
+    private val typeRepository: TypeRepository
+) {
     @GetMapping("/pokemon")
-    fun getAllPokemon(): ResponseEntity<List<Pokemon>> {
-        return ResponseEntity(
-            pokemonService.allPokemon(),
-            HttpStatus.NOT_FOUND
-        )
+    fun searchPokemon(
+        @RequestParam(defaultValue = "0") pageNum: Int,
+        @RequestParam(defaultValue = "15") pageSize: Int,
+        @RequestParam name:String?,
+    ): ResponseEntity<Any> {
+        val pokemon = if (name == null){
+            pokemonService.getPokemonByPage(pageNum, pageSize).toList()
+        } else{
+            listOf(pokemonService.getPokemonByName(name))
+        }
+        return ResponseEntity.ok(pokemon)
     }
 
     @GetMapping("/pokemon/{id}")
     fun getPokemonById(
         @PathVariable id: Int
-    ): ResponseEntity<PokemonResponse> {
-        return ResponseEntity(
-            pokemonService.getPokemonById(id),
-            HttpStatus.NOT_FOUND
-        )
-    }
-
-    //name?name=String
-    @GetMapping("/pokemon/name")
-    fun getPokemonByName(
-        @RequestParam name: String
     ): Any {
-        return ResponseEntity(
-            pokemonService.getPokemonByName(name),
-            HttpStatus.NOT_FOUND
+        val pokemon = pokemonService.getPokemonById(id) ?: return ResponseEntity.notFound()
+        return ResponseEntity.ok(
+            pokemon.toResponse()
         )
     }
 
-    //page?pageNum=Int&pageSize=Int
-    @GetMapping("/pokemon/page")
-    fun getPokemonByPage(
-        @RequestParam(defaultValue = "0") pageNum: Int,
-        @RequestParam(defaultValue = "15") pageSize: Int
-    ): ResponseEntity<Iterable<Pokemon>> {
-        return ResponseEntity(
-            pokemonService.getPokemonByPage(pageNum, pageSize),
-            HttpStatus.NOT_FOUND
+    fun Pokemon.toResponse(): PokemonResponse {
+        return PokemonResponse(
+            id = this.id,
+            name = this.name,
+//            pokemonTypes = this.pokemonTypes,
+            height = this.height,
+            weight = this.weight,
+            pokemonAbilities = this.pokemonAbilities,
+            eggGroups = this.eggGroups,
+            pokemonStats = this.pokemonStats,
+            genus = this.genus,
+            description = this.description
         )
     }
 }

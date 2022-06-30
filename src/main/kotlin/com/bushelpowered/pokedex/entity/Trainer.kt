@@ -10,26 +10,26 @@ import javax.persistence.*
 data class Trainer(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "trainerid")
-    val trainerId: Int,
+    @Column(name = "trainer_id")
+    val id: Int,
 
     @Column(name = "username", unique = true, nullable = false)
-    val userName: String,
+    val username: String,
 
     @Column(name = "firstname", nullable = false)
-    val firstName: String,
+    val firstname: String,
 
     @Column(name = "lastname", nullable = false)
-    val lastName: String,
+    val lastname: String,
 
-    @Column(name = "emailaddress", nullable = false)
-    val emailId: String,
+    @Column(name = "email", nullable = false)
+    val email: String,
 
     @OneToMany
     @JoinTable(
         name = "captured_pokemon_table",
-        joinColumns = [JoinColumn(name = "trainer", referencedColumnName = "trainerid")],
-        inverseJoinColumns = [JoinColumn(name = "pokemon", referencedColumnName = "pokemonid")]
+        joinColumns = [JoinColumn(name = "trainer", referencedColumnName = "trainer_id")],
+        inverseJoinColumns = [JoinColumn(name = "pokemon", referencedColumnName = "pokemon_id")]
     )
     val capturedPokemon: List<Pokemon>?
 

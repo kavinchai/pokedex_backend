@@ -2,6 +2,7 @@ package com.bushelpowered.pokedex.controller
 
 import com.bushelpowered.pokedex.dto.TrainerResponse
 import com.bushelpowered.pokedex.entity.Trainer
+import com.bushelpowered.pokedex.service.ParseFile
 import com.bushelpowered.pokedex.service.TrainerService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -9,32 +10,29 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 class TrainerController(private val trainerService: TrainerService) {
-    @GetMapping("/trainer/")
+    @GetMapping("/trainer")
     fun getAllTrainers(): ResponseEntity<List<Trainer>> {
-        return ResponseEntity(
-            trainerService.getAllTrainers(),
-            HttpStatus.NOT_FOUND
+        return ResponseEntity.ok(
+            trainerService.getAllTrainers()
         )
     }
 
     @GetMapping("/trainer/{id}")
     fun getTrainerById(
         @PathVariable id: Int
-    ): ResponseEntity<TrainerResponse> {
-        val trainerResponse: TrainerResponse? = trainerService.getTrainer(id)
-        return ResponseEntity(
-            trainerResponse,
-            HttpStatus.NOT_FOUND
+    ): ResponseEntity<Trainer> {
+        val trainerResponse: Trainer? = trainerService.getTrainer(id)
+        return ResponseEntity.ok(
+            trainerResponse
         )
     }
 
-    @PostMapping("/trainer/")
-    fun createEmployee(
+    @PostMapping("/trainer")
+    fun createTrainer(
         @RequestBody trainerInfo: Trainer
     ): ResponseEntity<Unit> {
-        return ResponseEntity(
-            trainerService.createTrainer(trainerInfo),
-            HttpStatus.CREATED
+        return ResponseEntity.ok(
+            trainerService.createTrainer(trainerInfo)
         )
     }
 
@@ -43,9 +41,8 @@ class TrainerController(private val trainerService: TrainerService) {
         @PathVariable("id") trainerId: Int,
         @RequestBody trainerInfo: Trainer
     ): ResponseEntity<Unit> {
-        return ResponseEntity(
-            trainerService.updateTrainerById(trainerId, trainerInfo),
-            HttpStatus.OK
+        return ResponseEntity.ok(
+            trainerService.updateTrainerById(trainerId, trainerInfo)
         )
     }
 
@@ -54,9 +51,8 @@ class TrainerController(private val trainerService: TrainerService) {
         @PathVariable trainerId: Int,
         @PathVariable pokemonId: Int
     ): ResponseEntity<Unit> {
-        return ResponseEntity(
-            trainerService.capturePokemonToTrainer(trainerId, pokemonId),
-            HttpStatus.OK
+        return ResponseEntity.ok(
+            trainerService.capturePokemonToTrainer(trainerId, pokemonId)
         )
     }
 
@@ -64,9 +60,19 @@ class TrainerController(private val trainerService: TrainerService) {
     fun deleteTrainerById(
         @PathVariable("id") trainerId: Int
     ): ResponseEntity<Unit> {
-        return ResponseEntity(
-            trainerService.deleteTrainer(trainerId),
-            HttpStatus.OK
+        return ResponseEntity.ok(
+            trainerService.deleteTrainer(trainerId)
+        )
+    }
+
+    fun Trainer.toResponse(): TrainerResponse{
+        return TrainerResponse(
+            id = this.id,
+            username = this.username,
+            firstname = this.firstname,
+            lastname = this.lastname,
+            email = this.email,
+            capturedPokemon = this.capturedPokemon
         )
     }
 }

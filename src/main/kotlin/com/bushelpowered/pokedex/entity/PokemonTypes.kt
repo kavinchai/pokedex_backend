@@ -1,24 +1,17 @@
 package com.bushelpowered.pokedex.entity
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonProperty
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name = "pokemon_types_table")
-@JsonIgnoreProperties("pokemontypeid")
 data class PokemonTypes(
     @Id
-    @Column(name = "pokemontypeid")
-    @JsonProperty("pokemontypeid")
-    val pokemonTypeId: Int,
+    @Column(name = "pokemon_types_id")
+    val id: Int,
 
-    @Column(name = "type1")
-    val type1: String?,
+    @Column(name = "pokemon_id")
+    val pokemonId: Int,
 
-    @Column(name = "type2")
-    val type2: String?
+    @Column(name = "type_id")
+    val typeId: Int?
 )

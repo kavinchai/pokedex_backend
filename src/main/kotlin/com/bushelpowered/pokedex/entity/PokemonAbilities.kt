@@ -9,12 +9,12 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "pokemon_abilities_table")
-@JsonIgnoreProperties("pokemonabilityid")
+@JsonIgnoreProperties("pokemon_ability_id")
 data class PokemonAbilities(
     @Id
-    @Column(name = "pokemonabilityid")
-    @JsonProperty("pokemonabilityid")
-    val pokemonAbilityId: Int,
+    @Column(name = "pokemon_ability_id")
+    @JsonProperty("pokemon_ability_id")
+    val id: Int,
 
     @Column(name = "ability1")
     val ability1: String?,

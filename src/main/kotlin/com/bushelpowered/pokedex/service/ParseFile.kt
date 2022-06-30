@@ -1,18 +1,25 @@
 package com.bushelpowered.pokedex.service
 
 import com.bushelpowered.pokedex.entity.*
+import com.bushelpowered.pokedex.repository.PokemonTypeRepository
+import com.bushelpowered.pokedex.repository.TypeRepository
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import org.json.JSONObject
 import java.io.File
+import java.util.*
+import kotlin.collections.HashMap
 
-class parseFile {
-    private fun parseCSV(): List<List<String>> {
+class ParseFile (
+    private val typeRepository: TypeRepository,
+    private val pokemonTypesRepository: PokemonTypeRepository
+){
+    fun parseCSV(): List<List<String>> {
         val filePath = "src/main/resources/db/changelog/data/"
         val file = filePath + "pokedex.csv"
         return csvReader().readAll(File(file))
     }
 
-    private fun formatString(str: String): MutableList<String?> {
+    fun formatString(str: String): MutableList<String?> {
         return str.replace("[\"", "")
             .replace("\"]", "")
             .replace("\", \"", ", ")
@@ -20,36 +27,38 @@ class parseFile {
             .toMutableList<String?>()
     }
 
-    private fun getPokemonTypes(){
+    fun getUniqueTypes(): List<String> {
         val pokemonInfo: List<List<String>> = parseCSV()
-
+        val pokeTypeList = mutableListOf<String>()
+        for (columns in 1 until pokemonInfo.size) {
+            val types = formatString(pokemonInfo[columns][2])
+            types.forEach{
+                if (it != null) {
+                    pokeTypeList.add(it)
+                }
+            }
+        }
+        return pokeTypeList.distinct()
     }
+
+
 
     private fun initPokemonEntity(): Array<MutableList<out Any>> {
         val pokemonInfo: List<List<String>> = parseCSV()
-        val pokeTypeList = mutableListOf<PokemonTypes>()
         val pokeAbilityList = mutableListOf<PokemonAbilities>()
         val eggGroupList = mutableListOf<EggGroups>()
         val pokeStatList = mutableListOf<PokemonStats>()
 
         for (columns in 1 until pokemonInfo.size) {
-            val types = formatString(pokemonInfo[columns][2])
             val ability = formatString(pokemonInfo[columns][5])
             val eggGroup = formatString(pokemonInfo[columns][6])
             val pokeStat = JSONObject(pokemonInfo[columns][7])
 
-            if (types.size == 1) types.add(null)
             if (ability.size == 1) for (i in 1..2) ability.add(null)
             if (ability.size == 2) ability.add(null)
             if (eggGroup.size == 1) eggGroup.add(null)
 
-            pokeTypeList.add(
-                PokemonTypes(
-                    pokemonInfo[columns][0].toInt(),
-                    types[0],
-                    types[1]
-                )
-            )
+
             pokeAbilityList.add(
                 PokemonAbilities(
                     pokemonInfo[columns][0].toInt(),
@@ -77,31 +86,45 @@ class parseFile {
                 )
             )
         }
-        return arrayOf(pokeTypeList, pokeAbilityList, eggGroupList, pokeStatList)
+        return arrayOf(pokeAbilityList, eggGroupList, pokeStatList)
     }
 
     fun listOfPokemon(): List<Pokemon> {
         val pokemonInfo: List<List<String>> = parseCSV()
         val pokemonList = mutableListOf<Pokemon>()
-        val (pokeTypeList,
+        val (
             pokeAbilityList,
             eggGroupList,
-            pokeStatList) = initPokemonEntity()
-        for (columns in 1 until pokemonInfo.size) {
+            pokeStatList
+        ) = initPokemonEntity()
+
+        for (pokemonId in 1 until pokemonInfo.size) {
+            val typesList = mutableListOf<Types>()
+            val pokemonTypeDb = pokemonTypesRepository.findAll()
+            for (entity in pokemonTypeDb){
+                if (entity.pokemonId == pokemonId){
+                    val typeEntity = entity.typeId?.let { typeRepository.findById(it) }
+                    typesList.add(typeEntity)
+                }
+            }
             val newPokemon: Pokemon = Pokemon(
-                pokemonInfo[columns][0].toInt(),
-                pokemonInfo[columns][1],
-                pokeTypeList[columns - 1] as PokemonTypes,
-                pokemonInfo[columns][3].toDouble(),
-                pokemonInfo[columns][4].toDouble(),
-                pokeAbilityList[columns - 1] as PokemonAbilities,
-                eggGroupList[columns - 1] as EggGroups,
-                pokeStatList[columns - 1] as PokemonStats,
-                pokemonInfo[columns][8],
-                pokemonInfo[columns][9]
+                pokemonInfo[pokemonId][0].toInt(),
+                pokemonInfo[pokemonId][1],
+                typesList,
+                pokemonInfo[pokemonId][3].toDouble(),
+                pokemonInfo[pokemonId][4].toDouble(),
+                pokeAbilityList[pokemonId - 1] as PokemonAbilities,
+                eggGroupList[pokemonId - 1] as EggGroups,
+                pokeStatList[pokemonId - 1] as PokemonStats,
+                pokemonInfo[pokemonId][8],
+                pokemonInfo[pokemonId][9]
             )
             pokemonList.add(newPokemon)
         }
         return pokemonList
     }
+}
+
+private fun <E> MutableList<E>.add(element: Optional<E>?) {
+
 }

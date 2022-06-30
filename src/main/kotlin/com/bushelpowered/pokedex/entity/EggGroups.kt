@@ -9,12 +9,12 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "egg_groups_table")
-@JsonIgnoreProperties("egggroupid")
+@JsonIgnoreProperties("egg_group_id")
 data class EggGroups(
     @Id
-    @Column(name = "egggroupid")
-    @JsonProperty("egggroupid")
-    val eggGroupId: Int,
+    @Column(name = "egg_group_id")
+    @JsonProperty("egg_group_id")
+    val id: Int,
 
     @Column(name = "egggroup1")
     val eggGroup1: String?,
