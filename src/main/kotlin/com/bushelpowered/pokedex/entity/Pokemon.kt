@@ -41,7 +41,7 @@ data class Pokemon(
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "pokemon_id", referencedColumnName = "egg_group_id")
-    val eggGroups: EggGroups,
+    val eggGroup: EggGroup,
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "pokemon_id", referencedColumnName = "stat_id")

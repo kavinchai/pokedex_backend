@@ -158,7 +158,7 @@ class PopulateData(
                 pokemonInfo[pokemonId][3].toDouble(),
                 pokemonInfo[pokemonId][4].toDouble(),
                 abilityList,
-                eggGroupList[pokemonId - 1] as EggGroups,
+                eggGroupList[pokemonId - 1] as EggGroup,
                 pokeStatList[pokemonId - 1] as PokemonStats,
                 pokemonInfo[pokemonId][8],
                 pokemonInfo[pokemonId][9]

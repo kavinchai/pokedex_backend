@@ -1,12 +1,9 @@
 package com.bushelpowered.pokedex.service
 
 import com.bushelpowered.pokedex.entity.*
-import com.bushelpowered.pokedex.repository.PokemonTypeRepository
-import com.bushelpowered.pokedex.repository.TypeRepository
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import org.json.JSONObject
 import java.io.File
-import java.util.*
 
 class ParseFile (){
     fun parseCSV(): List<List<String>> {
@@ -28,7 +25,7 @@ class ParseFile (){
     fun initPokemonEntity(): Array<MutableList<out Any>> {
         val pokemonInfo: List<List<String>> = parseCSV()
         val pokeAbilityList = mutableListOf<Ability>()
-        val eggGroupList = mutableListOf<EggGroups>()
+        val eggGroupList = mutableListOf<EggGroup>()
         val pokeStatList = mutableListOf<PokemonStats>()
 
         for (columns in 1 until pokemonInfo.size) {
@@ -41,7 +38,7 @@ class ParseFile (){
             if (eggGroup.size == 1) eggGroup.add(null)
 
             eggGroupList.add(
-                EggGroups(
+                EggGroup(
                     pokemonInfo[columns][0].toInt(),
                     eggGroup[0],
                     eggGroup[1]

@@ -3,12 +3,7 @@ package com.bushelpowered.pokedex.controller
 import com.bushelpowered.pokedex.dto.PokemonResponse
 import com.bushelpowered.pokedex.entity.Pokemon
 import com.bushelpowered.pokedex.repository.TypeRepository
-import com.bushelpowered.pokedex.service.ParseFile
 import com.bushelpowered.pokedex.service.PokemonService
-import com.bushelpowered.pokedex.service.PopulateData
-import org.springframework.boot.context.event.ApplicationReadyEvent
-import org.springframework.context.event.EventListener
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -49,7 +44,7 @@ class PokemonController(
             height = this.height,
             weight = this.weight,
 //            pokemonAbilities = this.ability,
-            eggGroups = this.eggGroups,
+            eggGroup = this.eggGroup,
             pokemonStats = this.pokemonStats,
             genus = this.genus,
             description = this.description
