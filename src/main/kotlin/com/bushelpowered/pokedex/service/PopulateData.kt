@@ -84,7 +84,7 @@ class PopulateData(
     }
 
 
-    private fun populateTypesTable(): List<Type> {
+    private fun getTypesList(): List<Type> {
         val uniqueList = getUniqueTypes()
         val typeList = mutableListOf<Type>()
         for (type in uniqueList.indices) {
@@ -98,7 +98,7 @@ class PopulateData(
         return typeList
     }
 
-    private fun populateAbilityTable(): List<Ability> {
+    private fun getAbilityList(): List<Ability> {
         val uniqueList = getUniqueAbilities()
         val abilityList = mutableListOf<Ability>()
         for (ability in uniqueList.indices) {
@@ -112,7 +112,7 @@ class PopulateData(
         return abilityList
     }
 
-    private fun populateEggGroupTable(): List<EggGroup> {
+    private fun getEggGroupList(): List<EggGroup> {
         val uniqueList = getUniqueEggGroups()
         val eggGroupList = mutableListOf<EggGroup>()
         for (eggGroup in uniqueList.indices) {
@@ -126,7 +126,7 @@ class PopulateData(
         return eggGroupList
     }
 
-    private fun populateGenusTable(): List<Genus> {
+    private fun getGenusList(): List<Genus> {
         val uniqueList = getUniqueGenus()
         val genusList = mutableListOf<Genus>()
         for (genus in uniqueList.indices) {
@@ -140,7 +140,7 @@ class PopulateData(
         return genusList
     }
 
-    private fun populatePokemonTypesTable(): List<PokemonType> {
+    private fun getPokemonTypesList(): List<PokemonType> {
         val pokemonInfo: List<List<String>> = ParseFile().parseCSV()
         val pokemonTypeList = mutableListOf<PokemonType>()
         val typeDb = typeRepository.findAll()
@@ -162,7 +162,7 @@ class PopulateData(
         return pokemonTypeList
     }
 
-    private fun populatePokemonAbilityTable(): List<PokemonAbility> {
+    private fun getPokemonAbilityList(): List<PokemonAbility> {
         val pokemonInfo: List<List<String>> = ParseFile().parseCSV()
         val pokemonAbilityList = mutableListOf<PokemonAbility>()
         val abilityDb = abilityRepository.findAll()
@@ -183,7 +183,7 @@ class PopulateData(
         return pokemonAbilityList
     }
 
-    private fun populatePokemonEggGroupTable(): List<PokemonEggGroup> {
+    private fun getPokemonEggGroupList(): List<PokemonEggGroup> {
         val pokemonInfo: List<List<String>> = ParseFile().parseCSV()
         val pokemonEggGroupList = mutableListOf<PokemonEggGroup>()
         val eggGroupDb = eggGroupRepository.findAll()
@@ -206,7 +206,7 @@ class PopulateData(
         return pokemonEggGroupList
     }
 
-    private fun populatePokemonGenusTable(): List<PokemonGenus> {
+    private fun getPokemonGenusList(): List<PokemonGenus> {
         val pokemonInfo: List<List<String>> = ParseFile().parseCSV()
         val pokemonGenusList = mutableListOf<PokemonGenus>()
         val genusDb = genusRepository.findAll()
@@ -227,7 +227,7 @@ class PopulateData(
         return pokemonGenusList
     }
 
-    private fun populatePokemonTable(): List<Pokemon> {
+    private fun getPokemonList(): List<Pokemon> {
         val pokemonTypeDb = pokemonTypesRepository.findAll()
         val pokemonAbilityDb = pokemonAbilityRepository.findAll()
         val pokemonEggGroupDb = pokemonEggGroupRepository.findAll()
@@ -273,11 +273,11 @@ class PopulateData(
                 pokemonInfo[pokemonId][0].toInt(),
                 pokemonInfo[pokemonId][1],
                 typeList,
-                pokemonInfo[pokemonId][3].toDouble(),
-                pokemonInfo[pokemonId][4].toDouble(),
+                pokemonInfo[pokemonId][3].toFloat(),
+                pokemonInfo[pokemonId][4].toFloat(),
                 abilityList,
                 eggGroupList,
-                pokeStatList[pokemonId - 1] as PokemonStats,
+                pokeStatList[pokemonId - 1] as PokemonStat,
                 genusList,
                 pokemonInfo[pokemonId][9]
             )
@@ -287,15 +287,15 @@ class PopulateData(
     }
 
     fun populateTables(){
-        typeRepository.saveAll(populateTypesTable())
-        pokemonTypesRepository.saveAll(populatePokemonTypesTable())
-        abilityRepository.saveAll(populateAbilityTable())
-        pokemonAbilityRepository.saveAll(populatePokemonAbilityTable())
-        eggGroupRepository.saveAll(populateEggGroupTable())
-        pokemonEggGroupRepository.saveAll(populatePokemonEggGroupTable())
-        genusRepository.saveAll(populateGenusTable())
-        pokemonGenusRepository.saveAll(populatePokemonGenusTable())
-        pokemonRepository.saveAll(populatePokemonTable())
+        typeRepository.saveAll(getTypesList())
+        pokemonTypesRepository.saveAll(getPokemonTypesList())
+        abilityRepository.saveAll(getAbilityList())
+        pokemonAbilityRepository.saveAll(getPokemonAbilityList())
+        eggGroupRepository.saveAll(getEggGroupList())
+        pokemonEggGroupRepository.saveAll(getPokemonEggGroupList())
+        genusRepository.saveAll(getGenusList())
+        pokemonGenusRepository.saveAll(getPokemonGenusList())
+        pokemonRepository.saveAll(getPokemonList())
     }
 
     private fun <E> MutableList<E>.add(element: Optional<E>) {

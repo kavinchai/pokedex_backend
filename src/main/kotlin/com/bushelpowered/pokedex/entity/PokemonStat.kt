@@ -6,8 +6,8 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "pokemon_stats_table")
-@JsonIgnoreProperties("statid")
-data class PokemonStats(
+@JsonIgnoreProperties("stat_id")
+data class PokemonStat(
     @Id
     @Column(name = "stat_id")
     @JsonProperty("stat_id")
@@ -30,5 +30,4 @@ data class PokemonStats(
 
     @Column(name = "special_defense")
     val specialDefense: Int,
-
-    )
+)

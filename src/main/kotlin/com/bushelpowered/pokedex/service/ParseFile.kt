@@ -24,13 +24,13 @@ class ParseFile (){
 
     fun getPokemonStat(): Array<MutableList<out Any>> {
         val pokemonInfo: List<List<String>> = parseCSV()
-        val pokeStatList = mutableListOf<PokemonStats>()
+        val pokeStatList = mutableListOf<PokemonStat>()
 
         for (columns in 1 until pokemonInfo.size) {
             val pokeStat = JSONObject(pokemonInfo[columns][7])
 
             pokeStatList.add(
-                PokemonStats(
+                PokemonStat(
                     pokemonInfo[columns][0].toInt(),
                     pokeStat.get("hp") as Int,
                     pokeStat.get("speed") as Int,

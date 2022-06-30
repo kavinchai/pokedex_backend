@@ -23,13 +23,13 @@ data class Pokemon(
         joinColumns = [JoinColumn(name = "pokemon_id", referencedColumnName = "pokemon_id")],
         inverseJoinColumns = [JoinColumn(name = "type_id", referencedColumnName = "type_id")]
     )
-    val pokemonTypes: List<Type>,
+    val type: List<Type>,
 
     @Column(name = "height")
-    val height: Double,
+    val height: Float,
 
     @Column(name = "weight")
-    val weight: Double,
+    val weight: Float,
 
     @OneToMany
     @JoinTable(
@@ -37,7 +37,7 @@ data class Pokemon(
         joinColumns = [JoinColumn(name = "pokemon_id", referencedColumnName = "pokemon_id")],
         inverseJoinColumns = [JoinColumn(name = "ability_id", referencedColumnName = "ability_id")]
     )
-    val pokemonAbilities: List<Ability>,
+    val ability: List<Ability>,
 
     @OneToMany
     @JoinTable(
@@ -45,11 +45,11 @@ data class Pokemon(
         joinColumns = [JoinColumn(name = "pokemon_id", referencedColumnName = "pokemon_id")],
         inverseJoinColumns = [JoinColumn(name = "egg_group_id", referencedColumnName = "egg_group_id")]
     )
-    val pokemonEggGroups: List<EggGroup>,
+    val eggGroup: List<EggGroup>,
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "pokemon_id", referencedColumnName = "stat_id")
-    val pokemonStats: PokemonStats,
+    val stats: PokemonStat,
 
     @OneToMany
     @JoinTable(
@@ -57,7 +57,7 @@ data class Pokemon(
         joinColumns = [JoinColumn(name = "pokemon_id", referencedColumnName = "pokemon_id")],
         inverseJoinColumns = [JoinColumn(name = "genus_id", referencedColumnName = "genus_id")]
     )
-    val pokemonGenus: List<Genus>,
+    val genus: List<Genus>,
 
     @Column(name = "description")
     val description: String,

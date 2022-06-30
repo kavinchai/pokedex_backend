@@ -40,13 +40,9 @@ class PokemonController(
         return PokemonResponse(
             id = this.id,
             name = this.name,
-//            pokemonTypes = this.pokemonTypes,
             height = this.height,
             weight = this.weight,
-//            pokemonAbilities = this.ability,
-//            eggGroup = this.eggGroup,
-            pokemonStats = this.pokemonStats,
-//            genus = this.genus,
+            stats = this.stats,
             description = this.description
         )
     }

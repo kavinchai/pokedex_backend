@@ -2,7 +2,6 @@ package com.bushelpowered.pokedex.service
 
 import com.bushelpowered.pokedex.repository.PokemonRepository
 import com.bushelpowered.pokedex.entity.*
-import com.bushelpowered.pokedex.repository.TypeRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -12,10 +11,6 @@ import org.springframework.web.server.ResponseStatusException
 class PokemonService(
     private val pokemonRepository: PokemonRepository
 ){
-    fun allPokemon(): List<Pokemon> {
-        return pokemonRepository.findAll().toList()
-    }
-
     fun getPokemonById(id: Int): Pokemon? {
        return pokemonRepository.findById(id).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
     }

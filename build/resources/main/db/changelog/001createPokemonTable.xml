@@ -12,8 +12,8 @@
                 <constraints primaryKey="true" primaryKeyName="pokemonPk"/>
             </column>
             <column name="name" type="varchar(250)"/>
-            <column name="height" type="int"/>
-            <column name="weight" type="int"/>
+            <column name="height" type="float"/>
+            <column name="weight" type="float"/>
             <column name="description" type="varchar(500)"/>
         </createTable>
 
