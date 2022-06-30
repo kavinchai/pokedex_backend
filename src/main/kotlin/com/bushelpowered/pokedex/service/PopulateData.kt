@@ -10,6 +10,8 @@ class PopulateData(
     private val pokemonTypesRepository: PokemonTypeRepository,
     private val abilityRepository: AbilityRepository,
     private val pokemonAbilityRepository: PokemonAbilityRepository,
+    private val eggGroupRepository: EggGroupRepository,
+    private val pokemonEggGroupRepository: PokemonEggGroupRepository,
     private val pokemonRepository : PokemonRepository
 ) {
     private fun getUniqueTypes(): List<String> {
@@ -151,6 +153,27 @@ class PopulateData(
         return eggGroupList
     }
 
+    fun populatePokemonEggGroupTable(): List<PokemonEggGroup> {
+        val pokemonInfo: List<List<String>> = ParseFile().parseCSV()
+        val pokemonEggGroupList = mutableListOf<PokemonEggGroup>()
+        val eggGroupDb = eggGroupRepository.findAll()
+        val eggGroupMap : MutableMap<Int, String> = HashMap()
+        var uniqueId : Int = 1;
+        eggGroupDb.forEach {
+            eggGroupMap[it.id] = it.eggGroup.toString()
+        }
+        for (pokemonId in 1 until pokemonInfo.size) {
+            val individualPokemonEggGroups = ParseFile().formatString(pokemonInfo[pokemonId][6])
+            for (eggGroup in individualPokemonEggGroups) {
+                if (eggGroupMap.containsValue(eggGroup)){
+                    pokemonEggGroupList.add(PokemonEggGroup(uniqueId, pokemonId, getKey(eggGroupMap, eggGroup.toString())))
+                    uniqueId += 1
+                }
+            }
+        }
+        return pokemonEggGroupList
+    }
+
     fun populatePokemonTable(): List<Pokemon> {
         val pokemonTypeDb = pokemonTypesRepository.findAll()
         val pokemonInfo: List<List<String>> = ParseFile().parseCSV()
@@ -197,6 +220,8 @@ class PopulateData(
         pokemonTypesRepository.saveAll(populatePokemonTypesTable())
         abilityRepository.saveAll(populateAbilityTable())
         pokemonAbilityRepository.saveAll(populatePokemonAbilityTable())
+        eggGroupRepository.saveAll(populateEggGroupTable())
+        pokemonEggGroupRepository.saveAll(populatePokemonEggGroupTable())
         pokemonRepository.saveAll(populatePokemonTable())
     }
     private fun <E> MutableList<E>.add(element: Optional<E>?) {}

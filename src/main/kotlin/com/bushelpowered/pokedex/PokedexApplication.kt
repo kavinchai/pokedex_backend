@@ -22,11 +22,13 @@ class PokedexApplication(
     @EventListener(ApplicationReadyEvent::class) // Import data on startup
     fun importData() {
         PopulateData(
-        typeRepository,
-        pokemonTypesRepository,
-        abilityRepository,
-        pokemonAbilityRepository,
-        pokemonRepository
+            typeRepository,
+            pokemonTypesRepository,
+            abilityRepository,
+            pokemonAbilityRepository,
+            eggGroupRepository,
+            pokemonEggGroupRepository,
+            pokemonRepository,
         ).populateTables()
     }
 }
