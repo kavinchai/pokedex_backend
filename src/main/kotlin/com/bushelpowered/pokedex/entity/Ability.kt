@@ -13,5 +13,5 @@ data class Ability(
     val id: Int,
 
     @Column(name = "ability")
-    val ability: String,
+    val ability: String
 )

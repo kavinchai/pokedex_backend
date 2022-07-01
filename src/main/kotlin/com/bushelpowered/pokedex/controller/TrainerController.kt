@@ -2,9 +2,7 @@ package com.bushelpowered.pokedex.controller
 
 import com.bushelpowered.pokedex.dto.TrainerResponse
 import com.bushelpowered.pokedex.entity.Trainer
-import com.bushelpowered.pokedex.service.ParseFile
 import com.bushelpowered.pokedex.service.TrainerService
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -21,9 +19,9 @@ class TrainerController(private val trainerService: TrainerService) {
     fun getTrainerById(
         @PathVariable id: Int
     ): ResponseEntity<Trainer> {
-        val trainerResponse: Trainer? = trainerService.getTrainer(id)
+        val trainerModel: Trainer? = trainerService.getTrainer(id)
         return ResponseEntity.ok(
-            trainerResponse
+            trainerModel
         )
     }
 
@@ -65,7 +63,7 @@ class TrainerController(private val trainerService: TrainerService) {
         )
     }
 
-    fun Trainer.toResponse(): TrainerResponse{
+    fun Trainer.toResponse(): TrainerResponse {
         return TrainerResponse(
             id = this.id,
             username = this.username,

@@ -5,24 +5,24 @@ import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import org.json.JSONObject
 import java.io.File
 
-class ParseFile (){
+class PokemonCsvParser (){
     fun parseCSV(): List<List<String>> {
         val filePath = "src/main/resources/db/changelog/data/"
         val file = filePath + "pokedex.csv"
         return csvReader().readAll(File(file))
     }
 
-    fun formatString(str: String): MutableList<String?> {
+    fun formatToStringList(str: String): MutableList<String> {
         return str.replace("[\"", "")
             .replace("\"]", "")
             .replace("\", \"", ", ")
+            .replace("é", "e")
+            .replace(("[0-9]").toRegex(),"")
             .split(", ")
-            .toMutableList<String?>()
+            .toMutableList()
     }
 
-
-
-    fun getPokemonStat(): Array<MutableList<out Any>> {
+    fun getPokemonStat(): MutableList<PokemonStat> {
         val pokemonInfo: List<List<String>> = parseCSV()
         val pokeStatList = mutableListOf<PokemonStat>()
 
@@ -41,7 +41,7 @@ class ParseFile (){
                 )
             )
         }
-        return arrayOf(pokeStatList)
+        return pokeStatList
     }
 }
 

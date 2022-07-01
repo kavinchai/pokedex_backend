@@ -8,5 +8,5 @@ data class TrainerResponse(
     val firstname: String,
     val lastname: String,
     val email: String,
-    val capturedPokemon: List<Pokemon>?
+    val capturedPokemon: List<Pokemon>
 )

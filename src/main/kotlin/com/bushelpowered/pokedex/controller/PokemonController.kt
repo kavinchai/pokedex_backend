@@ -2,15 +2,13 @@ package com.bushelpowered.pokedex.controller
 
 import com.bushelpowered.pokedex.dto.PokemonResponse
 import com.bushelpowered.pokedex.entity.Pokemon
-import com.bushelpowered.pokedex.repository.TypeRepository
 import com.bushelpowered.pokedex.service.PokemonService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 class PokemonController(
-    private val pokemonService: PokemonService,
-    private val typeRepository: TypeRepository
+    private val pokemonService: PokemonService
 ) {
     @GetMapping("/pokemon")
     fun searchPokemon(

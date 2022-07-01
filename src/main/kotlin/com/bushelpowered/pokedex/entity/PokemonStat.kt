@@ -29,5 +29,5 @@ data class PokemonStat(
     val specialAttack: Int,
 
     @Column(name = "special_defense")
-    val specialDefense: Int,
+    val specialDefense: Int
 )

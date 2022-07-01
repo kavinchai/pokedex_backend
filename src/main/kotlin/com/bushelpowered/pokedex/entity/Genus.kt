@@ -13,5 +13,5 @@ data class Genus(
     val id: Int,
 
     @Column(name = "genus")
-    val genus: String,
+    val genus: String
 )

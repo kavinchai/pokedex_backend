@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import javax.persistence.*
 
-
 @Entity
 @Table(name = "pokemon_table")
 @JsonIgnoreProperties("pokemon_id")
@@ -61,6 +60,7 @@ data class Pokemon(
 
     @Column(name = "description")
     val description: String,
+
 )
 
 

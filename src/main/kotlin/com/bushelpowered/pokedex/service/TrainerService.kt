@@ -1,6 +1,5 @@
 package com.bushelpowered.pokedex.service
 
-import com.bushelpowered.pokedex.dto.TrainerResponse
 import com.bushelpowered.pokedex.entity.CapturedPokemon
 import com.bushelpowered.pokedex.entity.Pokemon
 import com.bushelpowered.pokedex.entity.Trainer
@@ -14,25 +13,25 @@ import org.springframework.web.server.ResponseStatusException
 
 @Service
 class TrainerService(
-    private val trainerDb: TrainerRepository,
-    private val pokemonDb: PokemonRepository,
-    private val capturedPokemonDb: CapturedPokemonRepository
+    private val trainerRepository: TrainerRepository,
+    private val pokemonRepository: PokemonRepository,
+    private val capturedPokemonRepository: CapturedPokemonRepository
 ) {
     fun getAllTrainers(): List<Trainer> {
-        return trainerDb.findAll() as List<Trainer>
+        return trainerRepository.findAll().toList()
     }
 
     fun getTrainer(id: Int): Trainer? {
-        return trainerDb.findById(id).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
+        return trainerRepository.findById(id).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
     }
 
     fun createTrainer(trainerInfo: Trainer) {
-        trainerDb.save(trainerInfo)
+        trainerRepository.save(trainerInfo)
     }
 
     fun updateTrainerById(id: Int, trainerInfo: Trainer) {
-        trainerDb.findById((id)).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
-        trainerDb.save(
+        trainerRepository.findById((id)).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
+        trainerRepository.save(
             Trainer(
                 id = trainerInfo.id,
                 username = trainerInfo.username,
@@ -45,15 +44,17 @@ class TrainerService(
     }
 
     fun capturePokemonToTrainer(trainerId: Int, pokemonId: Int) {
-        val tmpTrainer: Trainer =trainerDb.findById(trainerId).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
-        val tmpPokemon: Pokemon = pokemonDb.findById(pokemonId).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
+        val tmpTrainer: Trainer =
+            trainerRepository.findById(trainerId).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
+        val tmpPokemon: Pokemon =
+            pokemonRepository.findById(pokemonId).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
         val uniqueTrainerPokemon = (tmpTrainer.id * 1000) + tmpPokemon.id
-        capturedPokemonDb.save(CapturedPokemon(uniqueTrainerPokemon, trainerId, pokemonId))
+        capturedPokemonRepository.save(CapturedPokemon(uniqueTrainerPokemon, trainerId, pokemonId))
     }
 
     fun deleteTrainer(trainerId: Int) {
-        trainerDb.findById(trainerId).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
-        trainerDb.deleteById(trainerId)
+        trainerRepository.findById(trainerId).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
+        trainerRepository.deleteById(trainerId)
     }
 }
 
