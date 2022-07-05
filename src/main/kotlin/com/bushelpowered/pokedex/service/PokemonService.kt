@@ -58,8 +58,8 @@ class PokemonService(
 
     private fun getTypeIdFromName(type: String): Int? {
         val typeList = typeRepository.findAll()
-        for (typeEntity in typeList){
-            if (type == typeEntity.type){
+        for (typeEntity in typeList) {
+            if (type == typeEntity.type) {
                 return typeEntity.id
             }
         }
@@ -71,38 +71,37 @@ class PokemonService(
         val pokemonTypeList = pokemonTypeRepository.findAll()
         val tmpList = mutableListOf<Pokemon>()
         val listOfPokemon = mutableListOf<Pokemon>()
-        if (type2 == null){     // Filter for only 1 type
-            for (typeEntity in typeList) { // Check if type input param is valid
-                if (type.lowercase() == typeEntity.type.lowercase()) {
-                    for (entity in pokemonTypeList) { // Search pokemon type table for type id
-                        if (entity.typeId == typeEntity.id) {
-                            val pokemon = pokemonRepository.findById(entity.pokemonId).orElse(null)
-                            listOfPokemon.add(pokemon)
-                        }
-                    }
-                }
-            }
-        }
-        else{       // Filter for 2 types
-            for (typeEntity in typeList) { // Check if type input param is valid
-                if (type.lowercase() == typeEntity.type.lowercase()) {
-                    for (entity in pokemonTypeList) { // Search pokemon type table for type id
-                        if (entity.typeId == typeEntity.id) {
-                            val pokemon = pokemonRepository.findById(entity.pokemonId).orElse(null)
-                            tmpList.add(pokemon)    // Tmp list of pokemon with type1
-                        }
-                    }
-                }
-            }
-            for (poke in tmpList){  // Filtering tmp list of pokemon for type 2
-                if (poke.type.size == 2){
-                    if (poke.type[0].type == type2 ||poke.type[1].type == type2){
-                        listOfPokemon.add(poke)
+
+        for (typeEntity in typeList) { // Check if type input param is valid
+            if (type.lowercase() == typeEntity.type.lowercase()) {
+                for (entity in pokemonTypeList) { // Search pokemon type table for type id
+                    if (entity.typeId == typeEntity.id) {
+                        val pokemon = pokemonRepository.findById(entity.pokemonId).orElse(null)
+                        listOfPokemon.add(pokemon)
                     }
                 }
             }
         }
 
+        if (type2 != null) {    // Filter for two types
+            listOfPokemon.removeAll {
+                it.type.size != 2
+            }
+            for (poke in listOfPokemon) {
+                if (poke.type.size == 2) {
+                    if (
+                        !(poke.type[0].type == type && poke.type[1].type == type2) &&
+                        !(poke.type[0].type == type2 && poke.type[1].type == type)
+                    ) {
+                        tmpList.add(poke)
+                    }
+                }
+            }
+            val keysOfTmp = tmpList.map { it.name }
+            listOfPokemon.removeAll {
+                it.name in keysOfTmp
+            }
+        }
 
         val typePages = PagedListHolder(listOfPokemon)
         typePages.page = pageNum
