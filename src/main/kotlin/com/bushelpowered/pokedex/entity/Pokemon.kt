@@ -59,8 +59,7 @@ data class Pokemon(
     val genus: List<Genus>,
 
     @Column(name = "description")
-    val description: String,
-
+    val description: String
 )
 
 

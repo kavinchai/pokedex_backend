@@ -14,16 +14,34 @@ class PokemonController(
     fun searchPokemon(
         @RequestParam(defaultValue = "0") pageNum: Int,
         @RequestParam(defaultValue = "15") pageSize: Int,
-        @RequestParam name:String?,
+        @RequestParam name: String?,
         @RequestParam id: Int?,
     ): ResponseEntity<out Any> {
-        if (name != null && id == null){
-            return ResponseEntity.ok(listOf(pokemonService.getPokemonByName(name)))
+        if (name != null && id == null){    // name param provided
+            return ResponseEntity.ok(listOf(
+                pokemonService.getPokemonByName(name)?.toResponse() ?: ResponseEntity.notFound()
+            ))
         }
-        else if (name == null && id != null){
-            return ResponseEntity.ok(pokemonService.getPokemonById(id))
+        else if (name == null && id != null){   // id param provided
+            return ResponseEntity.ok(
+                pokemonService.getPokemonById(id)?.toResponse() ?: ResponseEntity.notFound()
+            )
         }
         return ResponseEntity.ok(pokemonService.getPokemonByPage(pageNum, pageSize))
+    }
+
+    @GetMapping("/type")
+    fun searchPokemonType(
+        @RequestParam(defaultValue = "0") pageNum: Int,
+        @RequestParam(defaultValue = "15") pageSize: Int,
+        @RequestParam type1: String?
+    ): ResponseEntity<Any> {
+        if (type1 != null){
+            return ResponseEntity.ok(
+                listOf(pokemonService.getPokemonByType(type1, pageNum, pageSize))
+            )
+        }
+        return ResponseEntity.ok(pokemonService.getPokemonByPage(pageNum, pageSize).toList())
     }
 
     @GetMapping("/pokemon/{id}")
