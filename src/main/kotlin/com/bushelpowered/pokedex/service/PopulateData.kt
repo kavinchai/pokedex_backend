@@ -2,6 +2,7 @@ package com.bushelpowered.pokedex.service
 
 import com.bushelpowered.pokedex.entity.*
 import com.bushelpowered.pokedex.repository.*
+import org.json.JSONObject
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
@@ -43,57 +44,20 @@ class PopulateData(
         return null
     }
 
-    private fun getUniqueTypes(): List<String> {
+    private fun getUniqueList(dataColumn: Int): List<String>{
         val pokemonInfo: List<List<String>> = PokemonCsvParser().parseCSV()
-        val pokeTypeList = mutableListOf<String>()
-        for (columns in 1 until pokemonInfo.size) {
-            val types = PokemonCsvParser().formatToStringList(pokemonInfo[columns][2])
-            types.forEach {
-                pokeTypeList.add(it)
+        val uniqueList = mutableListOf<String>()
+        for (row in 1 until pokemonInfo.size) {
+            val entityList = PokemonCsvParser().formatToStringList(pokemonInfo[row][dataColumn])
+            entityList.forEach {
+                uniqueList.add(it)
             }
         }
-        return pokeTypeList.distinct()
+        return uniqueList.distinct()
     }
-
-    private fun getUniqueAbilities(): List<String> {
-        val pokemonInfo: List<List<String>> = PokemonCsvParser().parseCSV()
-        val pokeAbilityList = mutableListOf<String>()
-        for (columns in 1 until pokemonInfo.size) {
-            val abilities = PokemonCsvParser().formatToStringList(pokemonInfo[columns][5])
-            abilities.forEach {
-                pokeAbilityList.add(it)
-            }
-        }
-        return pokeAbilityList.distinct()
-    }
-
-    private fun getUniqueEggGroups(): List<String> {
-        val pokemonInfo: List<List<String>> = PokemonCsvParser().parseCSV()
-        val pokeEggGroupList = mutableListOf<String>()
-        for (columns in 1 until pokemonInfo.size) {
-            val eggGroups = PokemonCsvParser().formatToStringList(pokemonInfo[columns][6])
-            eggGroups.forEach {
-                pokeEggGroupList.add(it)
-            }
-        }
-        return pokeEggGroupList.distinct()
-    }
-
-    private fun getUniqueGenus(): List<String> {
-        val pokemonInfo: List<List<String>> = PokemonCsvParser().parseCSV()
-        val pokeGenusList = mutableListOf<String>()
-        for (columns in 1 until pokemonInfo.size) {
-            val genus = PokemonCsvParser().formatToStringList(pokemonInfo[columns][8])
-            genus.forEach {
-                pokeGenusList.add(it)
-            }
-        }
-        return pokeGenusList.distinct()
-    }
-
 
     private fun getTypesList(): List<Type> {
-        val uniqueList = getUniqueTypes()
+        val uniqueList = getUniqueList(2)
         val typeList = mutableListOf<Type>()
         for (type in uniqueList.indices) {
             typeList.add(
@@ -107,7 +71,7 @@ class PopulateData(
     }
 
     private fun getAbilityList(): List<Ability> {
-        val uniqueList = getUniqueAbilities()
+        val uniqueList = getUniqueList(5)
         val abilityList = mutableListOf<Ability>()
         for (ability in uniqueList.indices) {
             abilityList.add(
@@ -121,7 +85,7 @@ class PopulateData(
     }
 
     private fun getEggGroupList(): List<EggGroup> {
-        val uniqueList = getUniqueEggGroups()
+        val uniqueList = getUniqueList(6)
         val eggGroupList = mutableListOf<EggGroup>()
         for (eggGroup in uniqueList.indices) {
             eggGroupList.add(
@@ -135,7 +99,7 @@ class PopulateData(
     }
 
     private fun getGenusList(): List<Genus> {
-        val uniqueList = getUniqueGenus()
+        val uniqueList = getUniqueList(8)
         val genusList = mutableListOf<Genus>()
         for (genus in uniqueList.indices) {
             genusList.add(
@@ -238,6 +202,28 @@ class PopulateData(
         return pokemonGenusList
     }
 
+    fun getPokemonStat(): MutableList<PokemonStat> {
+        val pokemonInfo: List<List<String>> = PokemonCsvParser().parseCSV()
+        val pokeStatList = mutableListOf<PokemonStat>()
+
+        for (columns in 1 until pokemonInfo.size) {
+            val pokeStat = JSONObject(pokemonInfo[columns][7])
+
+            pokeStatList.add(
+                PokemonStat(
+                    pokemonInfo[columns][0].toInt(),
+                    pokeStat.get("hp") as Int,
+                    pokeStat.get("speed") as Int,
+                    pokeStat.get("attack") as Int,
+                    pokeStat.get("defense") as Int,
+                    pokeStat.get("special-attack") as Int,
+                    pokeStat.get("special-defense") as Int
+                )
+            )
+        }
+        return pokeStatList
+    }
+
     private fun getPokemonList(): List<Pokemon> {
         val pokemonTypeDb = pokemonTypesRepository.findAll()
         val pokemonAbilityDb = pokemonAbilityRepository.findAll()
@@ -246,7 +232,7 @@ class PopulateData(
 
         val pokemonInfo: List<List<String>> = PokemonCsvParser().parseCSV()
         val pokemonList = mutableListOf<Pokemon>()
-        val pokeStatList = PokemonCsvParser().getPokemonStat()
+        val pokeStatList = getPokemonStat()
 
         for (pokemonId in 1 until pokemonInfo.size) {
             val typeList = mutableListOf<Type>()
@@ -256,25 +242,25 @@ class PopulateData(
 
             for (type in pokemonTypeDb) {
                 if (type.pokemonId == pokemonId) {
-                    val typeEntity = type.typeId.let { typeRepository.findById(it) }
+                    val typeEntity = typeRepository.findById(pokemonId)
                     typeList.add(typeEntity)
                 }
             }
             for (ability in pokemonAbilityDb) {
                 if (ability.pokemonId == pokemonId) {
-                    val abilityEntity = ability.abilityId.let { abilityRepository.findById(it) }
+                    val abilityEntity = abilityRepository.findById(pokemonId)
                     abilityList.add(abilityEntity)
                 }
             }
             for (eggGroup in pokemonEggGroupDb) {
                 if (eggGroup.pokemonId == pokemonId) {
-                    val eggGroupEntity = eggGroup.eggGroupId.let { eggGroupRepository.findById(it) }
+                    val eggGroupEntity = eggGroupRepository.findById(pokemonId)
                     eggGroupList.add(eggGroupEntity)
                 }
             }
             for (genus in pokemonGenusDb) {
                 if (genus.pokemonId == pokemonId) {
-                    val genusEntity = genus.genusId.let { genusRepository.findById(it) }
+                    val genusEntity = genusRepository.findById(pokemonId)
                     genusList.add(genusEntity)
                 }
             }

@@ -15,13 +15,15 @@ class PokemonController(
         @RequestParam(defaultValue = "0") pageNum: Int,
         @RequestParam(defaultValue = "15") pageSize: Int,
         @RequestParam name:String?,
-    ): ResponseEntity<Any> {
-        val pokemon = if (name == null){
-            pokemonService.getPokemonByPage(pageNum, pageSize).toList()
-        } else{
-            listOf(pokemonService.getPokemonByName(name))
+        @RequestParam id: Int?,
+    ): ResponseEntity<out Any> {
+        if (name != null && id == null){
+            return ResponseEntity.ok(listOf(pokemonService.getPokemonByName(name)))
         }
-        return ResponseEntity.ok(pokemon)
+        else if (name == null && id != null){
+            return ResponseEntity.ok(pokemonService.getPokemonById(id))
+        }
+        return ResponseEntity.ok(pokemonService.getPokemonByPage(pageNum, pageSize))
     }
 
     @GetMapping("/pokemon/{id}")

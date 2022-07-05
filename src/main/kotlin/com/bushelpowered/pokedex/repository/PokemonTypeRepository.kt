@@ -4,4 +4,8 @@ import com.bushelpowered.pokedex.entity.PokemonAbility
 import com.bushelpowered.pokedex.entity.PokemonType
 import org.springframework.data.repository.CrudRepository
 
-interface PokemonTypeRepository : CrudRepository<PokemonType, Int>
+interface PokemonTypeRepository : CrudRepository<PokemonType, Int> {
+    abstract fun findAllById(pokemonId: Int): MutableIterable<PokemonType>
+
+
+}

@@ -21,27 +21,5 @@ class PokemonCsvParser (){
             .split(", ")
             .toMutableList()
     }
-
-    fun getPokemonStat(): MutableList<PokemonStat> {
-        val pokemonInfo: List<List<String>> = parseCSV()
-        val pokeStatList = mutableListOf<PokemonStat>()
-
-        for (columns in 1 until pokemonInfo.size) {
-            val pokeStat = JSONObject(pokemonInfo[columns][7])
-
-            pokeStatList.add(
-                PokemonStat(
-                    pokemonInfo[columns][0].toInt(),
-                    pokeStat.get("hp") as Int,
-                    pokeStat.get("speed") as Int,
-                    pokeStat.get("attack") as Int,
-                    pokeStat.get("defense") as Int,
-                    pokeStat.get("special-attack") as Int,
-                    pokeStat.get("special-defense") as Int
-                )
-            )
-        }
-        return pokeStatList
-    }
 }
 
