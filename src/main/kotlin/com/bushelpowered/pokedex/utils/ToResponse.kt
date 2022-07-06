@@ -1,0 +1,31 @@
+package com.bushelpowered.pokedex.utils
+
+import com.bushelpowered.pokedex.dto.PokemonResponse
+import com.bushelpowered.pokedex.entity.Pokemon
+
+fun Pokemon.toResponse(): PokemonResponse {
+    val typeResponseList = mutableListOf<String>()
+    val abilityResponseList = mutableListOf<String>()
+    val eggGroupResponseList = mutableListOf<String>()
+    this.type.forEach {
+        typeResponseList.add(it.type)
+    }
+    this.ability.forEach {
+        abilityResponseList.add(it.ability)
+    }
+    this.eggGroup.forEach {
+        eggGroupResponseList.add(it.eggGroup)
+    }
+    return PokemonResponse(
+        id = this.id,
+        name = this.name,
+        type = typeResponseList,
+        height = this.height,
+        weight = this.weight,
+        ability = abilityResponseList,
+        eggGroup = eggGroupResponseList,
+        stats = this.stats,
+        genus = this.genus[0].genus,
+        description = this.description
+    )
+}

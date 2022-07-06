@@ -1,6 +1,5 @@
 package com.bushelpowered.pokedex.entity
 
-import com.bushelpowered.pokedex.dto.*
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import javax.persistence.*
@@ -62,30 +61,6 @@ data class Pokemon(
     @Column(name = "description")
     val description: String
 
-) {
-    fun Type.toTypeResponse(): TypeResponse {
-        return TypeResponse(
-            type = this.type
-        )
-    }
-
-    fun Ability.toAbilityResponse(): AbilityResponse {
-        return AbilityResponse(
-            ability = this.ability
-        )
-    }
-
-    fun EggGroup.toEggGroupResponse(): EggGroupResponse {
-        return EggGroupResponse(
-            eggGroup = this.eggGroup
-        )
-    }
-
-    fun Genus.toGenusResponse(): GenusResponse {
-        return GenusResponse(
-            genus = this.genus
-        )
-    }
-}
+)
 
 

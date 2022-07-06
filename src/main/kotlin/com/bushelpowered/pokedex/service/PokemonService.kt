@@ -1,17 +1,17 @@
 package com.bushelpowered.pokedex.service
 
-import com.bushelpowered.pokedex.dto.*
-import com.bushelpowered.pokedex.entity.*
+import com.bushelpowered.pokedex.dto.PokemonResponse
+import com.bushelpowered.pokedex.entity.Pokemon
+import com.bushelpowered.pokedex.entity.Type
 import com.bushelpowered.pokedex.repository.PokemonRepository
 import com.bushelpowered.pokedex.repository.PokemonTypeRepository
 import com.bushelpowered.pokedex.repository.TypeRepository
 import org.springframework.beans.support.PagedListHolder
 import org.springframework.data.domain.PageImpl
-import org.springframework.data.domain.PageRequest
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
-
+import com.bushelpowered.pokedex.utils.toResponse
 
 @Service
 class PokemonService(
@@ -46,32 +46,12 @@ class PokemonService(
         return null
     }
 
-    private fun isValidPokemonType(type: String): Boolean {
-        val typeList = typeRepository.findAll()
-        for (typeEntity in typeList) {
-            if (type.lowercase() == typeEntity.type.lowercase()) {
-                return true
-            }
-        }
-        return false
-    }
-
-    private fun getTypeIdFromName(type: String): Int? {
-        val typeList = typeRepository.findAll()
-        for (typeEntity in typeList) {
-            if (type == typeEntity.type) {
-                return typeEntity.id
-            }
-        }
-        return null
-    }
-
-    fun getPokemonByType(type: String, type2: String?, pageNum: Int, pageSize: Int): PageImpl<Pokemon> {
+    fun getPokemonByType(type: String, type2: String?): List<Pokemon> {
         val typeList = typeRepository.findAll()
         val pokemonTypeList = pokemonTypeRepository.findAll()
         val tmpList = mutableListOf<Pokemon>()
         val listOfPokemon = mutableListOf<Pokemon>()
-
+        val listOfPokemonResponse = mutableListOf<PokemonResponse>()
         for (typeEntity in typeList) { // Check if type input param is valid
             if (type.lowercase() == typeEntity.type.lowercase()) {
                 for (entity in pokemonTypeList) { // Search pokemon type table for type id
@@ -102,15 +82,10 @@ class PokemonService(
                 it.name in keysOfTmp
             }
         }
-
-        val typePages = PagedListHolder(listOfPokemon)
-        typePages.page = pageNum
-        typePages.pageSize = pageSize
-        return PageImpl<Pokemon>(typePages.pageList)
+        return listOfPokemon.toList()
     }
 
-    fun getPokemonByPage(pageNum: Int, pageSize: Int): Iterable<Pokemon> {
-        return pokemonRepository.findAll(PageRequest.of(pageNum, pageSize))
+    fun getAllPokemon(): List<Pokemon> {
+        return pokemonRepository.findAll().toList()
     }
-
 }
