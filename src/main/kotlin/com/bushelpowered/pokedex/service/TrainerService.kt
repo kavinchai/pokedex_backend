@@ -13,9 +13,7 @@ import org.springframework.web.server.ResponseStatusException
 
 @Service
 class TrainerService(
-    private val trainerRepository: TrainerRepository,
-    private val pokemonRepository: PokemonRepository,
-    private val capturedPokemonRepository: CapturedPokemonRepository
+    private val trainerRepository: TrainerRepository
 ) {
     fun getAllTrainers(): List<Trainer> {
         return trainerRepository.findAll().toList()
@@ -41,15 +39,6 @@ class TrainerService(
                 capturedPokemon = trainerInfo.capturedPokemon
             )
         )
-    }
-
-    fun capturePokemonToTrainer(trainerId: Int, pokemonId: Int) {
-        val tmpTrainer: Trainer =
-            trainerRepository.findById(trainerId).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
-        val tmpPokemon: Pokemon =
-            pokemonRepository.findById(pokemonId).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
-        val uniqueTrainerPokemon = (tmpTrainer.id * 1000) + tmpPokemon.id
-        capturedPokemonRepository.save(CapturedPokemon(uniqueTrainerPokemon, trainerId, pokemonId))
     }
 
     fun deleteTrainer(trainerId: Int) {
