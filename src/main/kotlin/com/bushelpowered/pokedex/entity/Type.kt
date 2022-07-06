@@ -15,10 +15,6 @@ data class Type(
 
     @Column(name = "type")
     val type: String,
-){
-    fun Type.toResponse(): TypeResponse {
-        return TypeResponse(
-            type = this.type
-        )
-    }
-}
+)
+
+

@@ -1,6 +1,6 @@
 package com.bushelpowered.pokedex.controller
 
-import com.bushelpowered.pokedex.dto.PokemonResponse
+import com.bushelpowered.pokedex.dto.*
 import com.bushelpowered.pokedex.entity.Pokemon
 import com.bushelpowered.pokedex.service.PokemonService
 import org.springframework.http.ResponseEntity
@@ -40,7 +40,7 @@ class PokemonController(
     ): ResponseEntity<Any> {
         if (type != null) {
             return ResponseEntity.ok(
-                listOf(pokemonService.getPokemonByType(type, type2, pageNum, pageSize))
+                pokemonService.getPokemonByType(type, type2, pageNum, pageSize)
             )
         }
         return ResponseEntity.ok(pokemonService.getPokemonByPage(pageNum, pageSize).toList())
@@ -57,12 +57,32 @@ class PokemonController(
     }
 
     fun Pokemon.toResponse(): PokemonResponse {
+        val typeResponseList = mutableListOf<TypeResponse>()
+        val abilityResponseList = mutableListOf<AbilityResponse>()
+        val eggGroupResponseList = mutableListOf<EggGroupResponse>()
+        val genusResponseList = mutableListOf<GenusResponse>()
+        this.type.forEach{
+            typeResponseList.add(it.toTypeResponse())
+        }
+        this.ability.forEach{
+            abilityResponseList.add(it.toAbilityResponse())
+        }
+        this.eggGroup.forEach{
+            eggGroupResponseList.add(it.toEggGroupResponse())
+        }
+        this.genus.forEach{
+            genusResponseList.add(it.toGenusResponse())
+        }
         return PokemonResponse(
             id = this.id,
             name = this.name,
+            type = typeResponseList,
             height = this.height,
             weight = this.weight,
+            ability = abilityResponseList,
+            eggGroup = eggGroupResponseList,
             stats = this.stats,
+            genus = genusResponseList,
             description = this.description
         )
     }

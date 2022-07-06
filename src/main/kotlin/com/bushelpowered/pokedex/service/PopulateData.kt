@@ -1,5 +1,6 @@
 package com.bushelpowered.pokedex.service
 
+import com.bushelpowered.pokedex.dto.TypeResponse
 import com.bushelpowered.pokedex.entity.*
 import com.bushelpowered.pokedex.repository.*
 import org.json.JSONObject
@@ -268,8 +269,8 @@ class PopulateData(
                 pokemonInfo[pokemonId][0].toInt(),
                 pokemonInfo[pokemonId][1],
                 typeList,
-                pokemonInfo[pokemonId][3].toFloat(),
-                pokemonInfo[pokemonId][4].toFloat(),
+                pokemonInfo[pokemonId][3].toDouble(),
+                pokemonInfo[pokemonId][4].toDouble(),
                 abilityList,
                 eggGroupList,
                 pokeStatList[pokemonId - 1],
@@ -280,10 +281,7 @@ class PopulateData(
         }
         return pokemonList
     }
-
     private fun <E> MutableList<E>.add(element: Optional<E>) {
     }
 
 }
-
-

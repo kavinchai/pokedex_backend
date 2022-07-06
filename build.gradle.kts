@@ -31,6 +31,8 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.liquibase:liquibase-core")
 	implementation("org.projectlombok:lombok:1.18.22")
+    implementation("junit:junit:4.13.1")
+	testImplementation("io.mockk:mockk:1.9.3")
 	runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }

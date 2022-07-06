@@ -1,5 +1,6 @@
 package com.bushelpowered.pokedex.service
 
+import com.bushelpowered.pokedex.dto.*
 import com.bushelpowered.pokedex.entity.*
 import com.bushelpowered.pokedex.repository.PokemonRepository
 import com.bushelpowered.pokedex.repository.PokemonTypeRepository
@@ -39,7 +40,6 @@ class PokemonService(
                     val pokemonType = typeRepository.findById(e).orElse(null)
                     listOfTypeModels.add(pokemonType)
                 }
-                println(listOfTypeModels)
                 return pokemon
             }
         }
@@ -112,4 +112,5 @@ class PokemonService(
     fun getPokemonByPage(pageNum: Int, pageSize: Int): Iterable<Pokemon> {
         return pokemonRepository.findAll(PageRequest.of(pageNum, pageSize))
     }
+
 }
