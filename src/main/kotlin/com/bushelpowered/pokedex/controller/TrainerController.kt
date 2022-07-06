@@ -1,26 +1,33 @@
 package com.bushelpowered.pokedex.controller
 
+import com.bushelpowered.pokedex.dto.TrainerResponse
 import com.bushelpowered.pokedex.entity.Trainer
 import com.bushelpowered.pokedex.service.TrainerService
+import com.bushelpowered.pokedex.utils.toTrainerResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 class TrainerController(private val trainerService: TrainerService) {
     @GetMapping("/trainer")
-    fun getAllTrainers(): ResponseEntity<List<Trainer>> {
+    fun getAllTrainers(): ResponseEntity<List<TrainerResponse>> {
+        val trainersList = trainerService.getAllTrainers()
+        val trainerResponseList = mutableListOf<TrainerResponse>()
+        trainersList.forEach{trainer->
+            trainerResponseList.add(trainer.toTrainerResponse())
+        }
         return ResponseEntity.ok(
-            trainerService.getAllTrainers()
+            trainerResponseList
         )
     }
 
     @GetMapping("/trainer/{id}")
     fun getTrainerById(
         @PathVariable id: Int
-    ): ResponseEntity<Trainer> {
+    ): ResponseEntity<TrainerResponse> {
         val trainerModel: Trainer? = trainerService.getTrainer(id)
         return ResponseEntity.ok(
-            trainerModel
+            trainerModel?.toTrainerResponse()
         )
     }
 

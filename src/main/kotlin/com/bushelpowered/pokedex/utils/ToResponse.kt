@@ -33,12 +33,16 @@ fun Pokemon.toPokemonResponse(): PokemonResponse {
 }
 
 fun Trainer.toTrainerResponse(): TrainerResponse {
+    val pokemonResponse = mutableListOf<String>()
+    this.capturedPokemon.forEach{
+        pokemonResponse.add(it.name)
+    }
     return TrainerResponse(
         id = this.id,
         username = this.username,
         firstname = this.firstname,
         lastname = this.lastname,
         email = this.email,
-        capturedPokemon = this.capturedPokemon
+        capturedPokemon = pokemonResponse
     )
 }
