@@ -18,3 +18,4 @@ data class PokemonGenus (
     @Column(name="genus_id")
     val genusId: Int
 )
+

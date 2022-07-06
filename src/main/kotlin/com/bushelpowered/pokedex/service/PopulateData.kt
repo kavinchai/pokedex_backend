@@ -1,6 +1,5 @@
 package com.bushelpowered.pokedex.service
 
-import com.bushelpowered.pokedex.dto.TypeResponse
 import com.bushelpowered.pokedex.entity.*
 import com.bushelpowered.pokedex.repository.*
 import org.json.JSONObject

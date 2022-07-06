@@ -1,18 +1,16 @@
 package com.bushelpowered.pokedex.dto
 
-import com.bushelpowered.pokedex.entity.Ability
 import com.bushelpowered.pokedex.entity.PokemonStat
-import com.bushelpowered.pokedex.entity.Type
 
 data class PokemonResponse(
     val id: Int,
     val name: String,
-    val type: List<TypeResponse>,
+    val type: List<String>,
     val height: Double,
     val weight: Double,
-    val ability: List<AbilityResponse>,
-    val eggGroup: List<EggGroupResponse>,
+    val ability: List<String>,
+    val eggGroup: List<String>,
     val stats: PokemonStat,
-    val genus: List<GenusResponse>,
+    val genus: String?,
     val description: String
 )

@@ -46,32 +46,28 @@ class PokemonController(
         return ResponseEntity.ok(pokemonService.getPokemonByPage(pageNum, pageSize).toList())
     }
 
-    @GetMapping("/pokemon/{id}")
-    fun getPokemonById(
-        @PathVariable id: Int
-    ): Any {
-        val pokemon = pokemonService.getPokemonById(id) ?: return ResponseEntity.notFound()
-        return ResponseEntity.ok(
-            pokemon.toResponse()
-        )
-    }
+//    @GetMapping("/pokemon/{id}")
+//    fun getPokemonById(
+//        @PathVariable id: Int
+//    ): Any {
+//        val pokemon = pokemonService.getPokemonById(id) ?: return ResponseEntity.notFound()
+//        return ResponseEntity.ok(
+//            pokemon.toResponse()
+//        )
+//    }
 
     fun Pokemon.toResponse(): PokemonResponse {
-        val typeResponseList = mutableListOf<TypeResponse>()
-        val abilityResponseList = mutableListOf<AbilityResponse>()
-        val eggGroupResponseList = mutableListOf<EggGroupResponse>()
-        val genusResponseList = mutableListOf<GenusResponse>()
-        this.type.forEach{
-            typeResponseList.add(it.toTypeResponse())
+        val typeResponseList = mutableListOf<String>()
+        val abilityResponseList = mutableListOf<String>()
+        val eggGroupResponseList = mutableListOf<String>()
+        this.type.forEach {
+            typeResponseList.add(it.toTypeResponse().type)
         }
-        this.ability.forEach{
-            abilityResponseList.add(it.toAbilityResponse())
+        this.ability.forEach {
+            abilityResponseList.add(it.toAbilityResponse().ability)
         }
-        this.eggGroup.forEach{
-            eggGroupResponseList.add(it.toEggGroupResponse())
-        }
-        this.genus.forEach{
-            genusResponseList.add(it.toGenusResponse())
+        this.eggGroup.forEach {
+            eggGroupResponseList.add(it.toEggGroupResponse().eggGroup)
         }
         return PokemonResponse(
             id = this.id,
@@ -82,7 +78,7 @@ class PokemonController(
             ability = abilityResponseList,
             eggGroup = eggGroupResponseList,
             stats = this.stats,
-            genus = genusResponseList,
+            genus = this.genus[0].genus,
             description = this.description
         )
     }
