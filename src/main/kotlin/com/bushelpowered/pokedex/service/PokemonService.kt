@@ -8,6 +8,10 @@ import com.bushelpowered.pokedex.repository.TypeRepository
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
+import com.bushelpowered.pokedex.utils.checkValidType
+import com.bushelpowered.pokedex.utils.getTypeIdFromString
+import com.bushelpowered.pokedex.utils.checkValidPokemon
+import com.bushelpowered.pokedex.utils.getPokeIdFromString
 
 @Service
 class PokemonService(
@@ -30,47 +34,50 @@ class PokemonService(
     }
 
     fun getPokemonByName(name: String): Pokemon? {
-        val pokemonList = pokemonRepository.findAll()
-        val listOfPokemonId = mutableListOf<Int>()
-        val listOfTypeModels = mutableListOf<Type>()
-        for (pokemon in pokemonList) {
-            if (pokemon.name.lowercase() == name.lowercase()) {
-                val pokemonId = pokemon.id
-                val pokemonTypeRepository = pokemonTypeRepository.findAll()
-                for (i in pokemonTypeRepository) {
-                    if (i.pokemonId == pokemonId) {
-                        listOfPokemonId.add(i.typeId)
-                    }
-                }
-                for (pokemonId in listOfPokemonId) {
-                    val pokemonType = typeRepository.findById(pokemonId).orElse(null)
-                    listOfTypeModels.add(pokemonType)
-                }
-                return pokemon
-            }
+        if (!checkValidPokemon(name, pokemonRepository)){   // Check valid pokemon
+            throw ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "Error: Pokemon does not exist"
+            )
         }
-        return null
+        val pokemonId = getPokeIdFromString(name, pokemonRepository)
+        return pokemonRepository.findById(pokemonId).orElse(null)
     }
 
     fun getPokemonByType(type: String, type2: String?): List<Pokemon> {
-        val typeList = typeRepository.findAll()
+        if (!checkValidType(type, typeRepository)) {    // Check type 1 is valid type
+            throw ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "Error: Invalid Type"
+            )
+        }
+
         val pokemonTypeList = pokemonTypeRepository.findAll()
+        val typeId = getTypeIdFromString(type, typeRepository)
         val tmpList = mutableListOf<Pokemon>()
         val listOfPokemon = mutableListOf<Pokemon>()
-        for (typeEntity in typeList) { // Check if type input param is valid
-            if (type.lowercase() == typeEntity.type.lowercase()) {
-                for (entity in pokemonTypeList) { // Search Pokemon type table for type id
-                    if (entity.typeId == typeEntity.id) {
-                        val pokemon = pokemonRepository
-                            .findById(entity.pokemonId)
-                            .orElse(null)
-                        listOfPokemon.add(pokemon)
-                    }
-                }
+        for (entity in pokemonTypeList) { // Search Pokemon type table for type id
+            if (entity.typeId == typeId) {
+                val pokemon = pokemonRepository
+                    .findById(entity.pokemonId)
+                    .orElse(null)
+                listOfPokemon.add(pokemon)
             }
         }
 
         if (type2 != null) {    // Filter for two types
+            if (!checkValidType(type2, typeRepository)){    // Check if second type is valid
+                throw ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Error: Invalid Type"
+                )
+            }
+            if (type.lowercase() == type2!!.lowercase()){   // Check if type1 == type2
+                throw ResponseStatusException(
+                    HttpStatus.NOT_ACCEPTABLE,
+                    "Error: Duplicate Types"
+                )
+            }
             listOfPokemon.removeAll {
                 it.type.size != 2
             }
@@ -89,9 +96,6 @@ class PokemonService(
                 it.name in keysOfTmp    // Remove Pokemon without specified types
             }
         }
-
         return listOfPokemon.toList()
     }
-
-
 }
