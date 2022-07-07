@@ -1,6 +1,5 @@
 package com.bushelpowered.pokedex.entity
 
-import com.bushelpowered.pokedex.dto.TypeResponse
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Id
