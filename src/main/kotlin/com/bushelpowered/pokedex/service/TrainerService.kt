@@ -55,9 +55,6 @@ class TrainerService(
     //                username, firstname, lastname, email
     fun updateTrainerById(trainerInfo: HashMap<String, Any>) {
         try {
-            trainerInfo.forEach{
-                println(it.key + ": " + it.value)
-            }
             val trainerId: Int = trainerInfo.getValue("id") as Int
             val trainerUser: String = trainerInfo.getValue("username" ) as String
             val trainerFirstName: String = trainerInfo.getValue("firstname") as String
@@ -87,8 +84,6 @@ class TrainerService(
                 e.toString()
             )
         }
-
-
     }
 
     fun deleteTrainer(trainerId: Int) {

@@ -11,31 +11,27 @@ import org.springframework.http.HttpStatus
 @RestController
 class TrainerController(private val trainerService: TrainerService) {
     @GetMapping("/trainer")
-    fun getAllTrainers(): ResponseEntity<List<TrainerResponse>> {
-        val trainersList = trainerService.getAllTrainers()
-        val trainerResponseList = mutableListOf<TrainerResponse>()
-        trainersList.forEach { trainer ->
-            trainerResponseList.add(trainer.toTrainerResponse())
+    fun searchTrainer(@RequestParam id: Int?): ResponseEntity<Any> {
+        return if (id != null){
+            val trainerModel: Trainer? = trainerService.getTrainer(id)
+            ResponseEntity.ok(
+                trainerModel?.toTrainerResponse()
+            )
+        } else{
+            val trainerResponseList = mutableListOf<TrainerResponse>()
+            trainerService.getAllTrainers().forEach { trainer ->
+                trainerResponseList.add(trainer.toTrainerResponse())
+            }
+            ResponseEntity.ok(
+                trainerResponseList
+            )
         }
-        return ResponseEntity.ok(
-            trainerResponseList
-        )
-    }
-
-    @GetMapping("/trainer/{id}")
-    fun getTrainerById(
-        @PathVariable id: Int
-    ): ResponseEntity<TrainerResponse> {
-        val trainerModel: Trainer? = trainerService.getTrainer(id)
-        return ResponseEntity.ok(
-            trainerModel?.toTrainerResponse()
-        )
     }
 
     @PostMapping("/trainer")
     fun createTrainer(
         @RequestBody trainerInfo: Trainer
-    ): ResponseEntity<Unit> {
+    ): ResponseEntity<Any> {
         return ResponseEntity(
             trainerService.createTrainer(trainerInfo), HttpStatus.CREATED
         )
@@ -44,7 +40,7 @@ class TrainerController(private val trainerService: TrainerService) {
     @PutMapping("/trainer")
     fun updateTrainerById(
         @RequestBody trainerInfo: HashMap<String, Any>
-    ): ResponseEntity<Unit> {
+    ): ResponseEntity<Any> {
         return if (
             trainerInfo.containsKey("id") &&
             trainerInfo.containsKey("username") &&
@@ -64,7 +60,7 @@ class TrainerController(private val trainerService: TrainerService) {
     @DeleteMapping("/trainer")
     fun deleteTrainerById(
         @RequestBody trainerId: Int
-    ): ResponseEntity<Unit> {
+    ): ResponseEntity<Any> {
         return ResponseEntity.ok(
             trainerService.deleteTrainer(trainerId)
         )

@@ -25,12 +25,12 @@ class PopulateData(
     @EventListener(ApplicationReadyEvent::class) // Import data on startup
     fun populateTables() {
         typeRepository.saveAll(getTypesList())
-        pokemonTypesRepository.saveAll(getPokemonTypesList())
         abilityRepository.saveAll(getAbilityList())
-        pokemonAbilityRepository.saveAll(getPokemonAbilityList())
         eggGroupRepository.saveAll(getEggGroupList())
-        pokemonEggGroupRepository.saveAll(getPokemonEggGroupList())
         genusRepository.saveAll(getGenusList())
+        pokemonTypesRepository.saveAll(getPokemonTypesList())
+        pokemonAbilityRepository.saveAll(getPokemonAbilityList())
+        pokemonEggGroupRepository.saveAll(getPokemonEggGroupList())
         pokemonGenusRepository.saveAll(getPokemonGenusList())
         pokemonRepository.saveAll(getPokemonList())
     }
@@ -280,7 +280,6 @@ class PopulateData(
         }
         return pokemonList
     }
-    private fun <E> MutableList<E>.add(element: Optional<E>) {
-    }
+    private fun <E> MutableList<E>.add(element: Optional<E>) {}
 
 }
