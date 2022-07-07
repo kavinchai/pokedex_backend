@@ -10,9 +10,7 @@ import com.bushelpowered.pokedex.utils.toPokemonResponse
 import com.bushelpowered.pokedex.utils.paginate
 
 @RestController
-class PokemonController(
-    private val pokemonService: PokemonService
-) {
+class PokemonController(private val pokemonService: PokemonService) {
     @GetMapping("/pokemon")
     fun searchPokemon(
         @RequestParam(defaultValue = "0") pageNum: Int,

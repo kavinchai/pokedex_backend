@@ -62,8 +62,7 @@ class PopulateData(
         for (type in uniqueList.indices) {
             typeList.add(
                 Type(
-                    type + 1,
-                    uniqueList[type]
+                    type + 1, uniqueList[type]
                 )
             )
         }
@@ -76,8 +75,7 @@ class PopulateData(
         for (ability in uniqueList.indices) {
             abilityList.add(
                 Ability(
-                    ability + 1,
-                    uniqueList[ability]
+                    ability + 1, uniqueList[ability]
                 )
             )
         }
@@ -90,8 +88,7 @@ class PopulateData(
         for (eggGroup in uniqueList.indices) {
             eggGroupList.add(
                 EggGroup(
-                    eggGroup + 1,
-                    uniqueList[eggGroup]
+                    eggGroup + 1, uniqueList[eggGroup]
                 )
             )
         }
@@ -104,8 +101,7 @@ class PopulateData(
         for (genus in uniqueList.indices) {
             genusList.add(
                 Genus(
-                    genus + 1,
-                    uniqueList[genus]
+                    genus + 1, uniqueList[genus]
                 )
             )
         }
@@ -122,12 +118,15 @@ class PopulateData(
             typeListMap[it.id] = it.type
         }
         for (pokemonId in 1 until pokemonInfo.size) {
-            val individualPokemonTypes = PokemonCsvParser().formatToStringList(pokemonInfo[pokemonId][2])
+            val individualPokemonTypes = PokemonCsvParser()
+                .formatToStringList(pokemonInfo[pokemonId][2])
             for (type in individualPokemonTypes) {
                 if (typeListMap.containsValue(type)) {
-                    pokemonTypeList.add(PokemonType(uniqueId, pokemonId, getKey(typeListMap, type)!!))
+                    pokemonTypeList.add(
+                        PokemonType(uniqueId, pokemonId, getKey(typeListMap, type)!!
+                        )
+                    )
                     uniqueId += 1
-
                 }
             }
         }
@@ -144,10 +143,14 @@ class PopulateData(
             abilityMap[it.id] = it.ability
         }
         for (pokemonId in 1 until pokemonInfo.size) {
-            val individualPokemonAbilities = PokemonCsvParser().formatToStringList(pokemonInfo[pokemonId][5])
+            val individualPokemonAbilities = PokemonCsvParser()
+                .formatToStringList(pokemonInfo[pokemonId][5])
             for (ability in individualPokemonAbilities) {
                 if (abilityMap.containsValue(ability)) {
-                    pokemonAbilityList.add(PokemonAbility(uniqueId, pokemonId, getKey(abilityMap, ability)!!))
+                    pokemonAbilityList.add(
+                        PokemonAbility(uniqueId, pokemonId, getKey(abilityMap, ability)!!
+                        )
+                    )
                     uniqueId += 1
                 }
             }
@@ -165,13 +168,13 @@ class PopulateData(
             eggGroupMap[it.id] = it.eggGroup
         }
         for (pokemonId in 1 until pokemonInfo.size) {
-            val individualPokemonEggGroups = PokemonCsvParser().formatToStringList(pokemonInfo[pokemonId][6])
+            val individualPokemonEggGroups = PokemonCsvParser()
+                .formatToStringList(pokemonInfo[pokemonId][6])
             for (eggGroup in individualPokemonEggGroups) {
                 if (eggGroupMap.containsValue(eggGroup)) {
                     pokemonEggGroupList.add(
                         PokemonEggGroup(
-                            uniqueId, pokemonId,
-                            getKey(eggGroupMap, eggGroup)!!
+                            uniqueId, pokemonId, getKey(eggGroupMap, eggGroup)!!
                         )
                     )
                     uniqueId += 1
@@ -191,10 +194,15 @@ class PopulateData(
             genusMap[it.id] = it.genus
         }
         for (pokemonId in 1 until pokemonInfo.size) {
-            val individualPokemonGenus = PokemonCsvParser().formatToStringList(pokemonInfo[pokemonId][8])
+            val individualPokemonGenus = PokemonCsvParser()
+                .formatToStringList(pokemonInfo[pokemonId][8])
             for (genus in individualPokemonGenus) {
                 if (genusMap.containsValue(genus)) {
-                    pokemonGenusList.add(PokemonGenus(uniqueId, pokemonId, getKey(genusMap, genus)!!))
+                    pokemonGenusList.add(
+                        PokemonGenus(
+                            uniqueId, pokemonId, getKey(genusMap, genus)!!
+                        )
+                    )
                     uniqueId += 1
                 }
             }
@@ -206,12 +214,12 @@ class PopulateData(
         val pokemonInfo: List<List<String>> = PokemonCsvParser().parseCSV()
         val pokeStatList = mutableListOf<PokemonStat>()
 
-        for (columns in 1 until pokemonInfo.size) {
-            val pokeStat = JSONObject(pokemonInfo[columns][7])
+        for (pokemon in 1 until pokemonInfo.size) {
+            val pokeStat = JSONObject(pokemonInfo[pokemon][7])
 
             pokeStatList.add(
                 PokemonStat(
-                    pokemonInfo[columns][0].toInt(),
+                    pokemonInfo[pokemon][0].toInt(),
                     pokeStat.get("hp") as Int,
                     pokeStat.get("speed") as Int,
                     pokeStat.get("attack") as Int,
@@ -282,5 +290,4 @@ class PopulateData(
     }
 
     private fun <E> MutableList<E>.add(element: Optional<E>) {}
-
 }

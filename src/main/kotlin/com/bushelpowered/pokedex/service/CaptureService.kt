@@ -15,12 +15,11 @@ class CaptureService(
     private val pokemonRepository: PokemonRepository,
     private val capturedPokemonRepository: CapturedPokemonRepository
 ) {
-
     fun capturePokemonToTrainer(captureInfo: HashMap<String, Any>) {
         try {
-            val trainerId: Int = captureInfo.getValue("trainerId") as Int
-            val listOfPokemonId: List<Int> = captureInfo.getValue("capturedPokemon") as List<Int>
-            val tmpTrainer: Trainer = trainerRepository
+            val trainerId = captureInfo.getValue("trainerId") as Int
+            val listOfPokemonId = captureInfo.getValue("capturedPokemon") as List<Int>
+            val tmpTrainer = trainerRepository
                 .findById(trainerId)
                 .orElseThrow {
                     ResponseStatusException(
@@ -29,7 +28,7 @@ class CaptureService(
                     )
                 }
 
-            if (checkValidPokemonList(listOfPokemonId, pokemonRepository)) {
+            if (checkValidPokemonIdList(listOfPokemonId, pokemonRepository)) {
                 listOfPokemonId.forEach { pokemonId ->
                     val uniqueTrainerPokemon = (tmpTrainer.id * 1000) + pokemonId
                     capturedPokemonRepository
@@ -50,7 +49,7 @@ class CaptureService(
         }
     }
 
-    private fun checkValidPokemonList(
+    private fun checkValidPokemonIdList(
         pokemonList: List<Int>,
         pokemonRepo: PokemonRepository
     ): Boolean {

@@ -10,9 +10,7 @@ import org.springframework.http.HttpStatus
 class TrainerController(private val trainerService: TrainerService) {
 
     @PostMapping("/trainer")
-    fun createTrainer(
-        @RequestBody trainerInfo: Trainer
-    ): ResponseEntity<Any> {
+    fun createTrainer(@RequestBody trainerInfo: Trainer): ResponseEntity<Any> {
         return ResponseEntity(
             trainerService.createTrainer(trainerInfo), HttpStatus.CREATED
         )
