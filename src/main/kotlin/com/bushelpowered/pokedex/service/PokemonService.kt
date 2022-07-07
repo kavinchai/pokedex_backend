@@ -1,17 +1,12 @@
 package com.bushelpowered.pokedex.service
 
 import com.bushelpowered.pokedex.entity.Pokemon
-import com.bushelpowered.pokedex.entity.Type
 import com.bushelpowered.pokedex.repository.PokemonRepository
 import com.bushelpowered.pokedex.repository.PokemonTypeRepository
 import com.bushelpowered.pokedex.repository.TypeRepository
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
-import com.bushelpowered.pokedex.utils.checkValidType
-import com.bushelpowered.pokedex.utils.getTypeIdFromString
-import com.bushelpowered.pokedex.utils.checkValidPokemon
-import com.bushelpowered.pokedex.utils.getPokeIdFromString
 
 @Service
 class PokemonService(
@@ -97,5 +92,54 @@ class PokemonService(
             }
         }
         return listOfPokemon.toList()
+    }
+
+    private fun checkValidPokemon(
+        pokemonName: String,
+        pokemonRepo: PokemonRepository
+    ): Boolean {
+        pokemonRepo.findAll().forEach { pokemon ->
+            if (pokemon.name.lowercase() == pokemonName.lowercase()) {
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun checkValidType(
+        typeString: String,
+        typeRepo: TypeRepository
+    ): Boolean {
+        typeRepo.findAll().forEach { typeEntity ->
+            if (typeEntity.type.lowercase() == typeString.lowercase()) {
+                return true
+            }
+        }
+        return false
+    }
+
+
+    private fun getPokeIdFromString(
+        pokemonName: String,
+        pokeRepo: PokemonRepository
+    ): Int {
+        pokeRepo.findAll().forEach { pokemon ->
+            if (pokemon.name.lowercase() == pokemonName.lowercase()) {
+                return pokemon.id
+            }
+        }
+        return 0
+    }
+
+    private fun getTypeIdFromString(
+        typeString: String,
+        typeRepo: TypeRepository
+    ): Int {
+        typeRepo.findAll().forEach { typeEntity ->
+            if (typeEntity.type.lowercase() == typeString.lowercase()) {
+                return typeEntity.id
+            }
+        }
+        return 0
     }
 }

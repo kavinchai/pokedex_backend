@@ -8,8 +8,6 @@ import com.bushelpowered.pokedex.repository.TrainerRepository
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
-import com.bushelpowered.pokedex.utils.checkValidPokemonList
-
 
 @Service
 class CaptureService(
@@ -51,4 +49,17 @@ class CaptureService(
             )
         }
     }
+
+    private fun checkValidPokemonList(
+        pokemonList: List<Int>,
+        pokemonRepo: PokemonRepository
+    ): Boolean {
+        pokemonList.forEach { pokemonId ->
+            if (!pokemonRepo.existsById(pokemonId)) {
+                return false
+            }
+        }
+        return true
+    }
+
 }

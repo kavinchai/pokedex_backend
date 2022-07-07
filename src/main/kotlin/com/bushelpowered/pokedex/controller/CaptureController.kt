@@ -13,7 +13,8 @@ class CaptureController(private val captureService: CaptureService) {
         @RequestBody captureInfo: HashMap<String, Any>
     ): Any {
         return if (
-            captureInfo.containsKey("trainerId") && captureInfo.containsKey("capturedPokemon")
+            captureInfo.containsKey("trainerId") &&
+            captureInfo.containsKey("capturedPokemon")
         ) {
             ResponseEntity.ok(
                 captureService.capturePokemonToTrainer(captureInfo)

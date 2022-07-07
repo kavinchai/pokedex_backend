@@ -1,11 +1,9 @@
 package com.bushelpowered.pokedex.controller
 
-import com.bushelpowered.pokedex.dto.TrainerResponse
 import com.bushelpowered.pokedex.entity.Trainer
 import com.bushelpowered.pokedex.service.TrainerService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import com.bushelpowered.pokedex.utils.toTrainerResponse
 import org.springframework.http.HttpStatus
 
 @RestController
@@ -37,7 +35,6 @@ class TrainerController(private val trainerService: TrainerService) {
         } else {
             ResponseEntity(HttpStatus.NOT_ACCEPTABLE)
         }
-
     }
 
     @DeleteMapping("/trainer")
