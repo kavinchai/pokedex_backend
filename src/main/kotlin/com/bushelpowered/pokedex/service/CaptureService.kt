@@ -40,14 +40,14 @@ class CaptureService(
             } else {
                 throw ResponseStatusException(
                     HttpStatus.NOT_ACCEPTABLE,
-                    "Error: Invalid pokemon id"
+                    "Error: Invalid list of pokemon"
                 )
             }
-        } catch (e: Exception){
+        } catch (e: Exception) {
             println(e.toString())
             throw ResponseStatusException(
                 HttpStatus.NOT_ACCEPTABLE,
-                e.toString()
+                "Error: $e"
             )
         }
     }

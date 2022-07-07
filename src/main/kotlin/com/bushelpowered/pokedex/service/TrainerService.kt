@@ -15,18 +15,6 @@ class TrainerService(
     private val trainerRepository: TrainerRepository,
     private val pokemonRepository: PokemonRepository
 ) {
-    fun getAllTrainers(): List<Trainer> {
-        return trainerRepository.findAll().toList()
-    }
-
-    fun getTrainer(id: Int): Trainer? {
-        return trainerRepository.findById(id).orElseThrow {
-            ResponseStatusException(
-                HttpStatus.NOT_FOUND,
-                "Error: Trainer does not exist"
-            )
-        }
-    }
 
     fun createTrainer(trainerInfo: Trainer) {
         val trainerEmail = trainerInfo.email
@@ -81,7 +69,7 @@ class TrainerService(
             println(e.toString())
             throw ResponseStatusException(
                 HttpStatus.NOT_ACCEPTABLE,
-                e.toString()
+                "Error: $e"
             )
         }
     }

@@ -10,23 +10,6 @@ import org.springframework.http.HttpStatus
 
 @RestController
 class TrainerController(private val trainerService: TrainerService) {
-    @GetMapping("/trainer")
-    fun searchTrainer(@RequestParam id: Int?): ResponseEntity<Any> {
-        return if (id != null){
-            val trainerModel: Trainer? = trainerService.getTrainer(id)
-            ResponseEntity.ok(
-                trainerModel?.toTrainerResponse()
-            )
-        } else{
-            val trainerResponseList = mutableListOf<TrainerResponse>()
-            trainerService.getAllTrainers().forEach { trainer ->
-                trainerResponseList.add(trainer.toTrainerResponse())
-            }
-            ResponseEntity.ok(
-                trainerResponseList
-            )
-        }
-    }
 
     @PostMapping("/trainer")
     fun createTrainer(

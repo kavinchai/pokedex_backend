@@ -19,8 +19,8 @@ fun checkValidPokemon(
     pokemonName: String,
     pokemonRepo: PokemonRepository
 ): Boolean {
-    pokemonRepo.findAll().forEach{
-        if (it.name.lowercase() == pokemonName.lowercase()){
+    pokemonRepo.findAll().forEach { pokemon ->
+        if (pokemon.name.lowercase() == pokemonName.lowercase()) {
             return true
         }
     }
@@ -28,11 +28,11 @@ fun checkValidPokemon(
 }
 
 fun checkValidType(
-    type: String,
+    typeString: String,
     typeRepo: TypeRepository
 ): Boolean {
-    typeRepo.findAll().forEach{
-        if (it.type.lowercase() == type.lowercase()){
+    typeRepo.findAll().forEach { typeEntity ->
+        if (typeEntity.type.lowercase() == typeString.lowercase()) {
             return true
         }
     }
