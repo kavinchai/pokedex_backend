@@ -1,9 +1,9 @@
 package com.bushelpowered.pokedex.service
 
 import com.bushelpowered.pokedex.entity.Pokemon
+import com.bushelpowered.pokedex.repository.TypeRepository
 import com.bushelpowered.pokedex.repository.PokemonRepository
 import com.bushelpowered.pokedex.repository.PokemonTypeRepository
-import com.bushelpowered.pokedex.repository.TypeRepository
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
@@ -29,7 +29,7 @@ class PokemonService(
     }
 
     fun getPokemonByName(name: String): Pokemon? {
-        if (!checkValidPokemon(name, pokemonRepository)){   // Check valid pokemon
+        if (!checkValidPokemon(name, pokemonRepository)) {   // Check valid pokemon
             throw ResponseStatusException(
                 HttpStatus.NOT_FOUND,
                 "Error: Pokemon does not exist"
@@ -61,13 +61,13 @@ class PokemonService(
         }
 
         if (type2 != null) {    // Filter for two types
-            if (!checkValidType(type2, typeRepository)){    // Check if second type is valid
+            if (!checkValidType(type2, typeRepository)) {    // Check if second type is valid
                 throw ResponseStatusException(
                     HttpStatus.NOT_FOUND,
                     "Error: Invalid Type"
                 )
             }
-            if (type.lowercase() == type2!!.lowercase()){   // Check if type1 == type2
+            if (type.lowercase() == type2!!.lowercase()) {   // Check if type1 == type2
                 throw ResponseStatusException(
                     HttpStatus.NOT_ACCEPTABLE,
                     "Error: Duplicate Types"

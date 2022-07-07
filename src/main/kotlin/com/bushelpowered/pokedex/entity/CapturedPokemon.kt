@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import javax.persistence.*
 
-
 @Entity
 @Table(name = "captured_pokemon_table") // All tables need to be named with _ notation
 @JsonIgnoreProperties("captured_pokemon_id")

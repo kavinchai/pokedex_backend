@@ -1,11 +1,9 @@
 package com.bushelpowered.pokedex.service
 
-import com.bushelpowered.pokedex.entity.*
-import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
-import org.json.JSONObject
 import java.io.File
+import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 
-class PokemonCsvParser (){
+class PokemonCsvParser() {
     fun parseCSV(): List<List<String>> {
         val filePath = "src/main/resources/db/changelog/data/"
         val file = filePath + "pokedex.csv"
@@ -17,7 +15,7 @@ class PokemonCsvParser (){
             .replace("\"]", "")
             .replace("\", \"", ", ")
             .replace("é", "e")
-            .replace(("[0-9]").toRegex(),"")
+            .replace(("[0-9]").toRegex(), "")
             .split(", ")
             .toMutableList()
     }

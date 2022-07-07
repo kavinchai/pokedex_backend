@@ -60,7 +60,6 @@ data class Pokemon(
 
     @Column(name = "description")
     val description: String
-
 )
 
 

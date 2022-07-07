@@ -13,7 +13,7 @@ data class Type(
     val id: Int,
 
     @Column(name = "type")
-    val type: String,
+    val type: String
 )
 
 

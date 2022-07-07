@@ -4,6 +4,4 @@ import com.bushelpowered.pokedex.entity.Pokemon
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.CrudRepository
 
-interface PokemonRepository : CrudRepository<Pokemon, Int> {
-    fun findAll(paging: Pageable): MutableIterable<Pokemon>
-}
+interface PokemonRepository : CrudRepository<Pokemon, Int>

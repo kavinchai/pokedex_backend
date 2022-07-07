@@ -1,10 +1,10 @@
 package com.bushelpowered.pokedex.service
 
-import com.bushelpowered.pokedex.entity.CapturedPokemon
 import com.bushelpowered.pokedex.entity.Trainer
-import com.bushelpowered.pokedex.repository.CapturedPokemonRepository
+import com.bushelpowered.pokedex.entity.CapturedPokemon
 import com.bushelpowered.pokedex.repository.PokemonRepository
 import com.bushelpowered.pokedex.repository.TrainerRepository
+import com.bushelpowered.pokedex.repository.CapturedPokemonRepository
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException

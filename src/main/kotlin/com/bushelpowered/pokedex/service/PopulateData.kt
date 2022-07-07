@@ -1,13 +1,13 @@
 package com.bushelpowered.pokedex.service
 
+import java.util.*
+import org.json.JSONObject
+import kotlin.collections.HashMap
 import com.bushelpowered.pokedex.entity.*
 import com.bushelpowered.pokedex.repository.*
-import org.json.JSONObject
-import org.springframework.boot.context.event.ApplicationReadyEvent
-import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
-import java.util.*
-import kotlin.collections.HashMap
+import org.springframework.context.event.EventListener
+import org.springframework.boot.context.event.ApplicationReadyEvent
 
 @Component
 class PopulateData(
@@ -44,7 +44,7 @@ class PopulateData(
         return null
     }
 
-    private fun getUniqueList(dataColumn: Int): List<String>{
+    private fun getUniqueList(dataColumn: Int): List<String> {
         val pokemonInfo: List<List<String>> = PokemonCsvParser().parseCSV()
         val uniqueList = mutableListOf<String>()
         for (row in 1 until pokemonInfo.size) {
@@ -280,6 +280,7 @@ class PopulateData(
         }
         return pokemonList
     }
+
     private fun <E> MutableList<E>.add(element: Optional<E>) {}
 
 }
