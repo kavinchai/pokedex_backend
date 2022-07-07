@@ -20,7 +20,13 @@ class PokemonService(
     }
 
     fun getPokemonById(id: Int): Pokemon? {
-        return pokemonRepository.findById(id).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
+        return pokemonRepository.findById(id)
+            .orElseThrow {
+                ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Error: Pokemon does not exist"
+                )
+            }
     }
 
     fun getPokemonByName(name: String): Pokemon? {
@@ -36,8 +42,8 @@ class PokemonService(
                         listOfPokemonId.add(i.typeId)
                     }
                 }
-                for (e in listOfPokemonId) {
-                    val pokemonType = typeRepository.findById(e).orElse(null)
+                for (pokemonId in listOfPokemonId) {
+                    val pokemonType = typeRepository.findById(pokemonId).orElse(null)
                     listOfTypeModels.add(pokemonType)
                 }
                 return pokemon
@@ -55,7 +61,9 @@ class PokemonService(
             if (type.lowercase() == typeEntity.type.lowercase()) {
                 for (entity in pokemonTypeList) { // Search Pokemon type table for type id
                     if (entity.typeId == typeEntity.id) {
-                        val pokemon = pokemonRepository.findById(entity.pokemonId).orElse(null)
+                        val pokemon = pokemonRepository
+                            .findById(entity.pokemonId)
+                            .orElse(null)
                         listOfPokemon.add(pokemon)
                     }
                 }

@@ -32,7 +32,6 @@ data class Trainer(
         inverseJoinColumns = [JoinColumn(name = "pokemon", referencedColumnName = "pokemon_id")]
     )
     val capturedPokemon: List<Pokemon>
-
 )
 
 
