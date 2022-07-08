@@ -29,7 +29,7 @@ class PokemonService(
     }
 
     fun getPokemonByName(name: String): Pokemon? {
-        if (!checkValidPokemon(name, pokemonRepository)) {   // Check valid pokemon
+        if (!pokemonRepository.existsByName(name)) {   // Check valid pokemon
             throw ResponseStatusException(
                 HttpStatus.NOT_FOUND,
                 "Error: Pokemon does not exist"
@@ -40,7 +40,7 @@ class PokemonService(
     }
 
     fun getPokemonByType(type: String, type2: String?): List<Pokemon> {
-        if (!checkValidType(type, typeRepository)) {    // Check type 1 is valid type
+        if (!typeRepository.existsByType(type)) {    // Check type 1 is valid type
             throw ResponseStatusException(
                 HttpStatus.NOT_FOUND,
                 "Error: Invalid Type"
@@ -61,13 +61,13 @@ class PokemonService(
         }
 
         if (type2 != null) {    // Filter for two types
-            if (!checkValidType(type2, typeRepository)) {    // Check if second type is valid
+            if (!typeRepository.existsByType(type2)) {    // Check if second type is valid
                 throw ResponseStatusException(
                     HttpStatus.NOT_FOUND,
-                    "Error: Invalid Type"
+                    "Error: Invalid Type2"
                 )
             }
-            if (type.lowercase() == type2!!.lowercase()) {   // Check if type1 == type2
+            if (type.lowercase() == type2.lowercase()) {   // Check if type1 == type2
                 throw ResponseStatusException(
                     HttpStatus.NOT_ACCEPTABLE,
                     "Error: Duplicate Types"
@@ -92,30 +92,6 @@ class PokemonService(
             }
         }
         return listOfPokemon.toList()
-    }
-
-    private fun checkValidPokemon(
-        pokemonName: String,
-        pokemonRepo: PokemonRepository
-    ): Boolean {
-        pokemonRepo.findAll().forEach { pokemon ->
-            if (pokemon.name.lowercase() == pokemonName.lowercase()) {
-                return true
-            }
-        }
-        return false
-    }
-
-    private fun checkValidType(
-        typeString: String,
-        typeRepo: TypeRepository
-    ): Boolean {
-        typeRepo.findAll().forEach { typeEntity ->
-            if (typeEntity.type.lowercase() == typeString.lowercase()) {
-                return true
-            }
-        }
-        return false
     }
 
 

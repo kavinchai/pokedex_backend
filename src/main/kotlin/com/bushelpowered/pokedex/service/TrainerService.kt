@@ -25,7 +25,7 @@ class TrainerService(
                 "Error: Email already exists"
             )
         }
-        if (trainerRepository.existsByUserName(trainerUserName)){
+        if (trainerRepository.existsByUsername(trainerUserName)){
             throw ResponseStatusException(
                 HttpStatus.NOT_ACCEPTABLE,
                 "Error: Username already exists"

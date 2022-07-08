@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository
 interface TrainerRepository : CrudRepository<Trainer, Int> {
     fun existsByEmail(email: String): Boolean
 
-    fun existsByUserName(username: String): Boolean
+    fun existsByUsername(username: String): Boolean
 }
