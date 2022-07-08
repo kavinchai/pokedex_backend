@@ -49,7 +49,7 @@ class PokemonService(
 
         val pokemonTypeList = pokemonTypeRepository.findAll()
         val typeId = typeRepository.findByType(type).id
-        val tmpList = mutableListOf<Pokemon>()
+        val listOfPokemonToRemove = mutableListOf<Pokemon>()
         val listOfPokemon = mutableListOf<Pokemon>()
         for (entity in pokemonTypeList) { // Search Pokemon type table for type id
             if (entity.typeId == typeId) {
@@ -82,13 +82,13 @@ class PokemonService(
                         !(pokemon.type[0].type == type && pokemon.type[1].type == type2) &&
                         !(pokemon.type[0].type == type2 && pokemon.type[1].type == type)
                     ) {
-                        tmpList.add(pokemon)   // List of Pokemon without specified types
+                        listOfPokemonToRemove.add(pokemon)   // List of Pokemon without specified types
                     }
                 }
             }
-            val keysOfTmp = tmpList.map { it.name }
+            val keysOfPokemonToRemove = listOfPokemonToRemove.map { it.name }
             listOfPokemon.removeAll {
-                it.name in keysOfTmp    // Remove Pokemon without specified types
+                it.name in keysOfPokemonToRemove    // Remove Pokemon without specified types
             }
         }
         return listOfPokemon.toList()
