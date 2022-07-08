@@ -19,21 +19,19 @@ class TrainerService(
         val trainerEmail = trainerInfo.email
         val trainerUserName = trainerInfo.username
         val trainerRepo = trainerRepository.findAll()
-
-        trainerRepo.forEach {
-            if (it.username == trainerUserName) {
-                throw ResponseStatusException(
-                    HttpStatus.NOT_ACCEPTABLE,
-                    "Error: Username already exists"
-                )
-            }
-            if (it.email == trainerEmail) {
-                throw ResponseStatusException(
-                    HttpStatus.NOT_ACCEPTABLE,
-                    "Error: Trainer already exists"
-                )
-            }
+        if (trainerRepository.existsByEmail(trainerEmail)){
+            throw ResponseStatusException(
+                HttpStatus.NOT_ACCEPTABLE,
+                "Error: Email already exists"
+            )
         }
+        if (trainerRepository.existsByUserName(trainerUserName)){
+            throw ResponseStatusException(
+                HttpStatus.NOT_ACCEPTABLE,
+                "Error: Username already exists"
+            )
+        }
+
         trainerRepository.save(trainerInfo)
     }
 
