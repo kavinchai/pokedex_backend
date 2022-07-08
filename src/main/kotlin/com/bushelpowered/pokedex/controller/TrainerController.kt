@@ -18,21 +18,11 @@ class TrainerController(private val trainerService: TrainerService) {
 
     @PutMapping("/trainer")
     fun updateTrainerById(
-        @RequestBody trainerInfo: HashMap<String, Any>
+        @RequestBody trainerInfo: Trainer
     ): ResponseEntity<Any> {
-        return if (
-            trainerInfo.containsKey("id") &&
-            trainerInfo.containsKey("username") &&
-            trainerInfo.containsKey("firstname") &&
-            trainerInfo.containsKey("lastname") &&
-            trainerInfo.containsKey("email")
-        ) {
-            ResponseEntity.ok(
-                trainerService.updateTrainerById(trainerInfo)
-            )
-        } else {
-            ResponseEntity(HttpStatus.NOT_ACCEPTABLE)
-        }
+        return ResponseEntity.ok(
+            trainerService.updateTrainerById(trainerInfo)
+        )
     }
 
     @DeleteMapping("/trainer")

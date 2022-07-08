@@ -38,37 +38,24 @@ class TrainerService(
     // Design choice: Users cannot update their captured pokemon
     //                They can only update their:
     //                username, firstname, lastname, email
-    fun updateTrainerById(trainerInfo: HashMap<String, Any>) {
-        try {
-            val trainerId: Int = trainerInfo.getValue("id") as Int
-            val trainerUser: String = trainerInfo.getValue("username" ) as String
-            val trainerFirstName: String = trainerInfo.getValue("firstname") as String
-            val trainerLastName: String = trainerInfo.getValue("lastname") as String
-            val trainerEmail: String = trainerInfo.getValue("email") as String
-            val trainer = trainerRepository.findById(trainerId)
-                .orElseThrow {
-                    ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Error: Trainer does not exist"
-                    )
-                }
-            trainerRepository.save(
-                Trainer(
-                    id = trainer.id,
-                    username = trainerUser,
-                    firstname = trainerFirstName,
-                    lastname = trainerLastName,
-                    email = trainerEmail,
-                    capturedPokemon = trainer.capturedPokemon
+    fun updateTrainerById(trainerInfo: Trainer) {
+        val trainer = trainerRepository.findById(trainerInfo.id)
+            .orElseThrow {
+                ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Error: Trainer does not exist"
                 )
+            }
+        trainerRepository.save(
+            Trainer(
+                id = trainerInfo.id,
+                username = trainerInfo.username,
+                firstname = trainerInfo.firstname,
+                lastname = trainerInfo.lastname,
+                email = trainerInfo.email,
+                capturedPokemon = trainer.capturedPokemon
             )
-        } catch (e: Exception){
-            println(e.toString())
-            throw ResponseStatusException(
-                HttpStatus.NOT_ACCEPTABLE,
-                "Error: $e"
-            )
-        }
+        )
     }
 
     fun deleteTrainer(trainerId: Int) {
