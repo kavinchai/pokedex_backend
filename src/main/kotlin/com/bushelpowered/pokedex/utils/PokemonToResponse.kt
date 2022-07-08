@@ -1,7 +1,9 @@
 package com.bushelpowered.pokedex.utils
 
 import com.bushelpowered.pokedex.dto.PokemonResponse
+import com.bushelpowered.pokedex.dto.PokemonStatResponse
 import com.bushelpowered.pokedex.entity.Pokemon
+import com.bushelpowered.pokedex.entity.PokemonStat
 
 fun Pokemon.toPokemonResponse(): PokemonResponse {
     val typeResponseList = mutableListOf<String>()
@@ -16,6 +18,15 @@ fun Pokemon.toPokemonResponse(): PokemonResponse {
     this.eggGroup.forEach {
         eggGroupResponseList.add(it.eggGroup)
     }
+    val statResponse = PokemonStatResponse(
+        id = this.stats.id,
+        hp = this.stats.hp,
+        speed = this.stats.speed,
+        attack = this.stats.attack,
+        defense = this.stats.defense,
+        specialAttack = this.stats.specialAttack,
+        specialDefense = this.stats.specialDefense
+    )
     return PokemonResponse(
         id = this.id,
         name = this.name,
@@ -24,7 +35,7 @@ fun Pokemon.toPokemonResponse(): PokemonResponse {
         weight = this.weight,
         ability = abilityResponseList,
         eggGroup = eggGroupResponseList,
-        stats = this.stats,
+        stats = statResponse,
         genus = this.genus[0].genus,
         description = this.description
     )
