@@ -20,8 +20,9 @@ class PokemonController(private val pokemonService: PokemonService) {
     ): ResponseEntity<Any> {
 
         return if (name != null && id == null) {    // name param provided
+            val pokemon = pokemonService.getPokemonByName(name) ?: return ResponseEntity.notFound().build()
             ResponseEntity.ok(
-                pokemonService.getPokemonByName(name)?.toPokemonResponse() ?: ResponseEntity.notFound()
+                pokemon.toPokemonResponse()
             )
         } else if (name == null && id != null) {   // id param provided
             val pokemon =  pokemonService.getPokemonById(id) ?: return ResponseEntity.notFound().build()
