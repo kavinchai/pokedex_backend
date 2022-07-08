@@ -39,6 +39,9 @@ class PokemonService(
         return pokemonRepository.findById(pokemonId).orElse(null)
     }
 
+
+    // there should be a way to offload this logic to the database, instead of loading a lot to memory
+    // I can explain if you are confused
     fun getPokemonByType(type: String, type2: String?): List<Pokemon> {
         if (!checkValidType(type, typeRepository)) {    // Check type 1 is valid type
             throw ResponseStatusException(

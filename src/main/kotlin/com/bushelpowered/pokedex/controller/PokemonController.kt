@@ -27,6 +27,13 @@ class PokemonController(private val pokemonService: PokemonService) {
             ResponseEntity.ok(
                 pokemonService.getPokemonById(id)?.toPokemonResponse() ?: ResponseEntity.notFound()
             )
+
+            // should be
+             val pokemon =  pokemonService.getPokemonById(id) ?: return ResponseEntity.notFound().build()
+            ResponseEntity.ok(
+                   pokemon.toPokemonResponse()
+            )
+
         } else {
             val pokemonList = mutableListOf<PokemonResponse>()
             pokemonService.getAllPokemon().forEach {

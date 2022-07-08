@@ -20,6 +20,9 @@ class TrainerService(
         val trainerUserName = trainerInfo.username
         val trainerRepo = trainerRepository.findAll()
 
+        // what if we have 100k users? We would load them all into memory
+        // you should be able to offload this query to the db
+        // look up "Exists By" or COUNT in SQL as a hint.
         trainerRepo.forEach {
             if (it.username == trainerUserName) {
                 throw ResponseStatusException(
@@ -40,7 +43,7 @@ class TrainerService(
     // Design choice: Users cannot update their captured pokemon
     //                They can only update their:
     //                username, firstname, lastname, email
-    fun updateTrainerById(trainerInfo: HashMap<String, Any>) {
+    fun updateTrainerById(trainerInfo: HashMap<String, Any>) { // this should be a model, not hash map
         try {
             val trainerId: Int = trainerInfo.getValue("id") as Int
             val trainerUser: String = trainerInfo.getValue("username" ) as String
