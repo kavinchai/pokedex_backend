@@ -35,7 +35,7 @@ class PokemonService(
                 "Error: Pokemon does not exist"
             )
         }
-        val pokemonId = getPokeIdFromString(name, pokemonRepository)
+        val pokemonId = pokemonRepository.findByName(name).id
         return pokemonRepository.findById(pokemonId).orElse(null)
     }
 
@@ -48,7 +48,7 @@ class PokemonService(
         }
 
         val pokemonTypeList = pokemonTypeRepository.findAll()
-        val typeId = getTypeIdFromString(type, typeRepository)
+        val typeId = typeRepository.findByType(type).id
         val tmpList = mutableListOf<Pokemon>()
         val listOfPokemon = mutableListOf<Pokemon>()
         for (entity in pokemonTypeList) { // Search Pokemon type table for type id
@@ -92,30 +92,5 @@ class PokemonService(
             }
         }
         return listOfPokemon.toList()
-    }
-
-
-    private fun getPokeIdFromString(
-        pokemonName: String,
-        pokeRepo: PokemonRepository
-    ): Int {
-        pokeRepo.findAll().forEach { pokemon ->
-            if (pokemon.name.lowercase() == pokemonName.lowercase()) {
-                return pokemon.id
-            }
-        }
-        return 0
-    }
-
-    private fun getTypeIdFromString(
-        typeString: String,
-        typeRepo: TypeRepository
-    ): Int {
-        typeRepo.findAll().forEach { typeEntity ->
-            if (typeEntity.type.lowercase() == typeString.lowercase()) {
-                return typeEntity.id
-            }
-        }
-        return 0
     }
 }

@@ -19,7 +19,6 @@ class TrainerService(
     fun createTrainer(trainerInfo: Trainer) {
         val trainerEmail = trainerInfo.email
         val trainerUserName = trainerInfo.username
-        val trainerRepo = trainerRepository.findAll()
         if (trainerRepository.existsByEmail(trainerEmail)){
             throw ResponseStatusException(
                 HttpStatus.NOT_ACCEPTABLE,
