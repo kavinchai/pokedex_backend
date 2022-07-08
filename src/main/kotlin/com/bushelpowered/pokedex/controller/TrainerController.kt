@@ -11,6 +11,10 @@ class TrainerController(private val trainerService: TrainerService) {
 
     @PostMapping("/trainer")
     fun createTrainer(@RequestBody trainerInfo: Trainer): ResponseEntity<Any> {
+        // you can still add validation with Valiktor on the repsonse body
+        // Trainer should be a TrainerRequest, not a Trainer Entity.
+
+
         return ResponseEntity(
             trainerService.createTrainer(trainerInfo), HttpStatus.CREATED
         )
@@ -18,7 +22,7 @@ class TrainerController(private val trainerService: TrainerService) {
 
     @PutMapping("/trainer")
     fun updateTrainerById(
-        @RequestBody trainerInfo: HashMap<String, Any>
+        @RequestBody trainerInfo: HashMap<String, Any> // Trainer should be a TrainerRequest, not a HashMap
     ): ResponseEntity<Any> {
         return if (
             trainerInfo.containsKey("id") &&
@@ -37,7 +41,7 @@ class TrainerController(private val trainerService: TrainerService) {
 
     @DeleteMapping("/trainer")
     fun deleteTrainerById(
-        @RequestBody trainerId: Int
+        @RequestBody trainerId: Int // Trainer should be a DeleteTrainerRequest, not an int
     ): ResponseEntity<Any> {
         return ResponseEntity.ok(
             trainerService.deleteTrainer(trainerId)

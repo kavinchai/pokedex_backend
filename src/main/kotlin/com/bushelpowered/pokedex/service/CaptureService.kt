@@ -18,7 +18,7 @@ class CaptureService(
     fun capturePokemonToTrainer(captureInfo: HashMap<String, Any>) {
         try {
             val trainerId = captureInfo.getValue("trainerId") as Int
-            val listOfPokemonId = captureInfo.getValue("capturedPokemon") as List<Int>
+            val listOfPokemonId = captureInfo.getValue("capturedPokemon") as List<Int> // if these are an object you don't have to do this
             val tmpTrainer = trainerRepository
                 .findById(trainerId)
                 .orElseThrow {
@@ -59,6 +59,12 @@ class CaptureService(
             }
         }
         return true
+
+        // this could be, also consider a lookup for all id's in the database. Here we have a lot more network calls
+        // to the DB which is slow.
+//        return pokemonList.all {
+//            pokemonRepo.existsById(it)
+//        }
     }
 
 }
