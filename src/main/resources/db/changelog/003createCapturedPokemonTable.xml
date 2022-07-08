@@ -8,11 +8,12 @@
 
     <changeSet id="createTrainerPokemonTable" author="Kavin Chaisawangwong">
         <createTable tableName="captured_pokemon_table">
-            <column name="captured_pokemon_id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" primaryKeyName="trainerPokemonPk"/>
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="capturedPk"/>
             </column>
             <column name="trainer" type="varchar(50)"/>
             <column name="pokemon" type="varchar(50)"/>
+            <column name="times_caught" type="int"/>
         </createTable>
 
     </changeSet>

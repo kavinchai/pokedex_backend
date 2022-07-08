@@ -27,7 +27,7 @@ class CaptureService(
                     "Error: Trainer does not exist"
                 )
             }
-        if (!pokemonRepository.existsById(pokemonId)){
+        if (!pokemonRepository.existsById(pokemonId)) {
             throw ResponseStatusException(
                 HttpStatus.NOT_ACCEPTABLE,
                 "Error: Pokemon does not exist"
@@ -35,15 +35,19 @@ class CaptureService(
         }
 
         val uniqueCapturedPokemonId = (trainer.id * 1000) + pokemonId
-        if (!capturedPokemonRepository.existsById(uniqueCapturedPokemonId)){
-            capturedPokemonRepository.save(CapturedPokemon(uniqueCapturedPokemonId, trainerId, pokemonId))
-        }
-        else{
-//            val duplicateCapturedPokemonId = (uniqueCapturedPokemonId * 10) + 2
-            throw ResponseStatusException(
-                HttpStatus.NOT_ACCEPTABLE,
-                "Error: This pokemon has already been captured"
-            )
+        if (!capturedPokemonRepository.existsById(uniqueCapturedPokemonId)) {
+            capturedPokemonRepository.save(CapturedPokemon(uniqueCapturedPokemonId, trainerId, pokemonId, 1))
+        } else {
+            val timesCaught = capturedPokemonRepository.findById(uniqueCapturedPokemonId).orElse(null).timesCaught
+            capturedPokemonRepository
+                .save(
+                    CapturedPokemon(
+                        uniqueCapturedPokemonId,
+                        trainerId,
+                        pokemonId,
+                        timesCaught + 1
+                    )
+                )
         }
     }
 }
