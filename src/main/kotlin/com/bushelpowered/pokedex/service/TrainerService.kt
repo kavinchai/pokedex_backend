@@ -1,5 +1,6 @@
 package com.bushelpowered.pokedex.service
 
+import com.bushelpowered.pokedex.dto.DeleteTrainerRequest
 import com.bushelpowered.pokedex.entity.Trainer
 import com.bushelpowered.pokedex.entity.Pokemon
 import com.bushelpowered.pokedex.repository.TrainerRepository
@@ -58,7 +59,8 @@ class TrainerService(
         )
     }
 
-    fun deleteTrainer(trainerId: Int) {
+    fun deleteTrainer(deleteTrainerRequest: DeleteTrainerRequest) {
+        val trainerId = deleteTrainerRequest.id
         trainerRepository.findById(trainerId).orElseThrow {
             ResponseStatusException(
                 HttpStatus.NOT_FOUND,

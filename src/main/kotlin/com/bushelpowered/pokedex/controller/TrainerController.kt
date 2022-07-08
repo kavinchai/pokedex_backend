@@ -1,5 +1,6 @@
 package com.bushelpowered.pokedex.controller
 
+import com.bushelpowered.pokedex.dto.DeleteTrainerRequest
 import com.bushelpowered.pokedex.entity.Trainer
 import com.bushelpowered.pokedex.service.TrainerService
 import org.springframework.http.ResponseEntity
@@ -27,10 +28,10 @@ class TrainerController(private val trainerService: TrainerService) {
 
     @DeleteMapping("/trainer")
     fun deleteTrainerById(
-        @RequestBody trainerId: Int
+        @RequestBody deleteTrainerRequest: DeleteTrainerRequest
     ): ResponseEntity<Any> {
         return ResponseEntity.ok(
-            trainerService.deleteTrainer(trainerId)
+            trainerService.deleteTrainer(deleteTrainerRequest)
         )
     }
 }
