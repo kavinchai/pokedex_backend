@@ -1,5 +1,6 @@
 package com.bushelpowered.pokedex.service
 
+import com.bushelpowered.pokedex.dto.CapturePokemonResponse
 import com.bushelpowered.pokedex.entity.Trainer
 import com.bushelpowered.pokedex.entity.CapturedPokemon
 import com.bushelpowered.pokedex.repository.PokemonRepository
@@ -15,50 +16,27 @@ class CaptureService(
     private val pokemonRepository: PokemonRepository,
     private val capturedPokemonRepository: CapturedPokemonRepository
 ) {
-    fun capturePokemonToTrainer(captureInfo: HashMap<String, Any>) {
-        try {
-            val trainerId = captureInfo.getValue("trainerId") as Int
-            val listOfPokemonId = captureInfo.getValue("capturedPokemon") as List<Int>
-            val tmpTrainer = trainerRepository
-                .findById(trainerId)
-                .orElseThrow {
-                    ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Error: Trainer does not exist"
-                    )
-                }
-
-            if (checkValidPokemonIdList(listOfPokemonId, pokemonRepository)) {
-                listOfPokemonId.forEach { pokemonId ->
-                    val uniqueTrainerPokemon = (tmpTrainer.id * 1000) + pokemonId
-                    capturedPokemonRepository
-                        .save(CapturedPokemon(uniqueTrainerPokemon, trainerId, pokemonId))
-                }
-            } else {
-                throw ResponseStatusException(
-                    HttpStatus.NOT_ACCEPTABLE,
-                    "Error: Invalid list of pokemon"
+    fun capturePokemonToTrainer(captureInfo: CapturePokemonResponse) {
+        val trainerId = captureInfo.trainerId
+        val pokemonId = captureInfo.pokemonId
+        val trainer = trainerRepository
+            .findById(trainerId)
+            .orElseThrow {
+                ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Error: Trainer does not exist"
                 )
             }
-        } catch (e: Exception) {
-            println(e.toString())
+        if (pokemonRepository.existsById(pokemonId)){
+            val uniqueTrainerPokemon = (trainer.id * 1000) + pokemonId
+            capturedPokemonRepository
+                .save(CapturedPokemon(uniqueTrainerPokemon, trainerId, pokemonId))
+        }
+        else {
             throw ResponseStatusException(
                 HttpStatus.NOT_ACCEPTABLE,
-                "Error: $e"
+                "Error: Pokemon does not exist"
             )
         }
     }
-
-    private fun checkValidPokemonIdList(
-        pokemonList: List<Int>,
-        pokemonRepo: PokemonRepository
-    ): Boolean {
-        pokemonList.forEach { pokemonId ->
-            if (!pokemonRepo.existsById(pokemonId)) {
-                return false
-            }
-        }
-        return true
-    }
-
 }
