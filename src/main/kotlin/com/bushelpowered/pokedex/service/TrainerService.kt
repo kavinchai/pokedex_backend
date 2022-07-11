@@ -1,8 +1,8 @@
 package com.bushelpowered.pokedex.service
 
-import com.bushelpowered.pokedex.dto.request.TrainerRequest
+import com.bushelpowered.pokedex.dto.request.CreateTrainerRequest
+import com.bushelpowered.pokedex.dto.request.UpdateTrainerRequest
 import com.bushelpowered.pokedex.dto.request.DeleteTrainerRequest
-import com.bushelpowered.pokedex.dto.response.TrainerResponse
 import com.bushelpowered.pokedex.entity.Trainer
 import com.bushelpowered.pokedex.repository.TrainerRepository
 import org.springframework.http.HttpStatus
@@ -13,9 +13,9 @@ import org.springframework.web.server.ResponseStatusException
 @Service
 class TrainerService(private val trainerRepository: TrainerRepository) {
 
-    fun createTrainer(trainerInfo: TrainerRequest): Trainer {
-        val trainerEmail = trainerInfo.email
-        val trainerUserName = trainerInfo.username
+    fun createTrainer(createTrainerRequest: CreateTrainerRequest): Trainer {
+        val trainerEmail = createTrainerRequest.email
+        val trainerUserName = createTrainerRequest.username
         if (trainerRepository.existsByEmail(trainerEmail)){
             throw ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
@@ -29,52 +29,48 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
             )
         }
         trainerRepository.save(Trainer(
-            id = trainerInfo.id,
-            username = trainerInfo.username,
-            firstname = trainerInfo.firstname,
-            lastname = trainerInfo.lastname,
-            email = trainerInfo.email,
+            id = 0,
+            username = createTrainerRequest.username,
+            firstname = createTrainerRequest.firstname,
+            lastname = createTrainerRequest.lastname,
+            email = createTrainerRequest.email,
             capturedPokemon = listOf()
         ))
-        val trainerId = trainerRepository.findByUsername(trainerInfo.username).id
+        val trainerId = trainerRepository.findByUsername(createTrainerRequest.username).id
         return Trainer(
             id = trainerId,
-            username = trainerInfo.username,
-            firstname = trainerInfo.firstname,
-            lastname = trainerInfo.lastname,
-            email = trainerInfo.email,
+            username = createTrainerRequest.username,
+            firstname = createTrainerRequest.firstname,
+            lastname = createTrainerRequest.lastname,
+            email = createTrainerRequest.email,
             capturedPokemon = listOf()
         )
     }
 
-    // Design choice: Users cannot update their captured pokemon
-    //                They can only update their:
-    //                username, firstname, lastname, email
-    fun updateTrainerById(trainerInfo: TrainerRequest): Trainer {
-        val trainer = trainerRepository.findById(trainerInfo.id)
+    fun updateTrainerById(updateTrainerRequest: UpdateTrainerRequest): Trainer {
+        val trainer = trainerRepository.findById(updateTrainerRequest.id)
             .orElseThrow {
                 ResponseStatusException(
                     HttpStatus.NOT_FOUND,
                     "Error: Trainer does not exist"
                 )
             }
-        println(trainer.capturedPokemon)
         trainerRepository.save(
             Trainer(
-                id = trainerInfo.id,
-                username = trainerInfo.username,
-                firstname = trainerInfo.firstname,
-                lastname = trainerInfo.lastname,
-                email = trainerInfo.email,
+                id = updateTrainerRequest.id,
+                username = updateTrainerRequest.username,
+                firstname = updateTrainerRequest.firstname,
+                lastname = updateTrainerRequest.lastname,
+                email = updateTrainerRequest.email,
                 capturedPokemon = trainer.capturedPokemon
             )
         )
         return Trainer(
             id = trainer.id,
-            username = trainerInfo.username,
-            firstname = trainerInfo.firstname,
-            lastname = trainerInfo.lastname,
-            email = trainerInfo.email,
+            username = updateTrainerRequest.username,
+            firstname = updateTrainerRequest.firstname,
+            lastname = updateTrainerRequest.lastname,
+            email = updateTrainerRequest.email,
             capturedPokemon = trainer.capturedPokemon
         )
     }

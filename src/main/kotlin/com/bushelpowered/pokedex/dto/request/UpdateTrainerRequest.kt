@@ -5,7 +5,7 @@ import org.valiktor.functions.isNotBlank
 import org.valiktor.functions.isPositive
 import org.valiktor.validate
 
-data class TrainerRequest(
+data class UpdateTrainerRequest(
     val id: Int,
     val username: String,
     val firstname: String,
@@ -14,10 +14,11 @@ data class TrainerRequest(
 ){
     init{
         validate(this){
-            validate(TrainerRequest::username).isNotBlank()
-            validate(TrainerRequest::firstname).isNotBlank()
-            validate(TrainerRequest::lastname).isNotBlank()
-            validate(TrainerRequest::email).isNotBlank().isEmail()
+            validate(UpdateTrainerRequest::id).isPositive()
+            validate(UpdateTrainerRequest::username).isNotBlank()
+            validate(UpdateTrainerRequest::firstname).isNotBlank()
+            validate(UpdateTrainerRequest::lastname).isNotBlank()
+            validate(UpdateTrainerRequest::email).isNotBlank().isEmail()
         }
     }
 }
