@@ -1,6 +1,6 @@
 package com.bushelpowered.pokedex.controller
 
-import com.bushelpowered.pokedex.dto.PokemonResponse
+import com.bushelpowered.pokedex.dto.response.PokemonResponse
 import com.bushelpowered.pokedex.service.PokemonService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping

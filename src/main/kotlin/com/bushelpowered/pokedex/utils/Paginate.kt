@@ -1,6 +1,6 @@
 package com.bushelpowered.pokedex.utils
 
-import com.bushelpowered.pokedex.dto.PokemonResponse
+import com.bushelpowered.pokedex.dto.response.PokemonResponse
 import org.springframework.beans.support.PagedListHolder
 import org.springframework.data.domain.PageImpl
 

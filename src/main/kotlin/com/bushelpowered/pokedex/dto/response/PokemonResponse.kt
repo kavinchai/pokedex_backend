@@ -1,6 +1,4 @@
-package com.bushelpowered.pokedex.dto
-
-import com.bushelpowered.pokedex.entity.PokemonStat
+package com.bushelpowered.pokedex.dto.response
 
 data class PokemonResponse(
     val id: Int,

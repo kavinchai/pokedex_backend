@@ -1,4 +1,4 @@
-package com.bushelpowered.pokedex.dto
+package com.bushelpowered.pokedex.dto.request
 
 import org.valiktor.functions.isPositive
 import org.valiktor.validate

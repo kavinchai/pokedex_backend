@@ -1,4 +1,4 @@
-package com.bushelpowered.pokedex.dto
+package com.bushelpowered.pokedex.dto.response
 
 data class CapturePokemonResponse(
     val uniqueId: Int,
