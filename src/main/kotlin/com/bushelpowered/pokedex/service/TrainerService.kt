@@ -13,7 +13,7 @@ import org.springframework.web.server.ResponseStatusException
 @Service
 class TrainerService(private val trainerRepository: TrainerRepository) {
 
-    fun createTrainer(trainerInfo: TrainerRequest): TrainerResponse {
+    fun createTrainer(trainerInfo: TrainerRequest): Trainer {
         val trainerEmail = trainerInfo.email
         val trainerUserName = trainerInfo.username
         if (trainerRepository.existsByEmail(trainerEmail)){
@@ -28,29 +28,29 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
                 "Error: Username already exists"
             )
         }
-        val trainerModel = Trainer(
+        trainerRepository.save(Trainer(
             id = trainerInfo.id,
             username = trainerInfo.username,
             firstname = trainerInfo.firstname,
             lastname = trainerInfo.lastname,
             email = trainerInfo.email,
             capturedPokemon = listOf()
-        )
-        trainerRepository.save(trainerModel)
+        ))
         val trainerId = trainerRepository.findByUsername(trainerInfo.username).id
-        return TrainerResponse(
+        return Trainer(
             id = trainerId,
             username = trainerInfo.username,
             firstname = trainerInfo.firstname,
             lastname = trainerInfo.lastname,
-            email = trainerInfo.email
+            email = trainerInfo.email,
+            capturedPokemon = listOf()
         )
     }
 
     // Design choice: Users cannot update their captured pokemon
     //                They can only update their:
     //                username, firstname, lastname, email
-    fun updateTrainerById(trainerInfo: TrainerRequest): TrainerResponse {
+    fun updateTrainerById(trainerInfo: TrainerRequest): Trainer {
         val trainer = trainerRepository.findById(trainerInfo.id)
             .orElseThrow {
                 ResponseStatusException(
@@ -58,6 +58,7 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
                     "Error: Trainer does not exist"
                 )
             }
+        println(trainer.capturedPokemon)
         trainerRepository.save(
             Trainer(
                 id = trainerInfo.id,
@@ -68,17 +69,17 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
                 capturedPokemon = trainer.capturedPokemon
             )
         )
-        val trainerId = trainerRepository.findByUsername(trainerInfo.username).id
-        return TrainerResponse(
-            id = trainerId,
+        return Trainer(
+            id = trainer.id,
             username = trainerInfo.username,
             firstname = trainerInfo.firstname,
             lastname = trainerInfo.lastname,
-            email = trainerInfo.email
+            email = trainerInfo.email,
+            capturedPokemon = trainer.capturedPokemon
         )
     }
 
-    fun deleteTrainer(deleteTrainerRequest: DeleteTrainerRequest): TrainerResponse {
+    fun deleteTrainer(deleteTrainerRequest: DeleteTrainerRequest): Trainer {
         val trainerId = deleteTrainerRequest.id
         val trainer = trainerRepository.findById(trainerId).orElseThrow {
             ResponseStatusException(
@@ -87,12 +88,13 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
             )
         }
         trainerRepository.deleteById(trainerId)
-        return TrainerResponse(
+        return Trainer(
             id = trainer.id,
             username = trainer.username,
             firstname = trainer.firstname,
             lastname = trainer.lastname,
-            email = trainer.email
+            email = trainer.email,
+            capturedPokemon = trainer.capturedPokemon
         )
     }
 }

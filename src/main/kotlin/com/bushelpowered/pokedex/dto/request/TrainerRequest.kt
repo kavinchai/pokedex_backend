@@ -14,7 +14,6 @@ data class TrainerRequest(
 ){
     init{
         validate(this){
-            validate(TrainerRequest::id).isPositive()
             validate(TrainerRequest::username).isNotBlank()
             validate(TrainerRequest::firstname).isNotBlank()
             validate(TrainerRequest::lastname).isNotBlank()
