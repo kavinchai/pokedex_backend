@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import com.bushelpowered.pokedex.utils.toPokemonResponse
-import com.bushelpowered.pokedex.utils.paginate
+//import com.bushelpowered.pokedex.utils.paginate
+import com.bushelpowered.pokedex.utils.toPaginatedResponse
+import org.apache.coyote.Response
 import org.springframework.data.domain.PageImpl
 
 @RestController
@@ -32,7 +34,7 @@ class PokemonController(private val pokemonService: PokemonService) {
             )
         } else {
             val pokemonList = pokemonService.getAllPokemon().map{it.toPokemonResponse()}
-            ResponseEntity.ok(paginate(pageNum, pageSize, pokemonList))
+            ResponseEntity.ok(pokemonList.toPaginatedResponse(pageNum, pageSize))
         }
     }
 
@@ -47,12 +49,12 @@ class PokemonController(private val pokemonService: PokemonService) {
             val listOfPokemonResponse = pokemonService.getPokemonByType(type,type2).map {
                 it.toPokemonResponse()
             }
-            ResponseEntity.ok(paginate(pageNum, pageSize, listOfPokemonResponse))
+            ResponseEntity.ok(listOfPokemonResponse.toPaginatedResponse(pageNum, pageSize))
         } else {
             val listOfPokemonResponse = pokemonService.getAllPokemon().map {
                 it.toPokemonResponse()
             }
-            ResponseEntity.ok(paginate(pageNum, pageSize, listOfPokemonResponse))
+            ResponseEntity.ok(listOfPokemonResponse.toPaginatedResponse(pageNum, pageSize))
         }
     }
 }
