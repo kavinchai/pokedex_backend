@@ -15,14 +15,14 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
 
     fun createTrainer(createTrainerRequest: CreateTrainerRequest): Trainer {
         val trainerEmail = createTrainerRequest.email
-        val trainerUserName = createTrainerRequest.username
+        val trainerUsername = createTrainerRequest.username
         if (trainerRepository.existsByEmail(trainerEmail)){
             throw ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
                 "Error: Email already exists"
             )
         }
-        if (trainerRepository.existsByUsername(trainerUserName)){
+        if (trainerRepository.existsByUsername(trainerUsername)){
             throw ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
                 "Error: Username already exists"
@@ -48,6 +48,20 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
     }
 
     fun updateTrainerById(updateTrainerRequest: UpdateTrainerRequest): Trainer {
+        val trainerEmail = updateTrainerRequest.email
+        val trainerUsername = updateTrainerRequest.username
+        if (trainerRepository.existsByEmail(trainerEmail)){
+            throw ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "Error: Email already exists"
+            )
+        }
+        if (trainerRepository.existsByUsername(trainerUsername)){
+            throw ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "Error: Username already exists"
+            )
+        }
         val trainer = trainerRepository.findById(updateTrainerRequest.id)
             .orElseThrow {
                 ResponseStatusException(
