@@ -68,8 +68,9 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
                 capturedPokemon = trainer.capturedPokemon
             )
         )
+        val trainerId = trainerRepository.findByUsername(trainerInfo.username).id
         return TrainerResponse(
-            id = trainerInfo.id,
+            id = trainerId,
             username = trainerInfo.username,
             firstname = trainerInfo.firstname,
             lastname = trainerInfo.lastname,

@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class CaptureController(private val captureService: CaptureService) {
     @PutMapping("/capture")
-    fun capturePokemon(@RequestBody captureInfo: CapturePokemonRequest): ResponseEntity<CapturePokemonResponse> {
-        val trainerCapturedInfo = captureService.capturePokemonToTrainer(captureInfo)
+    fun capturePokemon(
+        @RequestBody captureRequest: CapturePokemonRequest
+    ): ResponseEntity<CapturePokemonResponse> {
+        val trainerCapturedInfo = captureService.capturePokemonToTrainer(captureRequest)
         return ResponseEntity.ok(trainerCapturedInfo.toResponse())
     }
 }
