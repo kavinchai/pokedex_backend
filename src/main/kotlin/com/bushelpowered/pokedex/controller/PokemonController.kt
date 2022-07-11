@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import com.bushelpowered.pokedex.utils.toPokemonResponse
 import com.bushelpowered.pokedex.utils.paginate
+import org.springframework.data.domain.PageImpl
 
 @RestController
 class PokemonController(private val pokemonService: PokemonService) {
@@ -30,11 +31,7 @@ class PokemonController(private val pokemonService: PokemonService) {
                 pokemon.toPokemonResponse()
             )
         } else {
-            val pokemonList = mutableListOf<PokemonResponse>()
-            pokemonService.getAllPokemon().forEach {
-                pokemonList.add(it.toPokemonResponse())
-            }
-
+            val pokemonList = pokemonService.getAllPokemon().map{it.toPokemonResponse()}
             ResponseEntity.ok(paginate(pageNum, pageSize, pokemonList))
         }
     }
@@ -45,21 +42,17 @@ class PokemonController(private val pokemonService: PokemonService) {
         @RequestParam(defaultValue = "15") pageSize: Int,
         @RequestParam type: String?,
         @RequestParam type2: String?
-    ): ResponseEntity<Any> {
-        val listOfPokemonResponse = mutableListOf<PokemonResponse>()
-
+    ): ResponseEntity<PageImpl<PokemonResponse>> {
         return if (type != null) {
-            pokemonService.getPokemonByType(type, type2).forEach {
-                listOfPokemonResponse.add(it.toPokemonResponse())
+            val listOfPokemonResponse = pokemonService.getPokemonByType(type,type2).map {
+                it.toPokemonResponse()
             }
-
-            return ResponseEntity.ok(paginate(pageNum, pageSize, listOfPokemonResponse))
+            ResponseEntity.ok(paginate(pageNum, pageSize, listOfPokemonResponse))
         } else {
-            pokemonService.getAllPokemon().forEach {
-                listOfPokemonResponse.add(it.toPokemonResponse())
+            val listOfPokemonResponse = pokemonService.getAllPokemon().map {
+                it.toPokemonResponse()
             }
-
-            return ResponseEntity.ok(paginate(pageNum, pageSize, listOfPokemonResponse))
+            ResponseEntity.ok(paginate(pageNum, pageSize, listOfPokemonResponse))
         }
     }
 }

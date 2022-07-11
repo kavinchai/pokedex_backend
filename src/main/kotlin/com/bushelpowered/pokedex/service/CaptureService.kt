@@ -15,7 +15,7 @@ class CaptureService(
     private val pokemonRepository: PokemonRepository,
     private val capturedPokemonRepository: CapturedPokemonRepository
 ) {
-    fun capturePokemonToTrainer(captureInfo: CapturePokemonRequest) {
+    fun capturePokemonToTrainer(captureInfo: CapturePokemonRequest): CapturedPokemon {
         val trainerId = captureInfo.trainerId
         val pokemonId = captureInfo.pokemonId
         val trainer = trainerRepository
@@ -28,7 +28,7 @@ class CaptureService(
             }
         if (!pokemonRepository.existsById(pokemonId)) {
             throw ResponseStatusException(
-                HttpStatus.NOT_ACCEPTABLE,
+                HttpStatus.NOT_FOUND,
                 "Error: Pokemon does not exist"
             )
         }
@@ -48,5 +48,6 @@ class CaptureService(
                     )
                 )
         }
+        return capturedPokemonRepository.findById(uniqueCapturedPokemonId).orElseThrow()
     }
 }
