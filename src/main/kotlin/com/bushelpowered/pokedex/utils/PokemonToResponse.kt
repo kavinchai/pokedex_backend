@@ -11,7 +11,10 @@ fun Pokemon.toPokemonResponse(): PokemonResponse {
     val eggGroupResponseList = mutableListOf<String>()
     this.type.forEach {
         typeResponseList.add(it.type)
-    }
+    } // you can collapse this into the assignment, look into Kotlin "map", see below
+
+    val typeREsponseList2 =  this.type.map { it.type }
+
     this.ability.forEach {
         abilityResponseList.add(it.ability)
     }

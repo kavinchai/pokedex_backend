@@ -13,7 +13,7 @@ import org.springframework.web.server.ResponseStatusException
 @Service
 class TrainerService(
     private val trainerRepository: TrainerRepository,
-    private val pokemonRepository: PokemonRepository
+    private val pokemonRepository: PokemonRepository //  unused value
 ) {
 
     fun createTrainer(trainerInfo: Trainer) {
@@ -21,13 +21,13 @@ class TrainerService(
         val trainerUserName = trainerInfo.username
         if (trainerRepository.existsByEmail(trainerEmail)){
             throw ResponseStatusException(
-                HttpStatus.NOT_ACCEPTABLE,
+                HttpStatus.NOT_ACCEPTABLE, // we would use "Bad Request" here
                 "Error: Email already exists"
             )
         }
         if (trainerRepository.existsByUsername(trainerUserName)){
             throw ResponseStatusException(
-                HttpStatus.NOT_ACCEPTABLE,
+                HttpStatus.NOT_ACCEPTABLE,  // we would use "Bad Request" here
                 "Error: Username already exists"
             )
         }

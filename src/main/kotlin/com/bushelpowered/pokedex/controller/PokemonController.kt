@@ -35,6 +35,10 @@ class PokemonController(private val pokemonService: PokemonService) {
                 pokemonList.add(it.toPokemonResponse())
             }
 
+            // try this where you are mapping:
+            pokemonService.getAllPokemon().map { it.toPokemonResponse() }
+
+
             ResponseEntity.ok(paginate(pageNum, pageSize, pokemonList))
         }
     }
@@ -45,9 +49,10 @@ class PokemonController(private val pokemonService: PokemonService) {
         @RequestParam(defaultValue = "15") pageSize: Int,
         @RequestParam type: String?,
         @RequestParam type2: String?
-    ): ResponseEntity<Any> {
+    ): ResponseEntity<Any> { // return type shouldn't be Any
         val listOfPokemonResponse = mutableListOf<PokemonResponse>()
 
+        // this return is 'unreachable'
         return if (type != null) {
             pokemonService.getPokemonByType(type, type2).forEach {
                 listOfPokemonResponse.add(it.toPokemonResponse())
