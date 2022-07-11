@@ -6,18 +6,10 @@ import com.bushelpowered.pokedex.entity.Pokemon
 import com.bushelpowered.pokedex.entity.PokemonStat
 
 fun Pokemon.toPokemonResponse(): PokemonResponse {
-    val typeResponseList = mutableListOf<String>()
-    val abilityResponseList = mutableListOf<String>()
-    val eggGroupResponseList = mutableListOf<String>()
-    this.type.forEach {
-        typeResponseList.add(it.type)
-    }
-    this.ability.forEach {
-        abilityResponseList.add(it.ability)
-    }
-    this.eggGroup.forEach {
-        eggGroupResponseList.add(it.eggGroup)
-    }
+    val typeResponseList = this.type.map{it.type}
+    val abilityResponseList = this.ability.map{it.ability}
+    val eggGroupResponseList = this.eggGroup.map{it.eggGroup}
+
     val statResponse = PokemonStatResponse(
         id = this.stats.id,
         hp = this.stats.hp,

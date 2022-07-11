@@ -11,23 +11,20 @@ import org.springframework.web.server.ResponseStatusException
 
 
 @Service
-class TrainerService(
-    private val trainerRepository: TrainerRepository,
-    private val pokemonRepository: PokemonRepository
-) {
+class TrainerService(private val trainerRepository: TrainerRepository) {
 
     fun createTrainer(trainerInfo: Trainer) {
         val trainerEmail = trainerInfo.email
         val trainerUserName = trainerInfo.username
         if (trainerRepository.existsByEmail(trainerEmail)){
             throw ResponseStatusException(
-                HttpStatus.NOT_ACCEPTABLE,
+                HttpStatus.BAD_REQUEST,
                 "Error: Email already exists"
             )
         }
         if (trainerRepository.existsByUsername(trainerUserName)){
             throw ResponseStatusException(
-                HttpStatus.NOT_ACCEPTABLE,
+                HttpStatus.BAD_REQUEST,
                 "Error: Username already exists"
             )
         }

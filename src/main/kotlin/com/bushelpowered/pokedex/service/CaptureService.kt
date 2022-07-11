@@ -1,7 +1,6 @@
 package com.bushelpowered.pokedex.service
 
-import com.bushelpowered.pokedex.dto.CapturePokemonResponse
-import com.bushelpowered.pokedex.entity.Trainer
+import com.bushelpowered.pokedex.dto.CapturePokemonRequest
 import com.bushelpowered.pokedex.entity.CapturedPokemon
 import com.bushelpowered.pokedex.repository.PokemonRepository
 import com.bushelpowered.pokedex.repository.TrainerRepository
@@ -16,7 +15,7 @@ class CaptureService(
     private val pokemonRepository: PokemonRepository,
     private val capturedPokemonRepository: CapturedPokemonRepository
 ) {
-    fun capturePokemonToTrainer(captureInfo: CapturePokemonResponse) {
+    fun capturePokemonToTrainer(captureInfo: CapturePokemonRequest) {
         val trainerId = captureInfo.trainerId
         val pokemonId = captureInfo.pokemonId
         val trainer = trainerRepository
