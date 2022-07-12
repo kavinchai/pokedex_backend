@@ -20,7 +20,9 @@ import javax.servlet.http.HttpServletResponse
 
 @Service
 class TrainerService(private val trainerRepository: TrainerRepository) {
-
+    private fun comparePassword(inputPassword: String, storedPassword: String): Boolean{
+        return BCryptPasswordEncoder().matches(inputPassword, storedPassword)
+    }
     fun registerTrainer(createTrainerRequest: RegisterTrainerRequest): Trainer {
         val trainerEmail = createTrainerRequest.email
         val trainerUsername = createTrainerRequest.username
@@ -116,10 +118,6 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
         cookie.maxAge = 0   // Set expiration to 0
         response.addCookie(cookie)  // Adds expired JWT cookie to HTTP servlet cookie
         return "Successfully logged out"
-    }
-
-    fun comparePassword(inputPassword: String, storedPassword: String): Boolean{
-        return BCryptPasswordEncoder().matches(inputPassword, storedPassword)
     }
 
     fun updateTrainerById(updateTrainerRequest: UpdateTrainerRequest): Trainer {
