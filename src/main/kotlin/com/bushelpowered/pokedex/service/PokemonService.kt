@@ -23,7 +23,7 @@ class PokemonService(
             .orElseThrow {
                 ResponseStatusException(
                     HttpStatus.NOT_FOUND,
-                    "Error: Pokemon does not exist"
+                    "Pokemon does not exist"
                 )
             }
     }
@@ -32,11 +32,10 @@ class PokemonService(
         if (!pokemonRepository.existsByName(name)) {   // Check valid pokemon
             throw ResponseStatusException(
                 HttpStatus.NOT_FOUND,
-                "Error: Pokemon does not exist"
+                "Pokemon does not exist"
             )
         }
         val pokemonId = pokemonRepository.findByName(name).id
-        println(pokemonRepository.findById(pokemonId).orElse(null))
         return pokemonRepository.findById(pokemonId).orElse(null)
     }
 
@@ -44,7 +43,7 @@ class PokemonService(
         if (!typeRepository.existsByType(type)) {    // Check type 1 is valid type
             throw ResponseStatusException(
                 HttpStatus.NOT_FOUND,
-                "Error: Invalid Type"
+                "Invalid Type"
             )
         }
 
@@ -65,13 +64,13 @@ class PokemonService(
             if (!typeRepository.existsByType(type2)) {    // Check if second type is valid
                 throw ResponseStatusException(
                     HttpStatus.NOT_FOUND,
-                    "Error: Invalid Type2"
+                    "Invalid Type2"
                 )
             }
             if (type.lowercase() == type2.lowercase()) {   // Check if type1 == type2
                 throw ResponseStatusException(
                     HttpStatus.NOT_ACCEPTABLE,
-                    "Error: Duplicate Types"
+                    "Duplicate Types"
                 )
             }
             listOfPokemon.removeAll {

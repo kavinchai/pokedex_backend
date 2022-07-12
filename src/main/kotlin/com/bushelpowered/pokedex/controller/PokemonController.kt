@@ -1,16 +1,13 @@
 package com.bushelpowered.pokedex.controller
 
-import com.bushelpowered.pokedex.dto.response.PokemonResponse
 import com.bushelpowered.pokedex.service.PokemonService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import com.bushelpowered.pokedex.utils.toPokemonResponse
-//import com.bushelpowered.pokedex.utils.paginate
 import com.bushelpowered.pokedex.utils.toPaginatedResponse
-import org.apache.coyote.Response
-import org.springframework.data.domain.PageImpl
+import org.springframework.web.server.ResponseStatusException
 
 @RestController
 class PokemonController(private val pokemonService: PokemonService) {
@@ -21,21 +18,25 @@ class PokemonController(private val pokemonService: PokemonService) {
         @RequestParam name: String?,
         @RequestParam id: Int?,
     ): ResponseEntity<Any> {
-
-        return if (name != null && id == null) {    // name param provided
-            val pokemon = pokemonService.getPokemonByName(name) ?: return ResponseEntity.notFound().build()
-            ResponseEntity.ok(
-                pokemon.toPokemonResponse()
-            )
-        } else if (name == null && id != null) {   // id param provided
-            val pokemon =  pokemonService.getPokemonById(id) ?: return ResponseEntity.notFound().build()
-            ResponseEntity.ok(
-                pokemon.toPokemonResponse()
-            )
-        } else {
-            val pokemonList = pokemonService.getAllPokemon().map{it.toPokemonResponse()}
-            ResponseEntity.ok(pokemonList.toPaginatedResponse(pageNum, pageSize))
+        return try{
+             if (name != null && id == null) {    // name param provided
+                val pokemon = pokemonService.getPokemonByName(name) ?: return ResponseEntity.notFound().build()
+                ResponseEntity.ok(
+                    pokemon.toPokemonResponse()
+                )
+            } else if (name == null && id != null) {   // id param provided
+                val pokemon =  pokemonService.getPokemonById(id) ?: return ResponseEntity.notFound().build()
+                ResponseEntity.ok(
+                    pokemon.toPokemonResponse()
+                )
+            } else {
+                val pokemonList = pokemonService.getAllPokemon().map{it.toPokemonResponse()}
+                ResponseEntity.ok(pokemonList.toPaginatedResponse(pageNum, pageSize))
+            }
+        } catch (e:ResponseStatusException){
+            ResponseEntity.badRequest().body("Error: ${e.reason}")
         }
+
     }
 
     @GetMapping("/type")
@@ -44,17 +45,22 @@ class PokemonController(private val pokemonService: PokemonService) {
         @RequestParam(defaultValue = "15") pageSize: Int,
         @RequestParam type: String?,
         @RequestParam type2: String?
-    ): ResponseEntity<PageImpl<PokemonResponse>> {
-        return if (type != null) {
-            val listOfPokemonResponse = pokemonService.getPokemonByType(type,type2).map {
-                it.toPokemonResponse()
+    ): ResponseEntity<Any> {
+        return try{
+            if (type != null) {
+                val listOfPokemonResponse = pokemonService.getPokemonByType(type,type2).map {
+                    it.toPokemonResponse()
+                }
+                ResponseEntity.ok(listOfPokemonResponse.toPaginatedResponse(pageNum, pageSize))
+            } else {
+                val listOfPokemonResponse = pokemonService.getAllPokemon().map {
+                    it.toPokemonResponse()
+                }
+                ResponseEntity.ok(listOfPokemonResponse.toPaginatedResponse(pageNum, pageSize))
             }
-            ResponseEntity.ok(listOfPokemonResponse.toPaginatedResponse(pageNum, pageSize))
-        } else {
-            val listOfPokemonResponse = pokemonService.getAllPokemon().map {
-                it.toPokemonResponse()
-            }
-            ResponseEntity.ok(listOfPokemonResponse.toPaginatedResponse(pageNum, pageSize))
+        } catch (e: ResponseStatusException){
+            ResponseEntity.badRequest().body("Error: ${e.reason}")
         }
+
     }
 }

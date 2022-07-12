@@ -6,6 +6,7 @@ import com.bushelpowered.pokedex.dto.request.DeleteTrainerRequest
 import com.bushelpowered.pokedex.model.Trainer
 import com.bushelpowered.pokedex.repository.TrainerRepository
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
@@ -17,7 +18,7 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
         if (!trainerRepository.existsByEmail(email)){
             ResponseStatusException(
                 HttpStatus.NOT_FOUND,
-                "Error: Trainer with that email does not exist"
+                "Trainer with that email does not exist"
             )
         }
         return trainerRepository.findByEmail(email)
@@ -27,7 +28,7 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
         if (!trainerRepository.existsById(id)){
             ResponseStatusException(
                 HttpStatus.NOT_FOUND,
-                "Error: Trainer with that id does not exist"
+                "Trainer with that id does not exist"
             )
         }
         return trainerRepository.findById(id).orElse(null)
@@ -39,13 +40,13 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
         if (trainerRepository.existsByEmail(trainerEmail)){
             throw ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
-                "Error: Email already exists"
+                "Email already exists"
             )
         }
         if (trainerRepository.existsByUsername(trainerUsername)){
             throw ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
-                "Error: Username already exists"
+                "Username already exists"
             )
         }
 
@@ -83,22 +84,28 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
         if (trainerRepository.existsByEmail(trainerEmail)){
             throw ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
-                "Error: Email already exists"
+                "Email already exists"
             )
         }
         if (trainerRepository.existsByUsername(trainerUsername)){
             throw ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
-                "Error: Username already exists"
+                "Username already exists"
             )
         }
         val trainer = trainerRepository.findById(updateTrainerRequest.id)
             .orElseThrow {
                 ResponseStatusException(
                     HttpStatus.NOT_FOUND,
-                    "Error: Trainer does not exist"
+                    "Trainer does not exist"
                 )
             }
+        if (!comparePassword(updateTrainerRequest.password, trainer.password)){
+            throw ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "Incorrect password"
+            )
+        }
         trainerRepository.save(
             Trainer(
                 id = updateTrainerRequest.id,
@@ -106,7 +113,7 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
                 firstname = updateTrainerRequest.firstname,
                 lastname = updateTrainerRequest.lastname,
                 email = updateTrainerRequest.email,
-                password = updateTrainerRequest.password,
+                password = trainer.password,
                 capturedPokemon = trainer.capturedPokemon
             )
         )
@@ -126,7 +133,7 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
         val trainer = trainerRepository.findById(trainerId).orElseThrow {
             ResponseStatusException(
                 HttpStatus.NOT_FOUND,
-                "Error: Trainer does not exist"
+                "Trainer does not exist"
             )
         }
         trainerRepository.deleteById(trainerId)

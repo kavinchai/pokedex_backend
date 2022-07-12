@@ -14,6 +14,7 @@ import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.http.HttpStatus
+import org.springframework.web.server.ResponseStatusException
 import java.util.*
 import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletResponse
@@ -37,6 +38,7 @@ class TrainerController(private val trainerService: TrainerService) {
         @RequestBody loginInfo: LoginRequest,
         response: HttpServletResponse
     ): ResponseEntity<String> {
+
         val trainer = trainerService.getTrainerByEmail(loginInfo.email)
 
         //Check if login password matches trainer password
@@ -71,8 +73,8 @@ class TrainerController(private val trainerService: TrainerService) {
             val body = Jwts.parser().setSigningKey("secret").parseClaimsJws(jwt).body
             val trainer = trainerService.getTrainerById(body.issuer.toInt())
             return ResponseEntity.ok(trainer.toLoginResponse())
-        }catch(e: Exception){
-            return ResponseEntity.status(401).body("Error: Invalid JWT")
+        } catch(e: ResponseStatusException){
+            return ResponseEntity.status(401).body("Error: ${e.reason}")
         }
     }
 
@@ -88,20 +90,30 @@ class TrainerController(private val trainerService: TrainerService) {
     @PutMapping("/trainer")
     fun updateTrainerById(
         @RequestBody trainerRequest: UpdateTrainerRequest
-    ): ResponseEntity<CrudTrainerResponse> {
-        val trainerModel = trainerService.updateTrainerById(trainerRequest)
-        return ResponseEntity.ok(
-            trainerModel.toResponse()
-        )
+    ): ResponseEntity<Any> {
+        return try{
+            val trainerModel = trainerService.updateTrainerById(trainerRequest)
+            ResponseEntity.ok(
+                trainerModel.toResponse()
+            )
+        } catch (e: ResponseStatusException){
+            ResponseEntity.badRequest().body("Error: ${e.reason}")
+        }
+
     }
 
     @DeleteMapping("/trainer")
     fun deleteTrainerById(
         @RequestBody deleteTrainerRequest: DeleteTrainerRequest
-    ): ResponseEntity<CrudTrainerResponse> {
-        val trainerModel = trainerService.deleteTrainer(deleteTrainerRequest)
-        return ResponseEntity.ok(
-            trainerModel.toResponse()
-        )
+    ): ResponseEntity<Any> {
+        return try{
+            val trainerModel = trainerService.deleteTrainer(deleteTrainerRequest)
+            ResponseEntity.ok(
+                "Trainer ${trainerModel.id}: ${trainerModel.firstname} has been deleted"
+            )
+        } catch (e: ResponseStatusException){
+            ResponseEntity.badRequest().body("Error: ${e.reason}")
+        }
+
     }
 }
