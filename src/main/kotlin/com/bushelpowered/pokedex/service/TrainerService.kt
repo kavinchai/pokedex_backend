@@ -61,7 +61,7 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
         )
     }
 
-    fun loginTrainer(loginInfo: LoginRequest, response: HttpServletResponse): ResponseEntity<String> {
+    fun loginTrainer(loginInfo: LoginRequest, response: HttpServletResponse): String {
         if (!trainerRepository.existsByEmail(loginInfo.email)){
             ResponseStatusException(
                 HttpStatus.NOT_FOUND,
@@ -89,7 +89,7 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
 
         // Access HTTPServlet and set JWT as cookie
         response.addCookie(cookie)
-        return ResponseEntity.ok("Successfully logged in")
+        return "Successfully logged in"
     }
 
     fun getTrainerAfterLogin(jwt: String?): Trainer{

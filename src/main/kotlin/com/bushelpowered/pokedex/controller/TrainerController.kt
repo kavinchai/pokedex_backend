@@ -42,7 +42,7 @@ class TrainerController(private val trainerService: TrainerService) {
         response: HttpServletResponse
     ): ResponseEntity<String> {
         return try{
-            trainerService.loginTrainer(loginInfo, response)
+            ResponseEntity.ok(trainerService.loginTrainer(loginInfo, response))
         } catch (e: ResponseStatusException){
             ResponseEntity.badRequest().body("Error: ${e.reason}")
         }
