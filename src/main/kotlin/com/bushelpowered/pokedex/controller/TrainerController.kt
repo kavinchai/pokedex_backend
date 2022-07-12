@@ -38,6 +38,16 @@ class TrainerController(private val trainerService: TrainerService) {
             return ResponseEntity.badRequest().body("Error: Incorrect password")
         }
 
+        val issuer = trainer.id.toString()
+        val jwt = Jwts.builder()
+            .setIssuer(issuer)
+            .setExpiration(Date(System.currentTimeMillis() + 60 * 60 * 24 * 1000)) // 1 day
+            .signWith(SignatureAlgorithm.HS256, "secret").compact()
+
+        val cookie = Cookie("jwt", jwt)
+        cookie.isHttpOnly = true
+
+        response.addCookie(cookie)
 
         return ResponseEntity.ok(
             LoginTrainerResponse(
