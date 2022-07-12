@@ -21,6 +21,8 @@ class CaptureController(private val captureService: CaptureService) {
             ResponseEntity.ok(trainerCapturedInfo.toResponse())
         } catch (e: ResponseStatusException) {
             ResponseEntity.badRequest().body("Error: ${e.reason}")
+        } catch (ex: Exception) {
+            ResponseEntity.badRequest().body("Exception error: ${ex.message}")
         }
     }
 }

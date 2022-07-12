@@ -33,6 +33,8 @@ class TrainerController(private val trainerService: TrainerService) {
             )
         } catch (e: ResponseStatusException) {
             ResponseEntity.badRequest().body("Error: ${e.reason}")
+        } catch (ex: Exception) {
+            ResponseEntity.badRequest().body("Exception error: ${ex.message}")
         }
     }
 
@@ -45,6 +47,8 @@ class TrainerController(private val trainerService: TrainerService) {
             ResponseEntity.ok(trainerService.loginTrainer(loginInfo, response))
         } catch (e: ResponseStatusException) {
             ResponseEntity.badRequest().body("Error: ${e.reason}")
+        } catch (ex: Exception) {
+            ResponseEntity.badRequest().body("Exception error: Trainer does not exist")
         }
     }
 
@@ -55,6 +59,8 @@ class TrainerController(private val trainerService: TrainerService) {
             ResponseEntity.ok(trainer.toLoginResponse())
         } catch (e: ResponseStatusException) {
             ResponseEntity.badRequest().body("Error: ${e.reason}")
+        } catch (ex: Exception) {
+            ResponseEntity.badRequest().body("Exception error: ${ex.message}")
         }
     }
 
@@ -67,6 +73,8 @@ class TrainerController(private val trainerService: TrainerService) {
             ResponseEntity.ok(trainerService.logoutTrainer(jwt, response))
         } catch (e: ResponseStatusException){
             ResponseEntity.badRequest().body("Error: ${e.reason}")
+        } catch (ex: Exception) {
+            ResponseEntity.badRequest().body("Exception error: ${ex.message}")
         }
     }
 
@@ -81,6 +89,8 @@ class TrainerController(private val trainerService: TrainerService) {
             )
         } catch (e: ResponseStatusException) {
             ResponseEntity.badRequest().body("Error: ${e.reason}")
+        } catch (ex: Exception) {
+            ResponseEntity.badRequest().body("Exception error: ${ex.message}")
         }
 
     }
@@ -96,6 +106,8 @@ class TrainerController(private val trainerService: TrainerService) {
             )
         } catch (e: ResponseStatusException) {
             ResponseEntity.badRequest().body("Error: ${e.reason}")
+        } catch (ex: Exception) {
+            ResponseEntity.badRequest().body("Exception error: ${ex.message}")
         }
 
     }

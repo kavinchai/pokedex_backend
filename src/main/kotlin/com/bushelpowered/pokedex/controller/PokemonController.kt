@@ -31,6 +31,8 @@ class PokemonController(private val pokemonService: PokemonService) {
             }
         } catch (e: ResponseStatusException) {
             ResponseEntity.badRequest().body("Error: ${e.reason}")
+        } catch (ex: Exception) {
+            ResponseEntity.badRequest().body("Exception error: ${ex.message}")
         }
 
     }
@@ -54,6 +56,8 @@ class PokemonController(private val pokemonService: PokemonService) {
             }
         } catch (e: ResponseStatusException) {
             ResponseEntity.badRequest().body("Error: ${e.reason}")
+        } catch (ex: Exception) {
+            ResponseEntity.badRequest().body("Exception error: ${ex.message}")
         }
 
     }

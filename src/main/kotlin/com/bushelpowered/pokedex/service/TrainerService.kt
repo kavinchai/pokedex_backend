@@ -117,7 +117,7 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
     }
 
     fun logoutTrainer(jwt: String?, response: HttpServletResponse): String {
-        if (jwt == null){
+        if (jwt == null) {
             throw ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
                 "Not currently logged in"
