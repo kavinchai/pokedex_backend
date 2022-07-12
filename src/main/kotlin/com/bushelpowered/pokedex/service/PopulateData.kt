@@ -5,6 +5,7 @@ import org.json.JSONObject
 import kotlin.collections.HashMap
 import com.bushelpowered.pokedex.entity.*
 import com.bushelpowered.pokedex.repository.*
+import com.bushelpowered.pokedex.utils.PokemonCsvParser
 import org.springframework.stereotype.Component
 import org.springframework.context.event.EventListener
 import org.springframework.boot.context.event.ApplicationReadyEvent

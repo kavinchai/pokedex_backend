@@ -1,4 +1,4 @@
-package com.bushelpowered.pokedex.service
+package com.bushelpowered.pokedex.utils
 
 import java.io.File
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader

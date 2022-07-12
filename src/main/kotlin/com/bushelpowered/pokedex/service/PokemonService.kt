@@ -36,6 +36,7 @@ class PokemonService(
             )
         }
         val pokemonId = pokemonRepository.findByName(name).id
+        println(pokemonRepository.findById(pokemonId).orElse(null))
         return pokemonRepository.findById(pokemonId).orElse(null)
     }
 
