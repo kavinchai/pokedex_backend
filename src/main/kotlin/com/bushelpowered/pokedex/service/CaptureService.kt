@@ -23,13 +23,13 @@ class CaptureService(
             .orElseThrow {
                 ResponseStatusException(
                     HttpStatus.NOT_FOUND,
-                    "Error: Trainer does not exist"
+                    "Trainer does not exist"
                 )
             }
         if (!pokemonRepository.existsById(pokemonId)) {
             throw ResponseStatusException(
                 HttpStatus.NOT_FOUND,
-                "Error: Pokemon does not exist"
+                "Pokemon does not exist"
             )
         }
 
