@@ -59,8 +59,15 @@ class TrainerController(private val trainerService: TrainerService) {
     }
 
     @PostMapping("/logout")
-    fun logoutTrainerRequest(response: HttpServletResponse): ResponseEntity<String> {
-        return ResponseEntity.ok(trainerService.logoutTrainer(response))
+    fun logoutTrainerRequest(
+        @CookieValue("jwt") jwt: String?,
+        response: HttpServletResponse
+    ): ResponseEntity<String> {
+        return try{
+            ResponseEntity.ok(trainerService.logoutTrainer(jwt, response))
+        } catch (e: ResponseStatusException){
+            ResponseEntity.badRequest().body("Error: ${e.reason}")
+        }
     }
 
     @PutMapping("/trainer")

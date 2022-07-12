@@ -21,14 +21,10 @@ class PokemonController(private val pokemonService: PokemonService) {
         return try {
             if (name != null && id == null) {    // name param provided
                 val pokemon = pokemonService.getPokemonByName(name) ?: return ResponseEntity.notFound().build()
-                ResponseEntity.ok(
-                    pokemon.toPokemonResponse()
-                )
+                ResponseEntity.ok(pokemon.toPokemonResponse())
             } else if (name == null && id != null) {   // id param provided
                 val pokemon = pokemonService.getPokemonById(id) ?: return ResponseEntity.notFound().build()
-                ResponseEntity.ok(
-                    pokemon.toPokemonResponse()
-                )
+                ResponseEntity.ok(pokemon.toPokemonResponse())
             } else {
                 val pokemonList = pokemonService.getAllPokemon().map { it.toPokemonResponse() }
                 ResponseEntity.ok(pokemonList.toPaginatedResponse(pageNum, pageSize))
@@ -48,14 +44,12 @@ class PokemonController(private val pokemonService: PokemonService) {
     ): ResponseEntity<Any> {
         return try {
             if (type != null) {
-                val listOfPokemonResponse = pokemonService.getPokemonByType(type, type2).map {
-                    it.toPokemonResponse()
-                }
+                val listOfPokemonResponse = pokemonService
+                    .getPokemonByType(type, type2).map { it.toPokemonResponse() }
                 ResponseEntity.ok(listOfPokemonResponse.toPaginatedResponse(pageNum, pageSize))
             } else {
-                val listOfPokemonResponse = pokemonService.getAllPokemon().map {
-                    it.toPokemonResponse()
-                }
+                val listOfPokemonResponse = pokemonService
+                    .getAllPokemon().map { it.toPokemonResponse() }
                 ResponseEntity.ok(listOfPokemonResponse.toPaginatedResponse(pageNum, pageSize))
             }
         } catch (e: ResponseStatusException) {

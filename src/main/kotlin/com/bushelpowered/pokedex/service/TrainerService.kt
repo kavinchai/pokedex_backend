@@ -116,7 +116,13 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
         return trainerRepository.findById(trainerId).orElse(null)
     }
 
-    fun logoutTrainer(response: HttpServletResponse): String {
+    fun logoutTrainer(jwt: String?, response: HttpServletResponse): String {
+        if (jwt == null){
+            throw ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "Not currently logged in"
+            )
+        }
         val cookie = Cookie("jwt", "")
         cookie.maxAge = 0   // Set expiration to 0
         response.addCookie(cookie)  // Adds expired JWT cookie to HTTP servlet cookie
