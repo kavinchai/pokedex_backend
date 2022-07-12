@@ -37,11 +37,14 @@ class TrainerController(private val trainerService: TrainerService) {
         @RequestBody loginInfo: LoginRequest,
         response: HttpServletResponse
     ): ResponseEntity<String> {
-        val trainer = trainerService.getTrainer(loginInfo.email)
+        val trainer = trainerService.getTrainerByEmail(loginInfo.email)
+
+        //Check if login password matches trainer password
         if (!trainerService.comparePassword(loginInfo.password, trainer.password)){
             return ResponseEntity.badRequest().body("Error: Incorrect password")
         }
 
+        // Create JWT
         val issuer = trainer.id.toString()
         val jwt = Jwts.builder()
             .setIssuer(issuer)
@@ -49,34 +52,37 @@ class TrainerController(private val trainerService: TrainerService) {
             .signWith(SignatureAlgorithm.HS256, "secret").compact()
 
         val cookie = Cookie("jwt", jwt)
-        cookie.isHttpOnly = true
+        cookie.isHttpOnly = true    // Front-end cannot see this cookie
 
+        // Access HTTPServlet and set JWT as cookie
         response.addCookie(cookie)
 
         return ResponseEntity.ok("Successfully logged in")
     }
 
-    @PostMapping("/logout")
-    fun logout(response: HttpServletResponse): ResponseEntity<String> {
-        val cookie = Cookie("jwt", "")
-        cookie.maxAge = 0
-        response.addCookie(cookie)
-
-        return ResponseEntity.ok("Logged Out")
-    }
-
     @GetMapping("/trainer")
     fun trainer(@CookieValue("jwt") jwt: String?): ResponseEntity<Any>{
         try{
-            if (jwt == null){
-                return ResponseEntity.status(401).body("Error: Unauthenticated")
+            if (jwt == null){   // If cookie does not contain JWT
+                return ResponseEntity.status(401).body("Error: Not logged in")
             }
+
+            // Get issuer id from claims
             val body = Jwts.parser().setSigningKey("secret").parseClaimsJws(jwt).body
             val trainer = trainerService.getTrainerById(body.issuer.toInt())
             return ResponseEntity.ok(trainer.toLoginResponse())
         }catch(e: Exception){
-            return ResponseEntity.status(401).body("Error: Unauthenticated")
+            return ResponseEntity.status(401).body("Error: Invalid JWT")
         }
+    }
+
+    @PostMapping("/logout")
+    fun logout(response: HttpServletResponse): ResponseEntity<String> {
+        val cookie = Cookie("jwt", "")
+        cookie.maxAge = 0   // Set expiration to 0
+        response.addCookie(cookie)  // Adds expired JWT cookie to HTTP servlet cookie
+
+        return ResponseEntity.ok("Logged Out")
     }
 
     @PutMapping("/trainer")

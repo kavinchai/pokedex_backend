@@ -13,7 +13,7 @@ import org.springframework.web.server.ResponseStatusException
 
 @Service
 class TrainerService(private val trainerRepository: TrainerRepository) {
-    fun getTrainer(email: String): Trainer {
+    fun getTrainerByEmail(email: String): Trainer {
         if (!trainerRepository.existsByEmail(email)){
             ResponseStatusException(
                 HttpStatus.NOT_FOUND,
