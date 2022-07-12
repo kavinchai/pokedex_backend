@@ -1,33 +1,60 @@
 package com.bushelpowered.pokedex.controller
 
-import com.bushelpowered.pokedex.dto.request.CreateTrainerRequest
+import com.bushelpowered.pokedex.dto.request.RegisterTrainerRequest
 import com.bushelpowered.pokedex.dto.request.UpdateTrainerRequest
 import com.bushelpowered.pokedex.dto.request.DeleteTrainerRequest
-import com.bushelpowered.pokedex.dto.response.TrainerResponse
+import com.bushelpowered.pokedex.dto.request.LoginRequest
+import com.bushelpowered.pokedex.dto.response.CrudTrainerResponse
+import com.bushelpowered.pokedex.dto.response.LoginTrainerResponse
 import com.bushelpowered.pokedex.service.TrainerService
 import com.bushelpowered.pokedex.utils.toResponse
+import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.http.HttpStatus
+import java.util.*
+import javax.servlet.http.Cookie
+import javax.servlet.http.HttpServletResponse
 
 @RestController
 class TrainerController(private val trainerService: TrainerService) {
 
     @PostMapping("/trainer")
-    fun createTrainer(
-        @RequestBody trainerRequest: CreateTrainerRequest
-    ): ResponseEntity<TrainerResponse> {
-        val trainerModel = trainerService.createTrainer(trainerRequest)
+    fun registerTrainer(
+        @RequestBody trainerRequest: RegisterTrainerRequest
+    ): ResponseEntity<CrudTrainerResponse> {
+        val trainerModel = trainerService.registerTrainer(trainerRequest)
         return ResponseEntity(
             trainerModel.toResponse(),
              HttpStatus.CREATED
         )
     }
 
+    @PostMapping("/login")
+    fun login(@RequestBody loginInfo: LoginRequest, response: HttpServletResponse): ResponseEntity<Any> {
+        val trainer = trainerService.getTrainer(loginInfo.email)
+        if (!trainerService.comparePassword(loginInfo.password, trainer.password)){
+            return ResponseEntity.badRequest().body("Error: Incorrect password")
+        }
+
+
+        return ResponseEntity.ok(
+            LoginTrainerResponse(
+                id = trainer.id,
+                username = trainer.username,
+                firstname = trainer.firstname,
+                lastname = trainer.lastname,
+                email = trainer.email,
+                capturedPokemon = trainer.capturedPokemon
+            )
+        )
+    }
+
     @PutMapping("/trainer")
     fun updateTrainerById(
         @RequestBody trainerRequest: UpdateTrainerRequest
-    ): ResponseEntity<TrainerResponse> {
+    ): ResponseEntity<CrudTrainerResponse> {
         val trainerModel = trainerService.updateTrainerById(trainerRequest)
         return ResponseEntity.ok(
             trainerModel.toResponse()
@@ -37,7 +64,7 @@ class TrainerController(private val trainerService: TrainerService) {
     @DeleteMapping("/trainer")
     fun deleteTrainerById(
         @RequestBody deleteTrainerRequest: DeleteTrainerRequest
-    ): ResponseEntity<TrainerResponse> {
+    ): ResponseEntity<CrudTrainerResponse> {
         val trainerModel = trainerService.deleteTrainer(deleteTrainerRequest)
         return ResponseEntity.ok(
             trainerModel.toResponse()

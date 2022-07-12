@@ -2,7 +2,7 @@ package com.bushelpowered.pokedex.utils
 
 import com.bushelpowered.pokedex.dto.response.CapturePokemonResponse
 import com.bushelpowered.pokedex.dto.response.CaughtPokemonResponse
-import com.bushelpowered.pokedex.entity.CapturedPokemon
+import com.bushelpowered.pokedex.model.CapturedPokemon
 
 fun CapturedPokemon.toResponse(): CapturePokemonResponse {
     return CapturePokemonResponse(

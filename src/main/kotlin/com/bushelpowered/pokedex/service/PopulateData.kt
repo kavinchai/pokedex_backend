@@ -3,7 +3,7 @@ package com.bushelpowered.pokedex.service
 import java.util.*
 import org.json.JSONObject
 import kotlin.collections.HashMap
-import com.bushelpowered.pokedex.entity.*
+import com.bushelpowered.pokedex.model.*
 import com.bushelpowered.pokedex.repository.*
 import com.bushelpowered.pokedex.utils.PokemonCsvParser
 import org.springframework.stereotype.Component

@@ -2,7 +2,7 @@ package com.bushelpowered.pokedex.utils
 
 import com.bushelpowered.pokedex.dto.response.PokemonResponse
 import com.bushelpowered.pokedex.dto.response.PokemonStatResponse
-import com.bushelpowered.pokedex.entity.Pokemon
+import com.bushelpowered.pokedex.model.Pokemon
 
 fun Pokemon.toPokemonResponse(): PokemonResponse {
     val typeResponseList = this.type.map{it.type}

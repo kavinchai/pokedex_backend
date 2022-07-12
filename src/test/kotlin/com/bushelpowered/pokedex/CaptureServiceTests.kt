@@ -1,7 +1,7 @@
 package com.bushelpowered.pokedex
 
 import com.bushelpowered.pokedex.dto.request.CapturePokemonRequest
-import com.bushelpowered.pokedex.entity.CapturedPokemon
+import com.bushelpowered.pokedex.model.CapturedPokemon
 import com.bushelpowered.pokedex.service.CaptureService
 import io.mockk.every
 import io.mockk.mockk

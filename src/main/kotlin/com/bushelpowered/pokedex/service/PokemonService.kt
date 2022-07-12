@@ -1,6 +1,6 @@
 package com.bushelpowered.pokedex.service
 
-import com.bushelpowered.pokedex.entity.Pokemon
+import com.bushelpowered.pokedex.model.Pokemon
 import com.bushelpowered.pokedex.repository.TypeRepository
 import com.bushelpowered.pokedex.repository.PokemonRepository
 import com.bushelpowered.pokedex.repository.PokemonTypeRepository

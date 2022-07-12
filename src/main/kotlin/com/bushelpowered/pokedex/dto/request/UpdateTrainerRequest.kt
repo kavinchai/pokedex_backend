@@ -10,7 +10,8 @@ data class UpdateTrainerRequest(
     val username: String,
     val firstname: String,
     val lastname: String,
-    val email: String
+    val email: String,
+    val password: String,
 ){
     init{
         validate(this){
@@ -19,6 +20,7 @@ data class UpdateTrainerRequest(
             validate(UpdateTrainerRequest::firstname).isNotBlank()
             validate(UpdateTrainerRequest::lastname).isNotBlank()
             validate(UpdateTrainerRequest::email).isNotBlank().isEmail()
+            validate(UpdateTrainerRequest::password).isNotBlank()
         }
     }
 }

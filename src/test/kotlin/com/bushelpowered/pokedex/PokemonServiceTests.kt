@@ -1,6 +1,6 @@
 package com.bushelpowered.pokedex
 
-import com.bushelpowered.pokedex.entity.*
+import com.bushelpowered.pokedex.model.*
 import com.bushelpowered.pokedex.service.PokemonService
 import io.mockk.every
 import io.mockk.mockk

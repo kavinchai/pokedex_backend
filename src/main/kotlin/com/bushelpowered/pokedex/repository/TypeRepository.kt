@@ -1,6 +1,6 @@
 package com.bushelpowered.pokedex.repository
 
-import com.bushelpowered.pokedex.entity.Type
+import com.bushelpowered.pokedex.model.Type
 import org.springframework.data.repository.CrudRepository
 
 interface TypeRepository : CrudRepository<Type, Int>{
