@@ -4,18 +4,13 @@ import com.bushelpowered.pokedex.dto.request.RegisterTrainerRequest
 import com.bushelpowered.pokedex.dto.request.UpdateTrainerRequest
 import com.bushelpowered.pokedex.dto.request.DeleteTrainerRequest
 import com.bushelpowered.pokedex.dto.request.LoginRequest
-import com.bushelpowered.pokedex.dto.response.CrudTrainerResponse
 import com.bushelpowered.pokedex.service.TrainerService
 import com.bushelpowered.pokedex.utils.toLoginResponse
 import com.bushelpowered.pokedex.utils.toResponse
-import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
-import java.util.*
-import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletResponse
 
 @RestController
@@ -69,9 +64,9 @@ class TrainerController(private val trainerService: TrainerService) {
         @CookieValue("jwt") jwt: String?,
         response: HttpServletResponse
     ): ResponseEntity<String> {
-        return try{
+        return try {
             ResponseEntity.ok(trainerService.logoutTrainer(jwt, response))
-        } catch (e: ResponseStatusException){
+        } catch (e: ResponseStatusException) {
             ResponseEntity.badRequest().body("Logout Error: ${e.reason}")
         } catch (ex: Exception) {
             ResponseEntity.badRequest().body("Logout Exception error: ${ex.message}")
@@ -102,7 +97,9 @@ class TrainerController(private val trainerService: TrainerService) {
         return try {
             val trainerModel = trainerService.deleteTrainer(deleteTrainerRequest)
             ResponseEntity.ok(
-                "Trainer ${trainerModel.id}: ${trainerModel.firstname} has been deleted"
+                "Trainer ${trainerModel.id}: " +
+                        "${trainerModel.firstname.replaceFirstChar { char -> char.uppercase() }} " +
+                        "has been deleted"
             )
         } catch (e: ResponseStatusException) {
             ResponseEntity.badRequest().body("Delete Error: ${e.reason}")

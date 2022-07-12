@@ -1,7 +1,6 @@
 package com.bushelpowered.pokedex.controller
 
 import com.bushelpowered.pokedex.dto.request.CapturePokemonRequest
-import com.bushelpowered.pokedex.dto.response.CapturePokemonResponse
 import com.bushelpowered.pokedex.service.CaptureService
 import com.bushelpowered.pokedex.utils.toResponse
 import org.springframework.http.ResponseEntity

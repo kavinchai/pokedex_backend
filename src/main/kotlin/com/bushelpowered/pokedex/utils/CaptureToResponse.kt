@@ -8,6 +8,9 @@ fun CapturedPokemon.toResponse(): CapturePokemonResponse {
     return CapturePokemonResponse(
         uniqueId = this.id,
         trainerId = this.trainer,
-        capturedInfo = CaughtPokemonResponse(this.pokemon, this.timesCaught)
+        capturedInfo = CaughtPokemonResponse(
+            this.pokemon,
+            this.timesCaught
+        )
     )
 }
