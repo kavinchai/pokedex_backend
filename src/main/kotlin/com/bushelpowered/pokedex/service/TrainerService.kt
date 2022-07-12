@@ -111,6 +111,13 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
         return trainerRepository.findById(trainerId).orElse(null)
     }
 
+    fun logoutTrainer(response: HttpServletResponse): String {
+        val cookie = Cookie("jwt", "")
+        cookie.maxAge = 0   // Set expiration to 0
+        response.addCookie(cookie)  // Adds expired JWT cookie to HTTP servlet cookie
+        return "Successfully logged out"
+    }
+
     fun comparePassword(inputPassword: String, storedPassword: String): Boolean{
         return BCryptPasswordEncoder().matches(inputPassword, storedPassword)
     }

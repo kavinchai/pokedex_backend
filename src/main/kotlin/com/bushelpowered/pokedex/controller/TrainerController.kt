@@ -56,11 +56,7 @@ class TrainerController(private val trainerService: TrainerService) {
 
     @PostMapping("/logout")
     fun logout(response: HttpServletResponse): ResponseEntity<String> {
-        val cookie = Cookie("jwt", "")
-        cookie.maxAge = 0   // Set expiration to 0
-        response.addCookie(cookie)  // Adds expired JWT cookie to HTTP servlet cookie
-
-        return ResponseEntity.ok("Successfully logged out")
+        return ResponseEntity.ok(trainerService.logoutTrainer(response))
     }
 
     @PutMapping("/trainer")
