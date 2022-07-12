@@ -24,12 +24,17 @@ class TrainerController(private val trainerService: TrainerService) {
     @PostMapping("/trainer")
     fun registerTrainer(
         @RequestBody trainerRequest: RegisterTrainerRequest
-    ): ResponseEntity<CrudTrainerResponse> {
-        val trainerModel = trainerService.registerTrainer(trainerRequest)
-        return ResponseEntity(
-            trainerModel.toResponse(),
-             HttpStatus.CREATED
-        )
+    ): ResponseEntity<Any> {
+        return try {
+            val trainerModel = trainerService.registerTrainer(trainerRequest)
+            ResponseEntity(
+                trainerModel.toResponse(),
+                HttpStatus.CREATED
+            )
+        } catch (e: ResponseStatusException){
+            ResponseEntity.badRequest().body("Error: ${e.reason}")
+        }
+
     }
 
     @PostMapping("/login")
