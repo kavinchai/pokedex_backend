@@ -7,6 +7,7 @@ import com.bushelpowered.pokedex.dto.request.LoginRequest
 import com.bushelpowered.pokedex.dto.response.CrudTrainerResponse
 import com.bushelpowered.pokedex.dto.response.LoginTrainerResponse
 import com.bushelpowered.pokedex.service.TrainerService
+import com.bushelpowered.pokedex.utils.toLoginResponse
 import com.bushelpowered.pokedex.utils.toResponse
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
@@ -32,7 +33,10 @@ class TrainerController(private val trainerService: TrainerService) {
     }
 
     @PostMapping("/login")
-    fun login(@RequestBody loginInfo: LoginRequest, response: HttpServletResponse): ResponseEntity<Any> {
+    fun login(
+        @RequestBody loginInfo: LoginRequest,
+        response: HttpServletResponse
+    ): ResponseEntity<String> {
         val trainer = trainerService.getTrainer(loginInfo.email)
         if (!trainerService.comparePassword(loginInfo.password, trainer.password)){
             return ResponseEntity.badRequest().body("Error: Incorrect password")
@@ -49,16 +53,30 @@ class TrainerController(private val trainerService: TrainerService) {
 
         response.addCookie(cookie)
 
-        return ResponseEntity.ok(
-            LoginTrainerResponse(
-                id = trainer.id,
-                username = trainer.username,
-                firstname = trainer.firstname,
-                lastname = trainer.lastname,
-                email = trainer.email,
-                capturedPokemon = trainer.capturedPokemon
-            )
-        )
+        return ResponseEntity.ok("Successfully logged in")
+    }
+
+    @PostMapping("/logout")
+    fun logout(response: HttpServletResponse): ResponseEntity<String> {
+        val cookie = Cookie("jwt", "")
+        cookie.maxAge = 0
+        response.addCookie(cookie)
+
+        return ResponseEntity.ok("Logged Out")
+    }
+
+    @GetMapping("/trainer")
+    fun trainer(@CookieValue("jwt") jwt: String?): ResponseEntity<Any>{
+        try{
+            if (jwt == null){
+                return ResponseEntity.status(401).body("Error: Unauthenticated")
+            }
+            val body = Jwts.parser().setSigningKey("secret").parseClaimsJws(jwt).body
+            val trainer = trainerService.getTrainerById(body.issuer.toInt())
+            return ResponseEntity.ok(trainer.toLoginResponse())
+        }catch(e: Exception){
+            return ResponseEntity.status(401).body("Error: Unauthenticated")
+        }
     }
 
     @PutMapping("/trainer")

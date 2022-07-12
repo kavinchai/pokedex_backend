@@ -23,6 +23,16 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
         return trainerRepository.findByEmail(email)
     }
 
+    fun getTrainerById(id: Int): Trainer{
+        if (!trainerRepository.existsById(id)){
+            ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "Error: Trainer with that id does not exist"
+            )
+        }
+        return trainerRepository.findById(id).orElse(null)
+    }
+
     fun registerTrainer(createTrainerRequest: RegisterTrainerRequest): Trainer {
         val trainerEmail = createTrainerRequest.email
         val trainerUsername = createTrainerRequest.username
