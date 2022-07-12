@@ -46,17 +46,11 @@ class TrainerController(private val trainerService: TrainerService) {
 
     @GetMapping("/trainer")
     fun trainer(@CookieValue("jwt") jwt: String?): ResponseEntity<Any>{
-        try{
-            if (jwt == null){   // If cookie does not contain JWT
-                return ResponseEntity.status(401).body("Error: Not logged in")
-            }
-
-            // Get issuer id from claims
-            val body = Jwts.parser().setSigningKey("secret").parseClaimsJws(jwt).body
-            val trainer = trainerService.getTrainerById(body.issuer.toInt())
-            return ResponseEntity.ok(trainer.toLoginResponse())
+        return try{
+            val trainer = trainerService.getTrainerAfterLogin(jwt)
+            ResponseEntity.ok(trainer.toLoginResponse())
         } catch(e: ResponseStatusException){
-            return ResponseEntity.status(401).body("Error: ${e.reason}")
+            ResponseEntity.badRequest().body("Error: ${e.reason}")
         }
     }
 
@@ -66,7 +60,7 @@ class TrainerController(private val trainerService: TrainerService) {
         cookie.maxAge = 0   // Set expiration to 0
         response.addCookie(cookie)  // Adds expired JWT cookie to HTTP servlet cookie
 
-        return ResponseEntity.ok("Logged Out")
+        return ResponseEntity.ok("Successfully logged out")
     }
 
     @PutMapping("/trainer")

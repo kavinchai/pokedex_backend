@@ -20,25 +20,6 @@ import javax.servlet.http.HttpServletResponse
 
 @Service
 class TrainerService(private val trainerRepository: TrainerRepository) {
-    fun getTrainerByEmail(email: String): Trainer {
-        if (!trainerRepository.existsByEmail(email)){
-            ResponseStatusException(
-                HttpStatus.NOT_FOUND,
-                "Trainer with that email does not exist"
-            )
-        }
-        return trainerRepository.findByEmail(email)
-    }
-
-    fun getTrainerById(id: Int): Trainer{
-        if (!trainerRepository.existsById(id)){
-            ResponseStatusException(
-                HttpStatus.NOT_FOUND,
-                "Trainer with that id does not exist"
-            )
-        }
-        return trainerRepository.findById(id).orElse(null)
-    }
 
     fun registerTrainer(createTrainerRequest: RegisterTrainerRequest): Trainer {
         val trainerEmail = createTrainerRequest.email
@@ -109,6 +90,25 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
         // Access HTTPServlet and set JWT as cookie
         response.addCookie(cookie)
         return ResponseEntity.ok("Successfully logged in")
+    }
+
+    fun getTrainerAfterLogin(jwt: String?): Trainer{
+        if (jwt == null){   // If cookie does not contain JWT
+            throw ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "Not logged in"
+            )
+        }
+        val body = Jwts.parser().setSigningKey("secret").parseClaimsJws(jwt).body
+        val trainerId = body.issuer.toInt()
+        if (!trainerRepository.existsById(trainerId)){
+            ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "Trainer with that id does not exist"
+            )
+        }
+        // Get issuer id from claims
+        return trainerRepository.findById(trainerId).orElse(null)
     }
 
     fun comparePassword(inputPassword: String, storedPassword: String): Boolean{
