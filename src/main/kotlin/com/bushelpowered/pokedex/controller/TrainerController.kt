@@ -5,7 +5,6 @@ import com.bushelpowered.pokedex.dto.request.UpdateTrainerRequest
 import com.bushelpowered.pokedex.dto.request.DeleteTrainerRequest
 import com.bushelpowered.pokedex.dto.request.LoginRequest
 import com.bushelpowered.pokedex.dto.response.CrudTrainerResponse
-import com.bushelpowered.pokedex.dto.response.LoginTrainerResponse
 import com.bushelpowered.pokedex.service.TrainerService
 import com.bushelpowered.pokedex.utils.toLoginResponse
 import com.bushelpowered.pokedex.utils.toResponse
@@ -38,28 +37,11 @@ class TrainerController(private val trainerService: TrainerService) {
         @RequestBody loginInfo: LoginRequest,
         response: HttpServletResponse
     ): ResponseEntity<String> {
-
-        val trainer = trainerService.getTrainerByEmail(loginInfo.email)
-
-        //Check if login password matches trainer password
-        if (!trainerService.comparePassword(loginInfo.password, trainer.password)){
-            return ResponseEntity.badRequest().body("Error: Incorrect password")
+        return try{
+            trainerService.loginTrainer(loginInfo, response)
+        } catch (e: ResponseStatusException){
+            ResponseEntity.badRequest().body("Error: ${e.reason}")
         }
-
-        // Create JWT
-        val issuer = trainer.id.toString()
-        val jwt = Jwts.builder()
-            .setIssuer(issuer)
-            .setExpiration(Date(System.currentTimeMillis() + 60 * 60 * 24 * 1000)) // 1 day
-            .signWith(SignatureAlgorithm.HS256, "secret").compact()
-
-        val cookie = Cookie("jwt", jwt)
-        cookie.isHttpOnly = true    // Front-end cannot see this cookie
-
-        // Access HTTPServlet and set JWT as cookie
-        response.addCookie(cookie)
-
-        return ResponseEntity.ok("Successfully logged in")
     }
 
     @GetMapping("/trainer")

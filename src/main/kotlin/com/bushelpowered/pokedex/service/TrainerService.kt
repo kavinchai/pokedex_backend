@@ -3,13 +3,19 @@ package com.bushelpowered.pokedex.service
 import com.bushelpowered.pokedex.dto.request.RegisterTrainerRequest
 import com.bushelpowered.pokedex.dto.request.UpdateTrainerRequest
 import com.bushelpowered.pokedex.dto.request.DeleteTrainerRequest
+import com.bushelpowered.pokedex.dto.request.LoginRequest
 import com.bushelpowered.pokedex.model.Trainer
 import com.bushelpowered.pokedex.repository.TrainerRepository
+import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
+import java.util.*
+import javax.servlet.http.Cookie
+import javax.servlet.http.HttpServletResponse
 
 
 @Service
@@ -72,6 +78,37 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
             password = createTrainerRequest.password,
             capturedPokemon = listOf()
         )
+    }
+
+    fun loginTrainer(loginInfo: LoginRequest, response: HttpServletResponse): ResponseEntity<String> {
+        if (!trainerRepository.existsByEmail(loginInfo.email)){
+            ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "Trainer with that email does not exist"
+            )
+        }
+        val trainer = trainerRepository.findByEmail(loginInfo.email)
+
+        if (!comparePassword(loginInfo.password, trainer.password)){
+            throw ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "Incorrect password"
+            )
+        }
+
+        // Create JWT
+        val issuer = trainer.id.toString()
+        val jwt = Jwts.builder()
+            .setIssuer(issuer)
+            .setExpiration(Date(System.currentTimeMillis() + 60 * 60 * 24 * 1000)) // 1 day
+            .signWith(SignatureAlgorithm.HS256, "secret").compact()
+
+        val cookie = Cookie("jwt", jwt)
+        cookie.isHttpOnly = true    // Front-end cannot see this cookie
+
+        // Access HTTPServlet and set JWT as cookie
+        response.addCookie(cookie)
+        return ResponseEntity.ok("Successfully logged in")
     }
 
     fun comparePassword(inputPassword: String, storedPassword: String): Boolean{
