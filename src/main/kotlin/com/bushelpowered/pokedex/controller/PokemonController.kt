@@ -40,7 +40,7 @@ class PokemonController(private val pokemonService: PokemonService) {
     }
 
     @GetMapping("/type")
-    fun searchPokemonType(
+    fun searchPokemonByType(
         @RequestParam(defaultValue = "0") pageNum: Int,
         @RequestParam(defaultValue = "15") pageSize: Int,
         @RequestParam type: String?,

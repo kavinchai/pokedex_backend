@@ -34,11 +34,10 @@ class TrainerController(private val trainerService: TrainerService) {
         } catch (e: ResponseStatusException){
             ResponseEntity.badRequest().body("Error: ${e.reason}")
         }
-
     }
 
     @PostMapping("/login")
-    fun login(
+    fun loginTrainerRequest(
         @RequestBody loginInfo: LoginRequest,
         response: HttpServletResponse
     ): ResponseEntity<String> {
@@ -50,7 +49,7 @@ class TrainerController(private val trainerService: TrainerService) {
     }
 
     @GetMapping("/trainer")
-    fun trainer(@CookieValue("jwt") jwt: String?): ResponseEntity<Any>{
+    fun getTrainerPostLoginRequest(@CookieValue("jwt") jwt: String?): ResponseEntity<Any>{
         return try{
             val trainer = trainerService.getTrainerAfterLogin(jwt)
             ResponseEntity.ok(trainer.toLoginResponse())
@@ -60,7 +59,7 @@ class TrainerController(private val trainerService: TrainerService) {
     }
 
     @PostMapping("/logout")
-    fun logout(response: HttpServletResponse): ResponseEntity<String> {
+    fun logoutTrainerRequest(response: HttpServletResponse): ResponseEntity<String> {
         return ResponseEntity.ok(trainerService.logoutTrainer(response))
     }
 
