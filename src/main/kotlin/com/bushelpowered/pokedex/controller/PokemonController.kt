@@ -30,9 +30,9 @@ class PokemonController(private val pokemonService: PokemonService) {
                 ResponseEntity.ok(pokemonList.toPaginatedResponse(pageNum, pageSize))
             }
         } catch (e: ResponseStatusException) {
-            ResponseEntity.badRequest().body("Error: ${e.reason}")
+            ResponseEntity.badRequest().body("Search Pokemon Error: ${e.reason}")
         } catch (ex: Exception) {
-            ResponseEntity.badRequest().body("Exception error: ${ex.message}")
+            ResponseEntity.badRequest().body("Search Pokemon Exception error: ${ex.message}")
         }
 
     }
@@ -55,9 +55,9 @@ class PokemonController(private val pokemonService: PokemonService) {
                 ResponseEntity.ok(listOfPokemonResponse.toPaginatedResponse(pageNum, pageSize))
             }
         } catch (e: ResponseStatusException) {
-            ResponseEntity.badRequest().body("Error: ${e.reason}")
+            ResponseEntity.badRequest().body("Search by Type Error: ${e.reason}")
         } catch (ex: Exception) {
-            ResponseEntity.badRequest().body("Exception error: ${ex.message}")
+            ResponseEntity.badRequest().body("Search by Type Exception error: ${ex.message}")
         }
 
     }

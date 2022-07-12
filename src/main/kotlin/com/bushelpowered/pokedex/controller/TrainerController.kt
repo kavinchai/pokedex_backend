@@ -32,9 +32,9 @@ class TrainerController(private val trainerService: TrainerService) {
                 HttpStatus.CREATED
             )
         } catch (e: ResponseStatusException) {
-            ResponseEntity.badRequest().body("Error: ${e.reason}")
+            ResponseEntity.badRequest().body("Register Error: ${e.reason}")
         } catch (ex: Exception) {
-            ResponseEntity.badRequest().body("Exception error: ${ex.message}")
+            ResponseEntity.badRequest().body("Register Exception error: ${ex.message}")
         }
     }
 
@@ -46,9 +46,9 @@ class TrainerController(private val trainerService: TrainerService) {
         return try {
             ResponseEntity.ok(trainerService.loginTrainer(loginInfo, response))
         } catch (e: ResponseStatusException) {
-            ResponseEntity.badRequest().body("Error: ${e.reason}")
+            ResponseEntity.badRequest().body("Login Error: ${e.reason}")
         } catch (ex: Exception) {
-            ResponseEntity.badRequest().body("Exception error: Trainer does not exist")
+            ResponseEntity.badRequest().body("Login Exception error: Trainer does not exist")
         }
     }
 
@@ -58,9 +58,9 @@ class TrainerController(private val trainerService: TrainerService) {
             val trainer = trainerService.getTrainerAfterLogin(jwt)
             ResponseEntity.ok(trainer.toLoginResponse())
         } catch (e: ResponseStatusException) {
-            ResponseEntity.badRequest().body("Error: ${e.reason}")
+            ResponseEntity.badRequest().body("Get Trainer Error: ${e.reason}")
         } catch (ex: Exception) {
-            ResponseEntity.badRequest().body("Exception error: ${ex.message}")
+            ResponseEntity.badRequest().body("Get Trainer Exception error: ${ex.message}")
         }
     }
 
@@ -72,9 +72,9 @@ class TrainerController(private val trainerService: TrainerService) {
         return try{
             ResponseEntity.ok(trainerService.logoutTrainer(jwt, response))
         } catch (e: ResponseStatusException){
-            ResponseEntity.badRequest().body("Error: ${e.reason}")
+            ResponseEntity.badRequest().body("Logout Error: ${e.reason}")
         } catch (ex: Exception) {
-            ResponseEntity.badRequest().body("Exception error: ${ex.message}")
+            ResponseEntity.badRequest().body("Logout Exception error: ${ex.message}")
         }
     }
 
@@ -88,9 +88,9 @@ class TrainerController(private val trainerService: TrainerService) {
                 trainerModel.toResponse()
             )
         } catch (e: ResponseStatusException) {
-            ResponseEntity.badRequest().body("Error: ${e.reason}")
+            ResponseEntity.badRequest().body("Update Error: ${e.reason}")
         } catch (ex: Exception) {
-            ResponseEntity.badRequest().body("Exception error: ${ex.message}")
+            ResponseEntity.badRequest().body("Update Exception error: ${ex.message}")
         }
 
     }
@@ -105,9 +105,9 @@ class TrainerController(private val trainerService: TrainerService) {
                 "Trainer ${trainerModel.id}: ${trainerModel.firstname} has been deleted"
             )
         } catch (e: ResponseStatusException) {
-            ResponseEntity.badRequest().body("Error: ${e.reason}")
+            ResponseEntity.badRequest().body("Delete Error: ${e.reason}")
         } catch (ex: Exception) {
-            ResponseEntity.badRequest().body("Exception error: ${ex.message}")
+            ResponseEntity.badRequest().body("Delete Exception error: ${ex.message}")
         }
 
     }
