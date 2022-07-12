@@ -19,7 +19,7 @@ class CaptureController(private val captureService: CaptureService) {
         return try {
             val trainerCapturedInfo = captureService.capturePokemonToTrainer(captureRequest)
             ResponseEntity.ok(trainerCapturedInfo.toResponse())
-        } catch (e: ResponseStatusException){
+        } catch (e: ResponseStatusException) {
             ResponseEntity.badRequest().body("Error: ${e.reason}")
         }
     }

@@ -5,9 +5,9 @@ import org.valiktor.validate
 
 data class DeleteTrainerRequest(
     val id: Int
-){
-    init{
-        validate(this){
+) {
+    init {
+        validate(this) {
             validate(DeleteTrainerRequest::id).isPositive()
         }
     }

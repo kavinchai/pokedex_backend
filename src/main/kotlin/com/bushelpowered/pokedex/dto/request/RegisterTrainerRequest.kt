@@ -10,9 +10,9 @@ data class RegisterTrainerRequest(
     val lastname: String,
     val email: String,
     val password: String,
-){
-    init{
-        validate(this){
+) {
+    init {
+        validate(this) {
             validate(RegisterTrainerRequest::username).isNotBlank()
             validate(RegisterTrainerRequest::firstname).isNotBlank()
             validate(RegisterTrainerRequest::lastname).isNotBlank()

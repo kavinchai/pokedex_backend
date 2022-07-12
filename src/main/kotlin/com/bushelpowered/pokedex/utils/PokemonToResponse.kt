@@ -5,9 +5,9 @@ import com.bushelpowered.pokedex.dto.response.PokemonStatResponse
 import com.bushelpowered.pokedex.model.Pokemon
 
 fun Pokemon.toPokemonResponse(): PokemonResponse {
-    val typeResponseList = this.type.map{it.type}
-    val abilityResponseList = this.ability.map{it.ability}
-    val eggGroupResponseList = this.eggGroup.map{it.eggGroup}
+    val typeResponseList = this.type.map { it.type }
+    val abilityResponseList = this.ability.map { it.ability }
+    val eggGroupResponseList = this.eggGroup.map { it.eggGroup }
 
     val statResponse = PokemonStatResponse(
         id = this.stats.id,

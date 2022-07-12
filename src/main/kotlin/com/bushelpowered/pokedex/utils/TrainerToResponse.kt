@@ -9,6 +9,6 @@ fun Trainer.toResponse(): CrudTrainerResponse {
         username = this.username,
         firstname = this.firstname,
         lastname = this.lastname,
-        email = this. email
+        email = this.email
     )
 }

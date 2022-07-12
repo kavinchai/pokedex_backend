@@ -31,7 +31,7 @@ class TrainerController(private val trainerService: TrainerService) {
                 trainerModel.toResponse(),
                 HttpStatus.CREATED
             )
-        } catch (e: ResponseStatusException){
+        } catch (e: ResponseStatusException) {
             ResponseEntity.badRequest().body("Error: ${e.reason}")
         }
     }
@@ -41,19 +41,19 @@ class TrainerController(private val trainerService: TrainerService) {
         @RequestBody loginInfo: LoginRequest,
         response: HttpServletResponse
     ): ResponseEntity<String> {
-        return try{
+        return try {
             ResponseEntity.ok(trainerService.loginTrainer(loginInfo, response))
-        } catch (e: ResponseStatusException){
+        } catch (e: ResponseStatusException) {
             ResponseEntity.badRequest().body("Error: ${e.reason}")
         }
     }
 
     @GetMapping("/trainer")
-    fun getTrainerPostLoginRequest(@CookieValue("jwt") jwt: String?): ResponseEntity<Any>{
-        return try{
+    fun getTrainerPostLoginRequest(@CookieValue("jwt") jwt: String?): ResponseEntity<Any> {
+        return try {
             val trainer = trainerService.getTrainerAfterLogin(jwt)
             ResponseEntity.ok(trainer.toLoginResponse())
-        } catch(e: ResponseStatusException){
+        } catch (e: ResponseStatusException) {
             ResponseEntity.badRequest().body("Error: ${e.reason}")
         }
     }
@@ -67,12 +67,12 @@ class TrainerController(private val trainerService: TrainerService) {
     fun updateTrainerById(
         @RequestBody trainerRequest: UpdateTrainerRequest
     ): ResponseEntity<Any> {
-        return try{
+        return try {
             val trainerModel = trainerService.updateTrainerById(trainerRequest)
             ResponseEntity.ok(
                 trainerModel.toResponse()
             )
-        } catch (e: ResponseStatusException){
+        } catch (e: ResponseStatusException) {
             ResponseEntity.badRequest().body("Error: ${e.reason}")
         }
 
@@ -82,12 +82,12 @@ class TrainerController(private val trainerService: TrainerService) {
     fun deleteTrainerById(
         @RequestBody deleteTrainerRequest: DeleteTrainerRequest
     ): ResponseEntity<Any> {
-        return try{
+        return try {
             val trainerModel = trainerService.deleteTrainer(deleteTrainerRequest)
             ResponseEntity.ok(
                 "Trainer ${trainerModel.id}: ${trainerModel.firstname} has been deleted"
             )
-        } catch (e: ResponseStatusException){
+        } catch (e: ResponseStatusException) {
             ResponseEntity.badRequest().body("Error: ${e.reason}")
         }
 

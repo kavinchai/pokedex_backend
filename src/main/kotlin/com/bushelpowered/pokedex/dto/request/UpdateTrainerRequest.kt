@@ -12,9 +12,9 @@ data class UpdateTrainerRequest(
     val lastname: String,
     val email: String,
     val password: String,
-){
-    init{
-        validate(this){
+) {
+    init {
+        validate(this) {
             validate(UpdateTrainerRequest::id).isPositive()
             validate(UpdateTrainerRequest::username).isNotBlank()
             validate(UpdateTrainerRequest::firstname).isNotBlank()

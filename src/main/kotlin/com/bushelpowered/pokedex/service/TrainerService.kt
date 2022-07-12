@@ -20,19 +20,20 @@ import javax.servlet.http.HttpServletResponse
 
 @Service
 class TrainerService(private val trainerRepository: TrainerRepository) {
-    private fun comparePassword(inputPassword: String, storedPassword: String): Boolean{
+    private fun comparePassword(inputPassword: String, storedPassword: String): Boolean {
         return BCryptPasswordEncoder().matches(inputPassword, storedPassword)
     }
+
     fun registerTrainer(createTrainerRequest: RegisterTrainerRequest): Trainer {
-        val trainerEmail = createTrainerRequest.email
-        val trainerUsername = createTrainerRequest.username
-        if (trainerRepository.existsByEmail(trainerEmail)){
+        val createTrainerEmail = createTrainerRequest.email
+        val createTrainerUsername = createTrainerRequest.username
+        if (trainerRepository.existsByEmail(createTrainerEmail)) {
             throw ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
                 "Email already exists"
             )
         }
-        if (trainerRepository.existsByUsername(trainerUsername)){
+        if (trainerRepository.existsByUsername(createTrainerUsername)) {
             throw ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
                 "Username already exists"
@@ -42,29 +43,31 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
         val passwordEncoder = BCryptPasswordEncoder()
         val encodePassword = passwordEncoder.encode(createTrainerRequest.password)
 
-        trainerRepository.save(Trainer(
-            id = 0,
-            username = createTrainerRequest.username,
-            firstname = createTrainerRequest.firstname,
-            lastname = createTrainerRequest.lastname,
-            email = createTrainerRequest.email,
-            password = encodePassword,
-            capturedPokemon = listOf()
-        ))
-        val trainerId = trainerRepository.findByUsername(createTrainerRequest.username).id
+        trainerRepository.save(
+            Trainer(
+                id = 0,
+                username = createTrainerRequest.username,
+                firstname = createTrainerRequest.firstname,
+                lastname = createTrainerRequest.lastname,
+                email = createTrainerRequest.email,
+                password = encodePassword,
+                capturedPokemon = listOf()
+            )
+        )
+        val trainer = trainerRepository.findByUsername(createTrainerRequest.username)
         return Trainer(
-            id = trainerId,
-            username = createTrainerRequest.username,
-            firstname = createTrainerRequest.firstname,
-            lastname = createTrainerRequest.lastname,
-            email = createTrainerRequest.email,
-            password = createTrainerRequest.password,
-            capturedPokemon = listOf()
+            id = trainer.id,
+            username = trainer.username,
+            firstname = trainer.firstname,
+            lastname = trainer.lastname,
+            email = trainer.email,
+            password = trainer.password,
+            capturedPokemon = trainer.capturedPokemon
         )
     }
 
     fun loginTrainer(loginInfo: LoginRequest, response: HttpServletResponse): String {
-        if (!trainerRepository.existsByEmail(loginInfo.email)){
+        if (!trainerRepository.existsByEmail(loginInfo.email)) {
             ResponseStatusException(
                 HttpStatus.NOT_FOUND,
                 "Trainer with that email does not exist"
@@ -72,7 +75,7 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
         }
         val trainer = trainerRepository.findByEmail(loginInfo.email)
 
-        if (!comparePassword(loginInfo.password, trainer.password)){
+        if (!comparePassword(loginInfo.password, trainer.password)) {
             throw ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
                 "Incorrect password"
@@ -94,8 +97,8 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
         return "Successfully logged in"
     }
 
-    fun getTrainerAfterLogin(jwt: String?): Trainer{
-        if (jwt == null){   // If cookie does not contain JWT
+    fun getTrainerAfterLogin(jwt: String?): Trainer {
+        if (jwt == null) {   // If cookie does not contain JWT
             throw ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
                 "Not logged in"
@@ -103,7 +106,7 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
         }
         val body = Jwts.parser().setSigningKey("secret").parseClaimsJws(jwt).body
         val trainerId = body.issuer.toInt()
-        if (!trainerRepository.existsById(trainerId)){
+        if (!trainerRepository.existsById(trainerId)) {
             ResponseStatusException(
                 HttpStatus.NOT_FOUND,
                 "Trainer with that id does not exist"
@@ -123,13 +126,13 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
     fun updateTrainerById(updateTrainerRequest: UpdateTrainerRequest): Trainer {
         val trainerEmail = updateTrainerRequest.email
         val trainerUsername = updateTrainerRequest.username
-        if (trainerRepository.existsByEmail(trainerEmail)){
+        if (trainerRepository.existsByEmail(trainerEmail)) {
             throw ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
                 "Email already exists"
             )
         }
-        if (trainerRepository.existsByUsername(trainerUsername)){
+        if (trainerRepository.existsByUsername(trainerUsername)) {
             throw ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
                 "Username already exists"
@@ -142,32 +145,24 @@ class TrainerService(private val trainerRepository: TrainerRepository) {
                     "Trainer does not exist"
                 )
             }
-        if (!comparePassword(updateTrainerRequest.password, trainer.password)){
+        if (!comparePassword(updateTrainerRequest.password, trainer.password)) {
             throw ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
                 "Incorrect password"
             )
         }
-        trainerRepository.save(
-            Trainer(
-                id = updateTrainerRequest.id,
-                username = updateTrainerRequest.username,
-                firstname = updateTrainerRequest.firstname,
-                lastname = updateTrainerRequest.lastname,
-                email = updateTrainerRequest.email,
-                password = trainer.password,
-                capturedPokemon = trainer.capturedPokemon
-            )
-        )
-        return Trainer(
+
+        val trainerModel = Trainer(
             id = trainer.id,
             username = updateTrainerRequest.username,
             firstname = updateTrainerRequest.firstname,
             lastname = updateTrainerRequest.lastname,
             email = updateTrainerRequest.email,
-            password = updateTrainerRequest.password,
+            password = trainer.password,
             capturedPokemon = trainer.capturedPokemon
         )
+        trainerRepository.save(trainerModel)
+        return trainerModel
     }
 
     fun deleteTrainer(deleteTrainerRequest: DeleteTrainerRequest): Trainer {

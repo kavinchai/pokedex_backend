@@ -124,7 +124,8 @@ class PopulateData(
             for (type in individualPokemonTypes) {
                 if (typeListMap.containsValue(type)) {
                     pokemonTypeList.add(
-                        PokemonType(uniqueId, pokemonId, getKey(typeListMap, type)!!
+                        PokemonType(
+                            uniqueId, pokemonId, getKey(typeListMap, type)!!
                         )
                     )
                     uniqueId += 1
@@ -149,7 +150,8 @@ class PopulateData(
             for (ability in individualPokemonAbilities) {
                 if (abilityMap.containsValue(ability)) {
                     pokemonAbilityList.add(
-                        PokemonAbility(uniqueId, pokemonId, getKey(abilityMap, ability)!!
+                        PokemonAbility(
+                            uniqueId, pokemonId, getKey(abilityMap, ability)!!
                         )
                     )
                     uniqueId += 1
